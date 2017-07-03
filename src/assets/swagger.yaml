@@ -1,0 +1,571 @@
+---
+swagger:                           "2.0"
+info:
+  description:                     "WALAT"
+  version:                         "1.0.0"
+  title:                           "walat"
+host:                              "127.0.0.1:8000"
+basePath:                          "/v1"
+schemes:
+- "http"
+produces:
+- "application/json"
+paths:
+  /questions:
+    get:
+      tags:
+      - "Editor"
+      description:                 "Returns information about questions at a given exercise."
+      operationId:                 "questionsGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name:                      "exercise_id"
+        in:                        "query"
+        description:               "Exercise to list questions"
+        required:                  true
+        type:                      "integer"
+        format:                    "int32"
+      responses:
+        200:
+          description:             "An array of question IDs"
+          schema:
+            type:                  "array"
+            items:
+              type:                "integer"
+              format:              "int32"
+        default:
+          description:             "Unexpected error"
+          schema:
+            $ref:                  "#/definitions/Error"
+      x-swagger-router-controller: "Editor"
+    post:
+      tags:
+      - "Editor"
+      description:                 "Adds a new question to a given exercise."
+      operationId:                 "questionsPOST"
+      produces:
+      - "application/json"
+      parameters:
+      - in:                        "body"
+        name:                      "body"
+        description:               "Question with default ID to be added"
+        required:                  true
+        schema:
+          $ref:                    "#/definitions/Question"
+      responses:
+        200:
+          description:             "OK"
+          schema:
+            type:                  "string"
+        405:
+          description:             "Invalid input"
+      x-swagger-router-controller: "Editor"
+    put:
+      tags:
+      - "Editor"
+      description:                 "Edits a question."
+      operationId:                 "questionsPUT"
+      produces:
+      - "application/json"
+      parameters:
+      - in:                        "body"
+        name:                      "body"
+        description:               "Question with given ID to be updated"
+        required:                  true
+        schema:
+          $ref:                    "#/definitions/Question"
+      responses:
+        200:
+          description:             "OK"
+          schema:
+            type:                  "string"
+        405:
+          description:             "Invalid input"
+      x-swagger-router-controller: "Editor"
+  /questions/{id}:
+    get:
+      tags:
+      - "Editor"
+      description:                 "Returns information about the question of a specified ID."
+      operationId:                 "questionsIdGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name:                      "id"
+        in:                        "path"
+        description:               "ID of question"
+        required:                  true
+        type:                      "integer"
+        format:                    "int32"
+      responses:
+        200:
+          description:             "A question"
+          schema:
+            $ref:                  "#/definitions/Question"
+        default:
+          description:             "Unexpected error"
+          schema:
+            $ref:                  "#/definitions/Error"
+      x-swagger-router-controller: "Editor"
+    delete:
+      tags:
+      - "Editor"
+      description:                 "Deletes a question."
+      operationId:                 "questionsIdDELETE"
+      produces:
+      - "application/json"
+      parameters:
+      - name:                      "id"
+        in:                        "path"
+        description:               "ID of question"
+        required:                  true
+        type:                      "integer"
+        format:                    "int32"
+      responses:
+        200:
+          description:             "OK"
+          schema:
+            type:                  "string"
+        405:
+          description:             "Invalid input"
+      x-swagger-router-controller: "Editor"
+  /exercises:
+    get:
+      tags:
+      - "Editor"
+      description:                 "Returns information about exercises at a given lesson."
+      operationId:                 "exercisesGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name:                      "lesson_id"
+        in:                        "query"
+        description:               "Lesson to list exercises"
+        required:                  true
+        type:                      "integer"
+        format:                    "int32"
+      responses:
+        200:
+          description:             "An array of exercise IDs"
+          schema:
+            type:                  "array"
+            items:
+              type:                "integer"
+              format:              "int32"
+        default:
+          description:             "Unexpected error"
+          schema:
+            $ref:                  "#/definitions/Error"
+      x-swagger-router-controller: "Editor"
+    post:
+      tags:
+      - "Editor"
+      description:                 "Adds a new exercise to a given lesson."
+      operationId:                 "exercisesPOST"
+      produces:
+      - "application/json"
+      parameters:
+      - in:                        "body"
+        name:                      "body"
+        description:               "Exercise with default ID to be added"
+        required:                  true
+        schema:
+          $ref:                    "#/definitions/Exercise"
+      responses:
+        200:
+          description:             "OK"
+          schema:
+            type:                  "string"
+        405:
+          description:             "Invalid input"
+      x-swagger-router-controller: "Editor"
+    put:
+      tags:
+      - "Editor"
+      description:                 "Edits an exercise."
+      operationId:                 "exercisesPUT"
+      produces:
+      - "application/json"
+      parameters:
+      - in:                        "body"
+        name:                      "body"
+        description:               "Exercise with given ID to be updated"
+        required:                  true
+        schema:
+          $ref:                    "#/definitions/Exercise"
+      responses:
+        200:
+          description:             "OK"
+          schema:
+            type:                  "string"
+        405:
+          description:             "Invalid input"
+      x-swagger-router-controller: "Editor"
+  /exercises/{id}:
+    get:
+      tags:
+      - "Editor"
+      description:                 "Returns information about the exercise of a specified ID."
+      operationId:                 "exercisesIdGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name:                      "id"
+        in:                        "path"
+        description:               "ID of exercise"
+        required:                  true
+        type:                      "integer"
+        format:                    "int32"
+      responses:
+        200:
+          description:             "An exercise"
+          schema:
+            $ref:                  "#/definitions/Exercise"
+        default:
+          description:             "Unexpected error"
+          schema:
+            $ref:                  "#/definitions/Error"
+      x-swagger-router-controller: "Editor"
+    delete:
+      tags:
+      - "Editor"
+      description:                 "Deletes an exercise."
+      operationId:                 "exercisesIdDELETE"
+      produces:
+      - "application/json"
+      parameters:
+      - name:                      "id"
+        in:                        "path"
+        description:               "ID of exercise"
+        required:                  true
+        type:                      "integer"
+        format:                    "int32"
+      responses:
+        200:
+          description:             "OK"
+          schema:
+            type:                  "string"
+        405:
+          description:             "Invalid input"
+      x-swagger-router-controller: "Editor"
+  /lessons:
+    get:
+      tags:
+      - "Editor"
+      description:                 "Returns information about lessons."
+      operationId:                 "lessonsGET"
+      produces:
+      - "application/json"
+      parameters:                  []
+      responses:
+        200:
+          description:             "An array of lesson IDs"
+          schema:
+            type:                  "array"
+            items:
+              type:                "integer"
+              format:              "int32"
+        default:
+          description:             "Unexpected error"
+          schema:
+            $ref:                  "#/definitions/Error"
+      x-swagger-router-controller: "Editor"
+    post:
+      tags:
+      - "Editor"
+      description:                 "Adds a new lesson."
+      operationId:                 "lessonsPOST"
+      produces:
+      - "application/json"
+      parameters:
+      - in:                        "body"
+        name:                      "body"
+        description:               "Lesson with default ID to be added"
+        required:                  true
+        schema:
+          $ref:                    "#/definitions/Lesson"
+      responses:
+        200:
+          description:             "OK"
+          schema:
+            type:                  "string"
+        405:
+          description:             "Invalid input"
+      x-swagger-router-controller: "Editor"
+    put:
+      tags:
+      - "Editor"
+      description:                 "Edits a lesson."
+      operationId:                 "lessonsPUT"
+      produces:
+      - "application/json"
+      parameters:
+      - in:                        "body"
+        name:                      "body"
+        description:               "Lesson with given ID to be updated"
+        required:                  true
+        schema:
+          $ref:                    "#/definitions/Lesson"
+      responses:
+        200:
+          description:             "OK"
+          schema:
+            type:                  "string"
+        405:
+          description:             "Invalid input"
+      x-swagger-router-controller: "Editor"
+  /lessons/{id}:
+    get:
+      tags:
+      - "Editor"
+      description:                 "Returns information about the lesson of a specified ID."
+      operationId:                 "lessonsIdGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name:                      "id"
+        in:                        "path"
+        description:               "ID of lesson"
+        required:                  true
+        type:                      "integer"
+        format:                    "int32"
+      responses:
+        200:
+          description:             "A lesson"
+          schema:
+            $ref:                  "#/definitions/Lesson"
+        default:
+          description:             "Unexpected error"
+          schema:
+            $ref:                  "#/definitions/Error"
+      x-swagger-router-controller: "Editor"
+    delete:
+      tags:
+      - "Editor"
+      description:                 "Deletes a lesson."
+      operationId:                 "lessonsIdDELETE"
+      produces:
+      - "application/json"
+      parameters:
+      - name:                      "id"
+        in:                        "path"
+        description:               "ID of lesson"
+        required:                  true
+        type:                      "integer"
+        format:                    "int32"
+      responses:
+        200:
+          description:             "OK"
+          schema:
+            type:                  "string"
+        405:
+          description:             "Invalid input"
+      x-swagger-router-controller: "Editor"
+  /assets:
+    get:
+      tags:
+      - "Assets"
+      description:                 "Returns information about assets."
+      operationId:                 "assetsGET"
+      produces:
+      - "application/json"
+      parameters:                  []
+      responses:
+        200:
+          description:             "An array of assets"
+          schema:
+            type:                  "array"
+            items:
+              $ref:                "#/definitions/Asset"
+        default:
+          description:             "Unexpected error"
+          schema:
+            $ref:                  "#/definitions/Error"
+      x-swagger-router-controller: "Assets"
+    post:
+      tags:
+      - "Assets"
+      description:                 "Adds a new asset."
+      operationId:                 "assetsPOST"
+      produces:
+      - "application/json"
+      parameters:
+      - in:                        "body"
+        name:                      "body"
+        description:               "Asset with default ID to be added"
+        required:                  true
+        schema:
+          $ref:                    "#/definitions/Asset"
+      responses:
+        200:
+          description:             "OK"
+          schema:
+            type:                  "string"
+        405:
+          description:             "Invalid input"
+      x-swagger-router-controller: "Assets"
+    put:
+      tags:
+      - "Assets"
+      description:                 "Edits an asset."
+      operationId:                 "assetsPUT"
+      produces:
+      - "application/json"
+      parameters:
+      - in:                        "body"
+        name:                      "body"
+        description:               "Asset with given ID to be updated"
+        required:                  true
+        schema:
+          $ref:                    "#/definitions/Asset"
+      responses:
+        200:
+          description:             "OK"
+          schema:
+            type:                  "string"
+        405:
+          description:             "Invalid input"
+      x-swagger-router-controller: "Assets"
+  /assets/{id}:
+    get:
+      tags:
+      - "Assets"
+      description:                 "Returns information about the asset of a specified ID."
+      operationId:                 "assetsIdGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name:                      "id"
+        in:                        "path"
+        description:               "ID of asset"
+        required:                  true
+        type:                      "integer"
+        format:                    "int32"
+      responses:
+        200:
+          description:             "An asset"
+          schema:
+            $ref:                  "#/definitions/Asset"
+        default:
+          description:             "Unexpected error"
+          schema:
+            $ref:                  "#/definitions/Error"
+      x-swagger-router-controller: "Assets"
+    delete:
+      tags:
+      - "Assets"
+      description:                 "Deletes an asset."
+      operationId:                 "assetsIdDELETE"
+      produces:
+      - "application/json"
+      parameters:
+      - name:                      "id"
+        in:                        "path"
+        description:               "ID of asset"
+        required:                  true
+        type:                      "integer"
+        format:                    "int32"
+      responses:
+        200:
+          description:             "OK"
+          schema:
+            type:                  "string"
+        405:
+          description:             "Invalid input"
+      x-swagger-router-controller: "Assets"
+definitions:
+  Question:
+    type:                          "object"
+    properties:
+      id:
+        type:                      "integer"
+        format:                    "int32"
+        description:               "ID of question"
+      name:
+        type:                      "string"
+        description:               "Name of question"
+      path:
+        type:                      "string"
+        description:               "Path of question"
+      recording_mode:
+        type:                      "string"
+        description:               "Recording mode of question"
+      mode_options:
+        type:                      "string"
+        description:               "Recording mode options of question"
+      template:
+        type:                      "string"
+        description:               "Template of question"
+      template_options:
+        type:                      "string"
+        description:               "Template options of question"
+      directions:
+        type:                      "string"
+        description:               "Directions of question"
+      notes:
+        type:                      "string"
+        description:               "Notes of question"
+      script:
+        type:                      "string"
+        description:               "Script of question"
+      exercise:
+        type:                      "integer"
+        format:                    "int32"
+        description:               "Parent exercise"
+  Exercise:
+    type:                          "object"
+    properties:
+      id:
+        type:                      "integer"
+        format:                    "int32"
+        description:               "ID of exercise"
+      name:
+        type:                      "string"
+        description:               "Name of exercise"
+      path:
+        type:                      "string"
+        description:               "Path of exercise"
+      lesson:
+        type:                      "integer"
+        format:                    "int32"
+        description:               "Parent lesson"
+  Lesson:
+    type:                          "object"
+    properties:
+      id:
+        type:                      "integer"
+        format:                    "int32"
+        description:               "ID of lesson"
+      name:
+        type:                      "string"
+        description:               "Name of lesson"
+      path:
+        type:                      "string"
+        description:               "Path of lesson"
+  Asset:
+    type:                          "object"
+    properties:
+      id:
+        type:                      "integer"
+        format:                    "int32"
+        description:               "ID of asset"
+      name:
+        type:                      "string"
+        description:               "Name of asset"
+      path:
+        type:                      "string"
+        description:               "Path of asset"
+      type:
+        type:                      "string"
+        description:               "Type of asset"
+  Error:
+    type:                          "object"
+    properties:
+      code:
+        type:                      "integer"
+        format:                    "int32"
+      message:
+        type:                      "string"
+      fields:
+        type:                      "string"

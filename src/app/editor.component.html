@@ -1,0 +1,36 @@
+<div class="ui grid">
+  <div class="ui row">
+    <div class="left floated two wide column" style="padding-right: 0; z-index: 9999; background-color: #1B1C1D;">
+      <wat-sidebar></wat-sidebar>
+    </div>
+    <div class="three wide column" style="padding-left: 0; padding-right: 0;">
+      <wat-exercise-list></wat-exercise-list>
+    </div>
+    <div class="eleven wide column ui segment">
+      <wat-breadcrumb></wat-breadcrumb>
+      <wat-exercise-edit></wat-exercise-edit>
+    </div>
+  </div>
+</div>
+
+<div class="ui modal" id="collection-add-modal">
+  <div class="header">New exercise</div>
+  <div class="content">
+    <form class="ui form">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" name="name" placeholder="Exercise name">
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <textarea name="description"></textarea>
+      </div>
+      <button class="ui primary button" type="submit">
+        Create
+      </button>
+      <button class="ui button">
+        Cancel
+      </button>
+    </form>
+  </div>
+</div>

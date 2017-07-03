@@ -1,0 +1,51 @@
+<wat-exercise-edit-sound-uploader></wat-exercise-edit-sound-uploader>
+
+<div class="field" style="display: none;">
+  <div class="field">
+    <label>Record for</label>
+    <div class="ui two fluid buttons" id='record-length-buttons'>
+      <button class="ui orange basic button" id='use-record-fixed'>Fixed length</button>
+      <div class="or"></div>
+      <button class="ui teal basic button" id='use-record-variable'>Variable length</button>
+    </div>
+  </div>
+
+  <div class="equal width fields">
+    <div class="field" id='record-fixed'>
+      <div class="equal width fields">
+        <div class="field">
+          <div class="ui right labeled input disabled">
+            <input type="text">
+            <div class="ui basic label">
+              seconds
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field" id='record-variable'>
+      <div class="equal width fields">
+        <div class="field">
+          <div class="ui selection dropdown disabled">
+            <input type="hidden" name="length-variable">
+            <i class="dropdown icon"></i>
+            <div class="default text">Choose a variable</div>
+            <div class="menu">
+              <div class="item" data-value="0">Same as this sound</div>
+              <div class="item" data-value="1">Same as next sound</div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui labeled input disabled">
+            <div class="ui basic label">
+              x
+            </div>
+            <input type="text" placeholder="Multiplier" name="multiplier">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

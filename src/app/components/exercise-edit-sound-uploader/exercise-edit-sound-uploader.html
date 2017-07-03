@@ -1,0 +1,39 @@
+<div class="field">
+  <label>Use sound from</label>
+  <div class="ui two fluid buttons" id='sound-source-buttons'>
+    <button class="ui yellow basic button" id='use-asset-sound'>Assets</button>
+    <div class="or"></div>
+    <button class="ui primary basic button" id='use-uploaded-sound'>Local upload</button>
+  </div>
+</div>
+
+<div class="equal width fields">
+  <div class="field" id='asset-sound'>
+    <div class="equal width fields">
+      <div class="field">
+        <div class="ui left icon input disabled">
+          <input type="text" placeholder="Search sound assets...">
+          <i class="sound icon"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field" id='uploaded-sound'>
+    <div class="equal width fields">
+      <div class="field">
+        <div class="ui action input disabled">
+          <input type="text" readonly value="Select a file..." name="button-upload-select">
+          <button class="ui teal right labeled icon button" name="button-upload">
+            <i class="upload icon"></i>
+            Upload
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form method="post" enctype="multipart/form-data" action="javascript:void(0)" style="display: none;">
+  <input type="file" name="file-upload">
+</form>
