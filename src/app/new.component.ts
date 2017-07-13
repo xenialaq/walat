@@ -8,7 +8,10 @@ export class NewComponent implements AfterViewInit {
   constructor() { }
 
   ngAfterViewInit() {
-    $('.modal').modal('show');
     $('.dropdown').dropdown();
+
+    $('.message .close').on('click', (event) => {
+      $(event.currentTarget).closest('.message').transition('fade');
+    });
   }
 }

@@ -2,27 +2,28 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { EditorComponent } from './editor.component';
+
 import { NewComponent } from './new.component';
+import { WizardComponent } from './components/wizard';
 
-import { SidebarComponent } from './components/sidebar/sidebar';
-import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb';
-import { ExerciseListComponent } from './components/exercise-list/exercise-list';
-import { ExerciseEditComponent } from './components/exercise-edit/exercise-edit';
+import { EditorComponent } from './editor.component';
+import { QEditComponent } from './components/qedit';
 
-import { ModeListComponent } from './components/mode-list/mode-list';
-import { ExerciseEditSoundUploaderComponent } from './components/exercise-edit-sound-uploader/exercise-edit-sound-uploader';
-import { ExerciseEditRecordComponent } from './components/exercise-edit-record/exercise-edit-record';
+import { QEditModeListComponent } from './components/qedit/events-picker';
+import { QEditAssetUploaderComponent } from './components/qedit/asset-uploader';
+import { QEditRecordComponent } from './components/qedit/record';
+import { QEditTemplateListComponent } from './components/qedit/content-picker';
+import { QEditRichEditorComponent } from './components/qedit/rich-editor';
+import { QEditQnaComponent } from './components/qedit/qna';
+import { QEditExtraComponent } from './components/qedit/extra';
 
-import { TemplateListComponent } from './components/template-list/template-list';
-import { ExerciseEditRichEditorComponent } from './components/exercise-edit-rich-editor/exercise-edit-rich-editor';
-import { ExerciseEditSlideUploaderComponent } from './components/exercise-edit-slide-uploader/exercise-edit-slide-uploader';
-import { ExerciseEditVideoUploaderComponent } from './components/exercise-edit-video-uploader/exercise-edit-video-uploader';
-import { ExerciseEditQnaComponent } from './components/exercise-edit-qna/exercise-edit-qna';
+import { AssetsComponent } from './assets.component';
+import { AssetManagerComponent } from './components/asset-manager';
 
-import { ExerciseEditExtraComponent } from './components/exercise-edit-extra/exercise-edit-extra';
-
-import { WizardComponent } from './components/wizard/wizard';
+import { BreadcrumbComponent } from './components/breadcrumb';
+import { CollectionListComponent } from './components/collection-list';
+import { ModalsComponent } from './components/modals';
+import { SidebarComponent } from './components/sidebar';
 
 import { RouterModule }   from '@angular/router';
 
@@ -33,31 +34,36 @@ import { AppComponentService } from './services/services';
     AppComponent,
     EditorComponent,
     NewComponent,
+    AssetsComponent,
+    AssetManagerComponent,
     BreadcrumbComponent,
-    ExerciseListComponent,
-    ExerciseEditComponent,
-    ExerciseEditRecordComponent,
-    ExerciseEditRichEditorComponent,
-    ExerciseEditSlideUploaderComponent,
-    ExerciseEditSoundUploaderComponent,
-    ExerciseEditVideoUploaderComponent,
-    ExerciseEditQnaComponent,
-    ExerciseEditExtraComponent,
-    ModeListComponent,
+    CollectionListComponent,
+    QEditComponent,
+    QEditRecordComponent,
+    QEditRichEditorComponent,
+    QEditAssetUploaderComponent,
+    QEditQnaComponent,
+    QEditExtraComponent,
+    QEditModeListComponent,
     SidebarComponent,
-    TemplateListComponent,
-    WizardComponent
+    QEditTemplateListComponent,
+    WizardComponent,
+    ModalsComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot([
       {
-        path: 'new',
+        path: '',
         component: NewComponent
       },
       {
         path: 'editor',
         component: EditorComponent
+      },
+      {
+        path: 'library',
+        component: AssetsComponent
       }
     ])
   ],

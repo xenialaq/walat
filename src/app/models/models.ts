@@ -2,10 +2,10 @@ class Question {
   id: number;
   name: string;
   path: string;
-  recording_mode: string;
-  mode_options: Map<string, any>;
-  template: string;
-  template_options: Map<string, any>;
+  events_t: string;
+  events_options: Map<string, any>;
+  content_t: string;
+  content_options: Map<string, any>;
   directions: string;
   notes: string;
   script: string;
@@ -14,8 +14,8 @@ class Question {
     this.id = id;
     this.name = name;
     this.path = path;
-    this.mode_options = new Map<string, string>();
-    this.template_options = new Map<string, string>();
+    this.events_options = new Map<string, string>();
+    this.content_options = new Map<string, string>();
   }
 }
 

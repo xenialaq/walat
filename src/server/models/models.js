@@ -20,10 +20,11 @@ const sequelize = new Sequelize('', '', '', {
 const Question = sequelize.define('question', {
   name: Sequelize.STRING,
   path: Sequelize.STRING,
-  recording_mode: Sequelize.STRING,
-  mode_options: Sequelize.TEXT('medium'),
-  template: Sequelize.STRING,
-  template_options: Sequelize.TEXT('medium'),
+  description: Sequelize.TEXT('medium'),
+  events_t: Sequelize.STRING,
+  events_options: Sequelize.TEXT('medium'),
+  content_t: Sequelize.STRING,
+  content_options: Sequelize.TEXT('medium'),
   directions: Sequelize.TEXT('medium'),
   notes: Sequelize.TEXT('medium'),
   script: Sequelize.TEXT('long')
@@ -31,13 +32,15 @@ const Question = sequelize.define('question', {
 
 const Exercise = sequelize.define('exercise', {
   name: Sequelize.STRING,
-  path: Sequelize.STRING
+  path: Sequelize.STRING,
+  description: Sequelize.TEXT('medium')
 });
 
 
 const Lesson = sequelize.define('lesson', {
   name: Sequelize.STRING,
-  path: Sequelize.STRING
+  path: Sequelize.STRING,
+  description: Sequelize.TEXT('medium')
 });
 
 

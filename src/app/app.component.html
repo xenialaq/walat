@@ -1,1 +1,11 @@
+<div class="ui page dimmer" id="page-wait-dimmer">
+  <div class="ui indeterminate text loader">Please wait...</div>
+</div>
+
 <router-outlet></router-outlet>
+
+<form method="post" enctype="multipart/form-data" action="javascript:void(0)" style="display: none;">
+  <input type="hidden" name="file-type">
+  <input type="hidden" name="file-path">
+  <input type="file" name="file-upload">
+</form>

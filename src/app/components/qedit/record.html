@@ -1,0 +1,71 @@
+<wat-qedit-asset-uploader></wat-qedit-asset-uploader>
+
+<div class="field" style="display: none;">
+  <div class="field">
+    <label>Record for</label>
+    <div class="ui two fluid buttons" id='record-length-buttons'>
+      <button class="ui orange basic button" id='use-record-fixed'>Fixed length</button>
+      <div class="or"></div>
+      <button class="ui teal basic button" id='use-record-variable'>Variable length</button>
+    </div>
+  </div>
+
+  <div class="equal width fields">
+    <div class="field" id='record-fixed'>
+      <div class="equal width fields">
+        <div class="field">
+          <div class="ui right labeled input disabled">
+            <input type="text" name="length">
+            <div class="ui basic label">
+              seconds
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field" id='record-variable'>
+      <div class="equal width fields">
+        <div class="field">
+          <div class="ui selection dropdown disabled" id="record-variable-dropdown">
+            <input type="hidden" name="length">
+            <i class="dropdown icon"></i>
+            <div class="default text">Choose a variable</div>
+            <div class="menu">
+              <div class="item" data-value="0">Same as this sound</div>
+              <div class="item" data-value="1">Same as next sound</div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui labeled input disabled">
+            <div class="ui basic label">
+              x
+            </div>
+            <input type="text" placeholder="Multiplier" name="multiplier">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="field">
+  <label>Advanced scripting</label>
+
+  <div class="ui labels">
+    <a class="ui orange tag label">wait</a>
+    <a class="ui blue tag label">play</a>
+    <a class="ui grey tag label">hide text</a>
+    <a class="ui grey tag label">hide directions</a>
+    <a class="ui grey tag label">hide comparison button</a>
+    <a class="ui black tag label">show text</a>
+    <a class="ui black tag label">show directions</a>
+    <a class="ui orange tag label">pause</a>
+    <a class="ui violet tag label">imagemap</a>
+    <a class="ui red tag label">record</a>
+    <a class="ui teal tag label">expect Q&amp;A submission</a>
+  </div>
+
+  <textarea rows="5" name="script"></textarea>
+</div>

@@ -11,7 +11,9 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit() {
     $('.message .close')
       .on('click', function() {
-        $(this).closest('.message').transition('fade');
+        if ($(this).closest('.message').is(':visible')) {
+          $(this).closest('.message').transition('fade');
+        }
       });
   }
 }

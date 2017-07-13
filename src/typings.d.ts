@@ -7,3 +7,4 @@ declare var $: any;
 declare var Quill: any;
 declare var URI: any;
 declare var _: any;
+declare var filesize: any;

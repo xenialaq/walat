@@ -16,9 +16,23 @@ exports.assetsGET = function(args, res, next) {
    * returns List
    **/
   var ret = {};
-
-  Asset.findAll().then(function(assets) {
-    ret['application/json'] = assets.map((d) => d.get('id'));
+  Asset.findAll({
+    where: {
+      name: {
+        $like: `${args.name.value ? args.name.value : ''}%`
+      },
+      path: {
+        $like: `${args.path.value ? args.path.value : ''}%`
+      }
+    }
+  }).then(function(assets) {
+    ret['application/json'] = assets.map((d) => ({
+      "id": null2Undefined(d.get('id')),
+      "name": null2Undefined(d.get('name')),
+      "path": null2Undefined(d.get('path')),
+      "type": null2Undefined(d.get('type')),
+      "attribute": JSON.parse(d.get('attribute'))
+    }));
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
   }, function(reason) {
@@ -33,11 +47,17 @@ exports.assetsIdDELETE = function(args, res, next) {
    * id Integer ID of asset
    * returns String
    **/
+  var ret = {};
+
   Asset.destroy({
     where: {
       id: args.id.value
     }
   });
+
+  ret['application/json'] = { "code": 200 };
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
 }
 
 exports.assetsIdGET = function(args, res, next) {
@@ -55,13 +75,15 @@ exports.assetsIdGET = function(args, res, next) {
     }
   }).then(function(d) {
     if (d === null) {
-      Errors.emitHttpError(404, res, 'Cannot find id.');
+      Errors.emitHttpError(res, { code: 404, message: 'Cannot find id.' });
       return;
     }
     ret['application/json'] = {
-      "id": d.get('id'),
-      "name": d.get('name'),
-      "path": d.get('path')
+      "id": null2Undefined(d.get('id')),
+      "name": null2Undefined(d.get('name')),
+      "path": null2Undefined(d.get('path')),
+      "type": null2Undefined(d.get('type')),
+      "attribute": JSON.parse(d.get('attribute'))
     };
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
@@ -77,11 +99,24 @@ exports.assetsPOST = function(args, res, next) {
    * body Body_7 Asset with default ID to be added
    * returns String
    **/
+  var ret = {};
+
   Asset.create({
     name: args.body.value.name,
-    path: args.body.value.path
+    path: args.body.value.path,
+    type: args.body.value.type,
+    attribute: JSON.stringify(args.body.value.attribute)
+  }).then((d) => {
+    ret['application/json'] = {
+      "id": null2Undefined(d.get('id')),
+      "name": null2Undefined(d.get('name')),
+      "path": null2Undefined(d.get('path')),
+      "type": null2Undefined(d.get('type')),
+      "attribute": JSON.parse(d.get('attribute'))
+    };
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
   });
-  res.end();
 }
 
 exports.assetsPUT = function(args, res, next) {
@@ -91,13 +126,33 @@ exports.assetsPUT = function(args, res, next) {
    * body Body_6 Asset with given ID to be updated
    * returns String
    **/
+  var ret = {};
+
   Asset.update({
     name: args.body.value.name,
-    path: args.body.value.path
+    path: args.body.value.path,
+    type: args.body.value.type,
+    attribute: JSON.stringify(args.body.value.attribute)
   }, {
     where: {
       id: args.body.value.id
     }
+  }).then((d) => {
+    ret['application/json'] = {
+      "id": null2Undefined(d.get('id')),
+      "name": null2Undefined(d.get('name')),
+      "path": null2Undefined(d.get('path')),
+      "type": null2Undefined(d.get('type')),
+      "attribute": JSON.parse(d.get('attribute'))
+    };
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
   });
-  res.end();
+}
+
+let null2Undefined = function(v) {
+  if (v === null) {
+    return undefined;
+  }
+  return v;
 }

@@ -28,12 +28,11 @@ paths:
         format:                    "int32"
       responses:
         200:
-          description:             "An array of question IDs"
+          description:             "An array of questions"
           schema:
             type:                  "array"
             items:
-              type:                "integer"
-              format:              "int32"
+              $ref:                "#/definitions/Question"
         default:
           description:             "Unexpected error"
           schema:
@@ -147,12 +146,11 @@ paths:
         format:                    "int32"
       responses:
         200:
-          description:             "An array of exercise IDs"
+          description:             "An array of exercises"
           schema:
             type:                  "array"
             items:
-              type:                "integer"
-              format:              "int32"
+              $ref:                "#/definitions/Exercise"
         default:
           description:             "Unexpected error"
           schema:
@@ -176,7 +174,8 @@ paths:
         200:
           description:             "OK"
           schema:
-            type:                  "string"
+            type:                  "integer"
+            format:                "int32"
         405:
           description:             "Invalid input"
       x-swagger-router-controller: "Editor"
@@ -260,12 +259,11 @@ paths:
       parameters:                  []
       responses:
         200:
-          description:             "An array of lesson IDs"
+          description:             "An array of lessons"
           schema:
             type:                  "array"
             items:
-              type:                "integer"
-              format:              "int32"
+              $ref:                "#/definitions/Lesson"
         default:
           description:             "Unexpected error"
           schema:
@@ -289,7 +287,8 @@ paths:
         200:
           description:             "OK"
           schema:
-            type:                  "string"
+            type:                  "integer"
+            format:                "int32"
         405:
           description:             "Invalid input"
       x-swagger-router-controller: "Editor"
@@ -370,7 +369,17 @@ paths:
       operationId:                 "assetsGET"
       produces:
       - "application/json"
-      parameters:                  []
+      parameters:
+      - name:                      "name"
+        in:                        "query"
+        description:               "Name prefix of assets"
+        required:                  false
+        type:                      "string"
+      - name:                      "path"
+        in:                        "query"
+        description:               "Base path of assets"
+        required:                  false
+        type:                      "string"
       responses:
         200:
           description:             "An array of assets"
@@ -401,7 +410,7 @@ paths:
         200:
           description:             "OK"
           schema:
-            type:                  "string"
+            $ref:                  "#/definitions/Asset"
         405:
           description:             "Invalid input"
       x-swagger-router-controller: "Assets"
@@ -423,7 +432,7 @@ paths:
         200:
           description:             "OK"
           schema:
-            type:                  "string"
+            $ref:                  "#/definitions/Asset"
         405:
           description:             "Invalid input"
       x-swagger-router-controller: "Assets"
@@ -488,16 +497,19 @@ definitions:
       path:
         type:                      "string"
         description:               "Path of question"
-      recording_mode:
+      description:
+        type:                      "string"
+        description:               "Description of question"
+      events_t:
         type:                      "string"
         description:               "Recording mode of question"
-      mode_options:
+      events_options:
         type:                      "string"
         description:               "Recording mode options of question"
-      template:
+      content_t:
         type:                      "string"
         description:               "Template of question"
-      template_options:
+      content_options:
         type:                      "string"
         description:               "Template options of question"
       directions:
@@ -526,6 +538,9 @@ definitions:
       path:
         type:                      "string"
         description:               "Path of exercise"
+      description:
+        type:                      "string"
+        description:               "Description of exercise"
       lesson:
         type:                      "integer"
         format:                    "int32"
@@ -543,6 +558,9 @@ definitions:
       path:
         type:                      "string"
         description:               "Path of lesson"
+      description:
+        type:                      "string"
+        description:               "Description of lesson"
   Asset:
     type:                          "object"
     properties:
@@ -559,6 +577,9 @@ definitions:
       type:
         type:                      "string"
         description:               "Type of asset"
+      attribute:
+        type:                      "string"
+        description:               "Attribute of asset"
   Error:
     type:                          "object"
     properties:
