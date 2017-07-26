@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'wat-sidebar',
   templateUrl: 'index.html'
 })
-export class SidebarComponent {}
+export class Sidebar {}

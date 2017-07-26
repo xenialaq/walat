@@ -1,13 +1,13 @@
 import { Component, AfterViewInit } from '@angular/core';
 
-import { AppComponentService } from '../../services/services';
+import { AppService } from '../../services/services';
 
 @Component({
   selector: 'wat-modals',
   templateUrl: 'index.html'
 })
-export class ModalsComponent implements AfterViewInit {
-  constructor(private service: AppComponentService) {
+export class Modals implements AfterViewInit {
+  constructor(private service: AppService) {
   }
 
   ngAfterViewInit() {

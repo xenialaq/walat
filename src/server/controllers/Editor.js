@@ -44,22 +44,22 @@ module.exports.lessonsPUT = function lessonsPUT(req, res, next) {
   Editor.lessonsPUT(req.swagger.params, res, next);
 };
 
-module.exports.questionsGET = function questionsGET(req, res, next) {
-  Editor.questionsGET(req.swagger.params, res, next);
+module.exports.pagesGET = function pagesGET(req, res, next) {
+  Editor.pagesGET(req.swagger.params, res, next);
 };
 
-module.exports.questionsIdDELETE = function questionsIdDELETE(req, res, next) {
-  Editor.questionsIdDELETE(req.swagger.params, res, next);
+module.exports.pagesIdDELETE = function pagesIdDELETE(req, res, next) {
+  Editor.pagesIdDELETE(req.swagger.params, res, next);
 };
 
-module.exports.questionsIdGET = function questionsIdGET(req, res, next) {
-  Editor.questionsIdGET(req.swagger.params, res, next);
+module.exports.pagesIdGET = function pagesIdGET(req, res, next) {
+  Editor.pagesIdGET(req.swagger.params, res, next);
 };
 
-module.exports.questionsPOST = function questionsPOST(req, res, next) {
-  Editor.questionsPOST(req.swagger.params, res, next);
+module.exports.pagesPOST = function pagesPOST(req, res, next) {
+  Editor.pagesPOST(req.swagger.params, res, next);
 };
 
-module.exports.questionsPUT = function questionsPUT(req, res, next) {
-  Editor.questionsPUT(req.swagger.params, res, next);
+module.exports.pagesPUT = function pagesPUT(req, res, next) {
+  Editor.pagesPUT(req.swagger.params, res, next);
 };

@@ -7,11 +7,11 @@ $.fn.api.settings.api = {
   'delete an asset': `${host}/v1/assets/{id}`,
   'get asset by ID': `${host}/v1/assets/{id}`,
 
-  'get questions': `${host}/v1/questions?exercise_id={id}`,
-  'post a question': `${host}/v1/questions`,
-  'put a question': `${host}/v1/questions`,
-  'delete a question': `${host}/v1/questions/{id}`,
-  'get question by ID': `${host}/v1/questions/{id}`,
+  'get pages': `${host}/v1/pages?exercise_id={id}`,
+  'post a page': `${host}/v1/pages`,
+  'put a page': `${host}/v1/pages`,
+  'delete a page': `${host}/v1/pages/{id}`,
+  'get page by ID': `${host}/v1/pages/{id}`,
 
 
   'get exercises': `${host}/v1/exercises?lesson_id={id}`,

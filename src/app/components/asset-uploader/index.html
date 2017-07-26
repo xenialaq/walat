@@ -1,0 +1,32 @@
+<div class="field">
+  <label>Use asset from</label>
+  <div class="ui two fluid buttons file-source-buttons">
+    <button class="ui yellow button use-asset" [ngClass]="this.isAsset ? '' : 'basic'" (click)="this.toggleMode(true)">Library</button>
+    <div class="or"></div>
+    <button class="ui primary button use-uploaded" [ngClass]="!this.isAsset ? '' : 'basic'" (click)="this.toggleMode(false)">Local upload</button>
+  </div>
+</div>
+
+<div class="equal width fields">
+  <div class="field asset-options" [ngClass]="this.isAsset ? '' : 'disabled'">
+    <div class="ui fluid search">
+      <div class="ui icon input">
+        <input class="prompt" type="text" placeholder="Search assets..." [value]="this.searchQuery" (input)="this.updateSearch($event.target.value)">
+        <i class="search icon"></i>
+      </div>
+      <div class="results"></div>
+    </div>
+  </div>
+
+  <div class="field uploaded-options" [ngClass]="!this.isAsset ? '' : 'disabled'">
+    <div class="ui action input">
+      <input type="text" readonly value="Select a file..." class="uploader-select">
+      <button class="ui teal right labeled icon button uploader-submit">
+        <i class="upload icon"></i>
+        Upload
+      </button>
+    </div>
+  </div>
+
+  <a class="ui yellow circular label" (click)="this.debug()">!</a>
+</div>

@@ -1,0 +1,31 @@
+<wat-pedit-content-picker [hidden]="!this.isAvailable()">
+</wat-pedit-content-picker>
+
+<div class="ui form" id="content-options" style="display: none;" [hidden]="!this.isAvailable()">
+  <div class="field" style="display: none;">
+    <wat-pedit-rich-editor></wat-pedit-rich-editor>
+  </div>
+
+  <div class="field" style="display: none;">
+    <wat-asset-uploader></wat-asset-uploader>
+  </div>
+
+  <div class="field" style="display: none;">
+    <wat-asset-uploader></wat-asset-uploader>
+  </div>
+
+  <div class="field" style="display: none;">
+    <wat-pedit-module-qna></wat-pedit-module-qna>
+  </div>
+
+  <button class="ui primary button q-save-button disabled">
+    Save
+  </button>
+  <button class="ui button" id="step-2-reset">
+    Start over
+  </button>
+</div>
+
+<div class="field" [hidden]="!this.isAvailable()">
+  <a class="ui yellow circular label" (click)="this.debug()">!</a>
+</div>

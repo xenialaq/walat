@@ -67,6 +67,49 @@
 
 
   <div class="ui four doubling cards" id="assets" style="margin: 1em 0;">
+    <div *ngFor="let asset of _.values(this.service.assets)" class="card" id="asset-a-{{asset.id}}">
+      <div class="image">
+        <img *ngIf="asset.type === 'image'" src="{{asset.getUrl()}}">
+        <audio *ngIf="asset.type === 'sound'" controls class="audio" style="width: 100%;">
+          <source src="{{asset.getUrl()}}" type="audio/mp3">
+        </audio>
+        <video *ngIf="asset.type === 'video'" controls class="video" style="width: 100%;">
+          <source src="{{asset.getUrl()}}" type="video/mp4">
+        </video>
+      </div>
+      <div class="extra">
+        <table class="ui very basic table">
+          <thead style="display: none;">
+            <tr>
+              <th class="one wide">A</th>
+              <th></th>
+              <th class="five wide">A</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <i class="asset-icon icon image" *ngIf="asset.type === 'image'"></i>
+                <i class="asset-icon icon music" *ngIf="asset.type === 'sound'"></i>
+                <i class="asset-icon icon video" *ngIf="asset.type === 'video'"></i>
+              </td>
+              <td>
+                <span class='asset-name' style='display: block; max-width: 80px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>
+                  <a href="/library?aid={{asset.id}}">{{asset.name}}</a>
+                </span>
+              </td>
+              <td>
+                <span class='asset-meta right floated'>
+                  {{
+                    filesize(asset.attribute.size, { round: 0 })
+                  }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
 </div>

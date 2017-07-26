@@ -1,0 +1,5 @@
+<wat-asset-uploader [hidden]="!this.isAvailable()" [value]="this._value" (change)="update($event)" [path]="this.service.getEditorPath()"></wat-asset-uploader>
+
+<div class="field" [hidden]="!this.isAvailable()">
+  <a class="ui yellow circular label" (click)="this.debug()">!</a>
+</div>

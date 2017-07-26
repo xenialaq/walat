@@ -17,16 +17,11 @@ const sequelize = new Sequelize('', '', '', {
   storage: dbPath
 });
 
-const Question = sequelize.define('question', {
+const Page = sequelize.define('page', {
   name: Sequelize.STRING,
   path: Sequelize.STRING,
   description: Sequelize.TEXT('medium'),
-  events_t: Sequelize.STRING,
-  events_options: Sequelize.TEXT('medium'),
-  content_t: Sequelize.STRING,
-  content_options: Sequelize.TEXT('medium'),
-  directions: Sequelize.TEXT('medium'),
-  notes: Sequelize.TEXT('medium'),
+  fields: Sequelize.TEXT('long'),
   script: Sequelize.TEXT('long')
 });
 
@@ -52,11 +47,11 @@ const Asset = sequelize.define('asset', {
   attribute: Sequelize.TEXT('medium')
 });
 
-Exercise.hasMany(Question);
+Exercise.hasMany(Page);
 Lesson.hasMany(Exercise);
 
 exports.DataSource = sequelize;
-exports.Question = Question;
+exports.Page = Page;
 exports.Exercise = Exercise;
 exports.Lesson = Lesson;
 exports.Asset = Asset;

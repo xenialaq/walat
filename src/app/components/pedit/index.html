@@ -1,0 +1,24 @@
+<div class="ui basic segment" id="step-content-wrapper" [hidden]="this.service.editor.page.id <= 0">
+  <wat-pedit-events-picker></wat-pedit-events-picker>
+
+  <wat-script-editor style="display: none"></wat-script-editor>
+
+  <div class="ui form" id="events-options">
+
+    <wat-pedit-module-directions [value]="this.service.editor.line.data"></wat-pedit-module-directions>
+
+    <wat-pedit-module-hide [value]="this.service.editor.line.data"></wat-pedit-module-hide>
+
+    <wat-pedit-module-play [value]="this.service.editor.line.data"></wat-pedit-module-play>
+
+    <wat-pedit-module-qna [value]="this.service.editor.line.data"></wat-pedit-module-qna>
+
+    <wat-pedit-module-record [value]="this.service.editor.line.data"></wat-pedit-module-record>
+
+    <wat-pedit-module-text [value]="this.service.editor.line.data"></wat-pedit-module-text>
+
+    <wat-pedit-module-wait [value]="this.service.editor.line.data"></wat-pedit-module-wait>
+
+  </div>
+
+</div>

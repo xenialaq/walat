@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'wat-breadcrumb',
   templateUrl: 'index.html'
 })
-export class BreadcrumbComponent {}
+export class Breadcrumb {}

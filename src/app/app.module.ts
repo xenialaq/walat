@@ -1,74 +1,76 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppComponent } from './app.component';
+import { App } from '.';
 
-import { NewComponent } from './new.component';
-import { WizardComponent } from './components/wizard';
+import { DashboardView } from './dashboard.view';
+import { EditorView } from './editor.view';
+import { LibraryView } from './library.view';
 
-import { EditorComponent } from './editor.component';
-import { QEditComponent } from './components/qedit';
-
-import { QEditModeListComponent } from './components/qedit/events-picker';
-import { QEditAssetUploaderComponent } from './components/qedit/asset-uploader';
-import { QEditRecordComponent } from './components/qedit/record';
-import { QEditTemplateListComponent } from './components/qedit/content-picker';
-import { QEditRichEditorComponent } from './components/qedit/rich-editor';
-import { QEditQnaComponent } from './components/qedit/qna';
-import { QEditExtraComponent } from './components/qedit/extra';
-
-import { AssetsComponent } from './assets.component';
-import { AssetManagerComponent } from './components/asset-manager';
-
-import { BreadcrumbComponent } from './components/breadcrumb';
-import { CollectionListComponent } from './components/collection-list';
-import { ModalsComponent } from './components/modals';
-import { SidebarComponent } from './components/sidebar';
+import { AssetUploader } from './components/asset-uploader';
+import { CollectionManager } from './components/collection-manager';
+import { Breadcrumb } from './components/breadcrumb';
+import { Modals } from './components/modals';
+import { Sidebar } from './components/sidebar';
 
 import { RouterModule }   from '@angular/router';
 
-import { AppComponentService } from './services/services';
+import { AppService } from './services/services';
+
+import { AssetManager } from './components/asset-manager';
+import { LessonManager } from './components/lesson-manager';
+import * as PEdit from './components/pedit';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    EditorComponent,
-    NewComponent,
-    AssetsComponent,
-    AssetManagerComponent,
-    BreadcrumbComponent,
-    CollectionListComponent,
-    QEditComponent,
-    QEditRecordComponent,
-    QEditRichEditorComponent,
-    QEditAssetUploaderComponent,
-    QEditQnaComponent,
-    QEditExtraComponent,
-    QEditModeListComponent,
-    SidebarComponent,
-    QEditTemplateListComponent,
-    WizardComponent,
-    ModalsComponent
+    App,
+    // views
+    DashboardView,
+    EditorView,
+    LibraryView,
+    // common components
+    AssetUploader,
+    Breadcrumb,
+    CollectionManager,
+    Modals,
+    Sidebar,
+    // components for Dashboard
+    LessonManager,
+    // components for Editor
+    PEdit.PEdit,
+    PEdit.EventsPicker,
+    PEdit.ScriptEditor,
+    PEdit.DirectionsModule,
+    PEdit.HideModule,
+    PEdit.PlayModule,
+    PEdit.QnaModule,
+    PEdit.RecordModule,
+    PEdit.TextModule,
+    PEdit.WaitModule,
+    PEdit.ContentPicker,
+    PEdit.RichEditor,
+    // components for Library
+    AssetManager
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot([
       {
         path: '',
-        component: NewComponent
+        component: DashboardView
       },
       {
         path: 'editor',
-        component: EditorComponent
+        component: EditorView
       },
       {
         path: 'library',
-        component: AssetsComponent
+        component: LibraryView
       }
     ])
   ],
-  providers: [AppComponentService],
-  bootstrap: [AppComponent]
+  providers: [AppService],
+  bootstrap: [App]
 })
 
 export class AppModule { }

@@ -1,0 +1,53 @@
+<div class="field" [hidden]="!this.isAvailable()">
+  <div class="field">
+    <label>Record for</label>
+    <div class="ui two fluid buttons" id='record-length-buttons'>
+      <button class="ui orange button" [ngClass]="this._value['isFixed'] === true ? '' : 'basic'" (click)="this.toggleMode(true)" id='use-record-fixed'>Fixed length</button>
+      <div class="or"></div>
+      <button class="ui teal button" [ngClass]="this._value['isFixed'] === false ? '' : 'basic'" (click)="this.toggleMode(false)" id='use-record-variable'>Variable length</button>
+    </div>
+  </div>
+
+  <div class="equal width fields">
+    <div class="field" id='record-fixed' [ngClass]="this._value['isFixed'] === true ? '' : 'disabled'">
+      <div class="equal width fields">
+        <div class="field">
+          <div class="ui right labeled input">
+            <input type="text" name="length" [value]="this._value['length']" (change)="this.updateLength($event.target.value)">
+            <div class="ui basic label">
+              seconds
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field" id='record-variable' [ngClass]="this._value['isFixed'] === false ? '' : 'disabled'">
+      <div class="equal width fields">
+        <div class="field">
+          <div class="ui selection dropdown" id="record-variable-dropdown">
+            <input type="hidden" name="length-var" [value]="this._value['length-var']" (change)="this.updateLengthVar($event.target.value)">
+            <i class="dropdown icon"></i>
+            <div class="default text">Choose a variable</div>
+            <div class="menu">
+              <div class="item" data-value="0">Same as this sound</div>
+              <div class="item" data-value="1">Same as next sound</div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui labeled input">
+            <div class="ui basic label">
+              x
+            </div>
+            <input type="text" placeholder="Multiplier" name="multiplier" [value]="this._value['length-multiplier']" (change)="this.updateLengthMultiplier($event.target.value)">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="field" [hidden]="!this.isAvailable()">
+  <a class="ui yellow circular label" (click)="this.debug()">!</a>
+</div>
