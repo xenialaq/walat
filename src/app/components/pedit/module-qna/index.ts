@@ -24,36 +24,6 @@ export class QnaModule implements AfterViewInit {
   constructor(private service: AppService) {
   }
 
-  moveHandle = (selector) => {
-    // // Reset action
-    // $('#mc-choices-handle').dropdown('restore defaults').appendTo(selector);
-    // selector.addClass('right action');
-    //
-    // // Post-action
-    // if (this.getChoices().length <= 1) {
-    //   $('#mc-choices-handle>.menu>.item:nth-child(2)').hide();
-    // } else {
-    //   $('#mc-choices-handle>.menu>.item:nth-child(2)').show();
-    // }
-  };
-
-  getChoices = () => {
-    const values = [];
-    const correctnesses = [];
-
-    $('#mc-choices>.field>.input>input').map((i, e) => {
-      values.push($(e).val());
-    });
-    $('#mc-choices>.field>.input>.ui.dropdown.label>input').map((i, e) => {
-      correctnesses.push(/checkmark/.test($(e).val()));
-    });
-    return values.map((v, i) => (
-      {
-        isCorrect: correctnesses[i],
-        value: v
-      }));
-  }
-
   setChoices = (choices) => {
     // $('#mc-choices').empty();
     // choices.forEach((c, i) => {
@@ -105,74 +75,69 @@ export class QnaModule implements AfterViewInit {
     // $('#mc-choices .dropdown').dropdown();
   }
 
-  mcItemFocused = (event) => {
-    this.moveHandle($(event.currentTarget).parent('.ui.input'));
+  updateChoice = (i, correct, v) => {
+    if (!_.isUndefined(correct)) {
+      this._value['choices'][i]['isCorrect'] = correct;
+    }
+
+    if (!_.isUndefined(v)) {
+      this._value['choices'][i]['value'] = v;
+    }
+
+    this.valueChange.emit(this._value);
   }
 
-  updateChoices = (c) => {
-    this._value['choices'] = c;
-    this.valueChange.emit(this._value);
+  activeChoice = 0;
+
+  handleChoices = (action) => {
+    if (action === 'insert above') {
+      this._value['choices'].splice(this.activeChoice, 0, {
+        isCorrect: false,
+        value: ''
+      });
+
+      this.activeChoice++;
+
+      this.valueChange.emit(this._value);
+    } else if (action === 'remove') {
+      this._value['choices'].splice(this.activeChoice, 1);
+
+      this.valueChange.emit(this._value);
+    } else if (action === 'move down') {
+      let a = this._value['choices'][this.activeChoice];
+      let b = this._value['choices'][this.activeChoice + 1];
+
+      this._value['choices'][this.activeChoice] = b;
+      this._value['choices'][this.activeChoice + 1] = a;
+      this.activeChoice++;
+
+      this.valueChange.emit(this._value);
+    } else {
+      return;
+    }
+
+    this.refreshDropdowns();
+  }
+
+  updateActiveChoice = (i) => {
+    this.activeChoice = i;
+    this.refreshDropdowns();
   }
 
   ngAfterViewInit() {
     $('#qna-type-dropdown').dropdown();
+    this.refreshDropdowns();
+  }
 
-    // $('#mc-choices-handle input[name="action"]').change((event) => {
-    //   const action = $(event.currentTarget).val();
-    //   if (action === 'insert above') {
-    //     $(event.currentTarget).closest('.field').before(`
-    //       <div class="field">
-    //         <div class="ui labeled input">
-    //           <div class="ui dropdown label">
-    //             <input type="hidden" name="correctness">
-    //             <div class="text"><i class="red remove icon"></i></div>
-    //             <i class="dropdown icon"></i>
-    //             <div class="menu" tabindex="-1">
-    //               <div class="item"><i class="green checkmark icon"></i></div>
-    //               <div class="item"><i class="red remove icon"></i></div>
-    //             </div>
-    //           </div>
-    //           <input type="text">
-    //         </div>
-    //       </div>`);
-    //
-    //     const srcInput = $(event.currentTarget).closest('.field').children('.ui.input');
-    //     srcInput.removeClass('right action');
-    //     const destInput = $(event.currentTarget).closest('.field').prev().children('.ui.input');
-    //     this.moveHandle(destInput);
-    //
-    //     // bind events and init dropdown
-    //     destInput.children('input').focus(this.mcItemFocused);
-    //     destInput.children('input').change(() => this.updateChoices(this.getChoices()));
-    //     $('#mc-choices .dropdown').dropdown();
-    //   } else if (action === 'remove') {
-    //     const srcField = $(event.currentTarget).closest('.field');
-    //
-    //     let destInput = $(event.currentTarget).closest('.field').prev().children('.ui.input');
-    //
-    //     if ($('#mc-choices>.field').index(srcField) === 0) {
-    //       // Remove first choice, dest should be next
-    //       destInput = $(event.currentTarget).closest('.field').next().children('.ui.input');
-    //     }
-    //
-    //     this.moveHandle(destInput);
-    //     srcField.remove();
-    //   } else if (action === 'move down') {
-    //     const srcField = $(event.currentTarget).closest('.field');
-    //     const destField = srcField.next();
-    //     srcField.before(destField);
-    //     $('#mc-choices-handle').dropdown('restore defaults');
-    //   }
-    //
-    //   // Focus
-    //   $('#mc-choices-handle').closest('.field').children('.ui.input').children('input').focus();
-    //
-    //   // Item changed
-    //   this.updateChoices(this.getChoices());
-    // });
-
-    $('#mc-choices>.field>.input>input').focus(this.mcItemFocused);
-    $('#mc-choices>.field>.input>input').change(() => this.updateChoices(this.getChoices()));
+  refreshDropdowns = () => {
+    // delayed init
+    let setter = setInterval(() => {
+      if ($('.mc-choices-handle').length) {
+        $('.mc-choices-handle').dropdown('restore defaults');
+        $('#mc-choices .dropdown.correctness').dropdown();
+        clearInterval(setter);
+      }
+    }, 50);
   }
 
   @Input()
