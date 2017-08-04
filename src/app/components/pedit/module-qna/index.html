@@ -1,7 +1,7 @@
 <div class="field" [hidden]="!this.isAvailable()">
   <label>Q&amp;A type</label>
   <div class="ui selection dropdown" id="qna-type-dropdown">
-    <input type="hidden" name="q-type" [value]="this._value.type">
+    <input type="hidden" name="q-type" [value]="this._value.type" (change)="this.toggleMode($event.target.value)">
     <i class="dropdown icon"></i>
     <div class="default text">Choose an option</div>
     <div class="menu">
@@ -12,32 +12,32 @@
   </div>
 </div>
 
-<div class='q-option' id='q-short-answer' style="display: none;" [hidden]="!this.isAvailable() || this._value['type'] !== 0">
+<div class='q-option' [hidden]="!this.isAvailable() || this._value['type'] !== 0">
   <div class="field">
-    <label>Page</label>
-    <textarea rows="2" name="page"></textarea>
+    <label>Question</label>
+    <textarea rows="2" [value]="this._value['question']" (change)="this.updateQ($event.target.value)"></textarea>
   </div>
   <div class="field">
     <label>Answer key</label>
-    <textarea rows="2" name="key"></textarea>
+    <textarea rows="2" [value]="this._value['answer']" (change)="this.updateQ($event.target.value)"></textarea>
   </div>
 </div>
 
-<div class='q-option' id='q-filling-blank' style="display: none;" [hidden]="!this.isAvailable() || this._value['type'] !== 1">
+<div class='q-option' [hidden]="!this.isAvailable() || this._value['type'] !== 1">
   <div class="field">
-    <label>Page</label>
-    <textarea rows="2" name="page"></textarea>
+    <label>Question</label>
+    <textarea rows="2"></textarea>
   </div>
   <div class="field">
     <label>Full text</label>
-    <textarea rows="2" name="key" placeholder="Enter the full text, then for any blank to fill, wrap around with '(((' and ')))' on each side."></textarea>
+    <textarea rows="2" (change)="this.updateA($event.target.value)" placeholder="Enter the full text, then for any blank to fill, wrap around with '(((' and ')))' on each side."></textarea>
   </div>
 </div>
 
-<div class='q-option' id='q-multiple-choice' style="display: none;" [hidden]="!this.isAvailable() || this._value['type'] !== 2">
+<div class='q-option' [hidden]="!this.isAvailable() || this._value['type'] !== 2">
   <div class="field">
-    <label>Page</label>
-    <textarea rows="2" name="page"></textarea>
+    <label>Question</label>
+    <textarea rows="2" [value]="this._value['question']" (change)="this.updateQ($event.target.value)"></textarea>
   </div>
 
   <div class="field" style="margin-bottom: 0;">
@@ -45,33 +45,19 @@
   </div>
 
   <div id="mc-choices">
-    <div class="field">
-      <div class="ui labeled input">
+    <div *ngFor="let choice of this._value['choices']; let last = last" class="field">
+      <div class="ui labeled input" [ngClass]="last ? 'right action' : ''">
         <div class="ui dropdown label">
-          <input type="hidden" name="correctness" value="<i class=&quot;red remove icon&quot;></i>">
-          <div class="text"><i class="red remove icon"></i></div>
+          <input type="hidden" name="correctness" [value]="choice.isCorrect ? '<i class=&quot;green checkmark icon&quot;></i>' : '<i class=&quot;red remove icon&quot;></i>'">
+          <div class="text"><i [ngClass]="(choice.isCorrect ? 'green checkmark' : 'red remove') + ' icon'"></i></div>
           <i class="dropdown icon"></i>
           <div class="menu">
             <div class="item"><i class="green checkmark icon"></i></div>
             <div class="item"><i class="red remove icon"></i></div>
           </div>
         </div>
-        <input type="text">
-      </div>
-    </div>
-    <div class="field">
-      <div class="ui labeled right action input">
-        <div class="ui dropdown label">
-          <input type="hidden" name="correctness" value="<i class=&quot;green checkmark icon&quot;></i>">
-          <div class="text"><i class="green checkmark icon"></i></div>
-          <i class="dropdown icon"></i>
-          <div class="menu">
-            <div class="item"><i class="green checkmark icon"></i></div>
-            <div class="item"><i class="red remove icon"></i></div>
-          </div>
-        </div>
-        <input type="text">
-        <div class="ui basic floating dropdown button" id="mc-choices-handle">
+        <input type="text" [value]="choice.value">
+        <div class="ui basic floating dropdown button" [hidden]="!last">
           <input type="hidden" name="action">
           <div class="text">Action</div>
           <i class="dropdown icon"></i>
