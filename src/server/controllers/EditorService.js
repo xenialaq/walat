@@ -105,7 +105,8 @@ exports.exercisesPOST = function(args, res, next) {
 
   Exercise.create({
     name: args.body.value.name,
-    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value.path,
+    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value
+      .path,
     description: args.body.value.description,
     lessonId: args.body.value.lesson
   }).then((d) => {
@@ -132,23 +133,25 @@ exports.exercisesPUT = function(args, res, next) {
 
   Exercise.update({
     name: args.body.value.name,
-    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value.path,
+    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value
+      .path,
     description: args.body.value.description,
     lessonId: args.body.value.lesson
   }, {
     where: {
       id: args.body.value.id
     }
-  }).then((d) => {
-    ret['application/json'] = {
-      "id": null2Undefined(d.get('id')),
-      "name": null2Undefined(d.get('name')),
-      "path": null2Undefined(d.get('path')),
-      "description": null2Undefined(d.get('description')),
-      "lesson": null2Undefined(d.get('lessonId'))
+  }).then((rows) => {
+    let d = rows[0];
+    if (_.isUndefined(d)) {
+      Errors.emitHttpError(res, { code: 400, message: 'Cannot update exercise.' });
+      return;
+    }
+
+    args.id = {
+      value: args.body.value.id
     };
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
+    this.exercisesIdGET(args, res, next);
   });
 }
 
@@ -236,7 +239,8 @@ exports.lessonsPOST = function(args, res, next) {
 
   Lesson.create({
     name: args.body.value.name,
-    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value.path,
+    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value
+      .path,
     description: args.body.value.description,
   }).then((d) => {
     ret['application/json'] = {
@@ -261,21 +265,24 @@ exports.lessonsPUT = function(args, res, next) {
 
   Lesson.update({
     name: args.body.value.name,
-    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value.path,
+    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value
+      .path,
     description: args.body.value.description
   }, {
     where: {
       id: args.body.value.id
     }
-  }).then((d) => {
-    ret['application/json'] = {
-      "id": null2Undefined(d.get('id')),
-      "name": null2Undefined(d.get('name')),
-      "path": null2Undefined(d.get('path')),
-      "description": null2Undefined(d.get('description'))
+  }).then((rows) => {
+    let d = rows[0];
+    if (_.isUndefined(d)) {
+      Errors.emitHttpError(res, { code: 400, message: 'Cannot update lesson.' });
+      return;
+    }
+
+    args.id = {
+      value: args.body.value.id
     };
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
+    this.lessonsIdGET(args, res, next);
   });
 }
 
@@ -374,7 +381,8 @@ exports.pagesPOST = function(args, res, next) {
 
   Page.create({
     name: args.body.value.name,
-    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value.path,
+    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value
+      .path,
     description: args.body.value.description,
     fields: args.body.value.fields,
     script: args.body.value.script,
@@ -405,7 +413,8 @@ exports.pagesPUT = function(args, res, next) {
 
   Page.update({
     name: args.body.value.name,
-    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value.path,
+    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value
+      .path,
     description: args.body.value.description,
     fields: args.body.value.fields,
     script: args.body.value.script,
@@ -414,18 +423,17 @@ exports.pagesPUT = function(args, res, next) {
     where: {
       id: args.body.value.id
     }
-  }).then((d) => {
-    ret['application/json'] = {
-      "id": null2Undefined(d.get('id')),
-      "name": null2Undefined(d.get('name')),
-      "path": null2Undefined(d.get('path')),
-      "description": null2Undefined(d.get('description')),
-      "fields": null2Undefined(d.get('fields')),
-      "script": null2Undefined(d.get('script')),
-      "exercise": null2Undefined(d.get('exerciseId'))
+  }).then((rows) => {
+    let d = rows[0];
+    if (_.isUndefined(d)) {
+      Errors.emitHttpError(res, { code: 400, message: 'Cannot update page.' });
+      return;
+    }
+
+    args.id = {
+      value: args.body.value.id
     };
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
+    this.pagesIdGET(args, res, next);
   });
 }
 

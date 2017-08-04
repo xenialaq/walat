@@ -812,15 +812,51 @@ export class AppService {
   }
 
   removeLesson = (id) => {
-    this.lessons[id] = undefined;
+    if (this.pages[this.editor.page.id] && this.pages[this.editor.page.id].exercise.lesson.id === id) {
+      this.editor.page.id = 0;
+    }
+
+    if (this.exercises[this.editor.exercise.id] && this.exercises[this.editor.exercise.id].lesson.id === id) {
+      this.editor.exercise.id = 0;
+    }
+
+    if (this.editor.lesson.id === id) {
+      this.editor.lesson.id = 0;
+    }
+
+    this.pages = _.omitBy(this.pages, (v, k) => {
+      return v.exercise.lesson.id === id;
+    });
+
+    this.exercises = _.omitBy(this.exercises, (v, k) => {
+      return v.lesson.id === id;
+    });
+
+    delete this.lessons[id];
   }
 
   removeExercise = (id) => {
-    this.exercises[id] = undefined;
+    if (this.pages[this.editor.page.id] && this.pages[this.editor.page.id].exercise.id === id) {
+      this.editor.page.id = 0;
+    }
+
+    if (this.editor.exercise.id === id) {
+      this.editor.exercise.id = 0;
+    }
+
+    this.pages = _.omitBy(this.pages, (v, k) => {
+      return v.exercise.id === id;
+    });
+
+    delete this.exercises[id];
   }
 
   removePage = (id) => {
-    this.pages[id] = undefined;
+    if (this.editor.page.id === id) {
+      this.editor.page.id = 0;
+    }
+
+    delete this.pages[id];
   }
 
   hideMessages = () => {
@@ -871,7 +907,7 @@ export class AppService {
 
     this.editor.line.cmd = cmd;
     const matches = line.match(/@\w+\s*$/g);
-    tag = _.isNull(matches) ? undefined : matches[0].replace(/^@/g, '');
+    tag = _.isNull(matches) ? undefined : matches[0].replace(/^@/g, '').trim();
     this.editor.line.tag = tag;
     this.editor.line.data = _.has(this.editor.page.data, tag)
       ? this.editor.page.data[tag]

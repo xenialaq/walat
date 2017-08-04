@@ -137,16 +137,17 @@ exports.assetsPUT = function(args, res, next) {
     where: {
       id: args.body.value.id
     }
-  }).then((d) => {
-    ret['application/json'] = {
-      "id": null2Undefined(d.get('id')),
-      "name": null2Undefined(d.get('name')),
-      "path": null2Undefined(d.get('path')),
-      "type": null2Undefined(d.get('type')),
-      "attribute": JSON.parse(d.get('attribute'))
+  }).then((rows) => {
+    let d = rows[0];
+    if (_.isUndefined(d)) {
+      Errors.emitHttpError(res, { code: 400, message: 'Cannot update asset.' });
+      return;
+    }
+
+    args.id = {
+      value: args.body.value.id
     };
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
+    this.assetsIdGET(args, res, next);
   });
 }
 

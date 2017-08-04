@@ -11,75 +11,9 @@ export class CollectionManager implements AfterViewInit {
   constructor(private service: AppService) {
   }
 
+  isPage = false;
+
   ngAfterViewInit() {
-    $('#exercise-create').click(() => {
-      // $('#collection-create-modal').data('pid', this.service.lesson.id);
-
-      $('.collection-action-type').text('an exercise');
-
-      $('#collection-create-modal input[name="name"]').val('');
-      $('#collection-create-modal input[name="cname"]').val('');
-
-      $('#collection-create-modal').modal('show');
-    });
-
-    $('#page-create').click(() => {
-      // $('#collection-create-modal').data('pid', this.service.exercise.id);
-
-      $('.collection-action-type').text('a page');
-
-      $('#collection-create-modal input[name="name"]').val('');
-      $('#collection-create-modal input[name="cname"]').val('');
-
-      $('#collection-create-modal').modal('show');
-    });
-
-    $('#collection-edit').click(() => {
-      let pid = 0;
-      let item;
-
-      if ($('.collection-action-type:eq(0)').text() === 'an exercise') {
-        // Edit exercise
-        item = this.service.exercises[this.service.editor.exercise.id];
-        pid = item.lesson.id;
-      } else if ($('.collection-action-type:eq(0)').text() === 'a page') {
-        // Edit page
-        item = this.service.pages[this.service.editor.page.id];
-        pid = item.exercise.id;
-      } else {
-        return;
-      }
-
-      $('#collection-edit-modal').data('id', item.id);
-      $('#collection-edit-modal').data('pid', pid);
-
-      $('#collection-edit-modal input[name="name"]').val(item.name);
-      $('#collection-edit-modal input[name="cname"]').val(item.path);
-
-      $('#collection-edit-modal').modal('show');
-    });
-
-    $('#collection-delete').click(() => {
-      let item;
-      if ($('.collection-action-type:eq(0)').text() === 'an exercise') {
-        // Delete exercise
-        item = this.service.exercises[this.service.editor.exercise.id];
-      } else if ($('.collection-action-type:eq(0)').text() === 'a page') {
-        // Delete page
-        item = this.service.pages[this.service.editor.page.id];
-      } else {
-        return;
-      }
-      $('#collection-delete-modal').data('id', item.id);
-
-      $('#collection-delete-modal .name-check').text(item.name);
-
-      $('#collection-delete-modal input[name="name"]').val('');
-      $('#collection-delete-modal input[name="cname"]').val('');
-
-      $('#collection-delete-modal').modal('show');
-    });
-
     $('#collection-create-modal button[name="create"]').click((event) => {
       // type can either be lesson | exercise | page
       if (!$('#collection-create-form').form('is valid')) {
@@ -163,6 +97,10 @@ export class CollectionManager implements AfterViewInit {
             this.service.removeExercise($('#collection-delete-modal').data('id'));
           } else {
             this.service.removePage($('#collection-delete-modal').data('id'));
+            if (this.service.editor.page.id === 0) {
+              // repurpose delete / edit because they're not hidden
+              this.isPage = false;
+            }
           }
         }
       });
@@ -170,24 +108,19 @@ export class CollectionManager implements AfterViewInit {
   }
 
   showExercise = (id) => {
+    this.isPage = false;
+
     this.service.editor.exercise = { id: id, data: {} };
-    $('#page-create').show();
-    $('#collection-edit').show();
-    $('#collection-delete').show();
 
-    $('#exercise-list>a').removeClass('primary');
-    $(`#exercise-list-e-${id}`).addClass('primary');
-
-    console.log('clearing page data');
+    console.log('page data is lost');
 
     this.service.editor.page = { id: 0, data: {} };
   }
 
   showPage = (id) => {
-    this.service.editor.page = { id: id, data: {} };
+    this.isPage = true;
 
-    $('#page-list>a').removeClass('primary');
-    $(`#page-list-p-${id}`).addClass('primary');
+    this.service.editor.page = { id: id, data: {} };
   }
 
   getExercises = () => {
@@ -200,5 +133,75 @@ export class CollectionManager implements AfterViewInit {
     return _.filter(_.values(this.service.pages), (e) => {
       return e.exercise.id === this.service.editor.exercise.id;
     });
+  }
+
+  createExerciseClick = () => {
+    $('.collection-action-type').text('an exercise');
+
+    $('#collection-create-modal input[name="name"]').val('');
+    $('#collection-create-modal input[name="cname"]').val('');
+
+    $('#collection-create-modal').modal('show');
+  }
+
+  createPageClick = () => {
+    $('.collection-action-type').text('a page');
+
+    $('#collection-create-modal input[name="name"]').val('');
+    $('#collection-create-modal input[name="cname"]').val('');
+
+    $('#collection-create-modal').modal('show');
+  }
+
+  editCollectionClick = () => {
+    let pid = 0;
+    let item;
+
+    if (!this.isPage) {
+      // Edit exercise
+      item = this.service.exercises[this.service.editor.exercise.id];
+      pid = item.lesson.id;
+      $('.collection-action-type').text('an exercise');
+      $('#collection-edit-modal .header').text('Edit an exercise');
+    } else {
+      // Edit page
+      item = this.service.pages[this.service.editor.page.id];
+      pid = item.exercise.id;
+      $('.collection-action-type').text('a page');
+      $('#collection-edit-modal .header').text('Edit a page');
+    }
+
+    $('#collection-edit-modal').data('id', item.id);
+    $('#collection-edit-modal').data('pid', pid);
+
+    $('#collection-edit-modal input[name="name"]').val(item.name);
+    $('#collection-edit-modal input[name="cname"]').val(item.path);
+
+    $('#collection-edit-modal').modal('show');
+  }
+
+  deleteCollectionClick = () => {
+    let item;
+    if (!this.isPage) {
+      // Delete exercise
+      item = this.service.exercises[this.service.editor.exercise.id];
+      $('.collection-action-type').text('an exercise');
+      $('#collection-delete-modal .header').text('Delete an exercise');
+    } else {
+      // Delete page
+      item = this.service.pages[this.service.editor.page.id];
+      $('.collection-action-type').text('a page');
+      $('#collection-delete-modal .header').text('Delete a page');
+    }
+
+    $('#collection-delete-modal').data('id', item.id);
+
+    $('#collection-delete-modal .name-check').text(item.name);
+
+
+    $('#collection-delete-modal input[name="name"]').val('');
+    $('#collection-delete-modal input[name="cname"]').val('');
+
+    $('#collection-delete-modal').modal('show');
   }
 }
