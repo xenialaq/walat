@@ -7,21 +7,12 @@ import { AppService } from '../../../services/services';
   templateUrl: 'index.html'
 })
 export class DirectionsModule implements AfterViewInit {
-  defaults = {
-    'directions': ''
-  }
-
-  _value = this.defaults;
+  @Input('value') _value: object;
 
   constructor(private service: AppService, private e: ElementRef) {
   }
 
   ngAfterViewInit() {
-  }
-
-  @Input()
-  set value(line) {
-    this._value = line.cmd !== 'show directions' || _.isUndefined(line.data) ? this.defaults : line.data;
   }
 
   @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();
@@ -37,6 +28,6 @@ export class DirectionsModule implements AfterViewInit {
 
   isAvailable = () => {
     let v = this.service.editor.line;
-    return !_.isUndefined(v.tag) && v.cmd === 'show directions';
+    return !_.isNull(v.tag) && v.cmd === 'show directions';
   }
 }

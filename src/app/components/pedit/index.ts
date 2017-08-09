@@ -30,48 +30,25 @@ export class PEdit implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    $('a.step').each((index) => {
-      $(`a.step:nth-child(${index + 1})`).click((event) => {
-        $('a.step').removeClass('active');
-        $(event.currentTarget).addClass('active');
-        $(`#step-content-wrapper>div`).hide();
-        $(`#step-content-wrapper>div:nth-child(${index + 1})`).show();
-      });
-    });
-
-    $('#step-1-reset').click(() => {
-      $('wat-pedit-events-picker').show();
-      $('#events-options').hide();
-      $('wat-pedit-events-options>div').hide();
-
-      // this.service.page.events_t = undefined;
-    });
-
-    $('#step-2-reset').click(() => {
-      $('wat-pedit-content-picker').show();
-      $('#content-options').hide();
-      $('#content-options>div').hide();
-
-      // this.service.page.content_t = undefined;
-    });
   }
 
   updateLine = (v) => {
     this.service.editor.line.data = v;
-
-    let changedData = {};
-    changedData[this.service.editor.line.tag] = this.service.editor.line.data;
+    let merged = {};
+    merged[this.service.editor.line.tag] = v;
     this.service.editor.page.data = _.merge(
       this.service.editor.page.data,
-      changedData
+      merged
     );
+
+    let q = this.service.pages[this.service.editor.page.id];
+
+    q.setFields(this.service.editor.page.data);
   }
 
   save = () => {
     let q = this.service.pages[this.service.editor.page.id];
-
-    q.setFields(this.service.editor.page.data);
-
+    q.sync();
     $('#success-message>span').text(`${q.name} has been ${q.id > 0 ? 'updated' : 'posted'}.`);
     $('#success-message').transition('fade');
   }

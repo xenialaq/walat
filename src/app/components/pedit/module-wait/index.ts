@@ -10,17 +10,9 @@ export class WaitModule implements AfterViewInit {
   constructor(private service: AppService, private e: ElementRef) {
   }
 
-  defaults = {
-  }
-
-  _value = this.defaults;
+  @Input('value') _value: object;
 
   ngAfterViewInit() {
-  }
-
-  @Input()
-  set value(line) {
-    this._value = line.cmd !== 'wait' || _.isUndefined(line.data) ? this.defaults : line.data;
   }
 
   @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();

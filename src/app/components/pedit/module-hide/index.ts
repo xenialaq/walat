@@ -7,22 +7,13 @@ import { AppService } from '../../../services/services';
   templateUrl: 'index.html'
 })
 export class HideModule implements AfterViewInit {
-  defaults = {
-    'element': '',
-  }
-
-  _value = this.defaults;
+  @Input('value') _value: object;
 
   constructor(private service: AppService, private e: ElementRef) {
   }
 
   ngAfterViewInit() {
     $('wat-pedit-module-hide .checkbox').checkbox();
-  }
-
-  @Input()
-  set value(line) {
-    this._value = line.cmd !== 'hide' || _.isUndefined(line.data) ? this.defaults : line.data;
   }
 
   @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();

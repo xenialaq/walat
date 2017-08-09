@@ -7,25 +7,13 @@ import { AppService } from '../../../services/services';
   templateUrl: 'index.html'
 })
 export class RecordModule implements AfterViewInit {
-  defaults = {
-    'isFixed': true,
-    'length': 0,
-    'length-var': 0,
-    'length-multiplier': 1
-  }
-
-  _value = this.defaults;
+  @Input('value') _value: object;
 
   constructor(private service: AppService, private e: ElementRef) {
   }
 
   ngAfterViewInit() {
     $('#record-variable-dropdown').dropdown();
-  }
-
-  @Input()
-  set value(line) {
-    this._value = line.cmd !== 'record' || _.isUndefined(line.data) ? this.defaults : line.data;
   }
 
   @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();
@@ -68,6 +56,6 @@ export class RecordModule implements AfterViewInit {
 
   isAvailable = () => {
     let v = this.service.editor.line;
-    return !_.isUndefined(v.tag) && v.cmd === 'record';
+    return !_.isNull(v.tag) && v.cmd === 'record';
   }
 }

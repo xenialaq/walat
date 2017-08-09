@@ -7,22 +7,12 @@ import { AppService } from '../../../services/services';
   templateUrl: 'index.html'
 })
 export class PlayModule implements AfterViewInit {
-  defaults = {
-    name: '',
-    path: ''
-  }
-
-  _value = this.defaults;
+  @Input('value') _value: object;
 
   constructor(private service: AppService, private e: ElementRef) {
   }
 
   ngAfterViewInit() {
-  }
-
-  @Input()
-  set value(line) {
-    this._value = line.cmd !== 'play' || _.isUndefined(line.data) ? this.defaults : line.data;
   }
 
   @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();
@@ -42,6 +32,6 @@ export class PlayModule implements AfterViewInit {
 
   isAvailable = () => {
     let v = this.service.editor.line;
-    return !_.isUndefined(v.tag) && v.cmd === 'play';
+    return !_.isNull(v.tag) && v.cmd === 'play';
   }
 }

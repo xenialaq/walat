@@ -5,21 +5,21 @@
 
   <div class="ui form" id="events-options">
 
-    <wat-pedit-module-directions [value]="this.service.editor.line" (valueUpdate)="updateLine($event)"></wat-pedit-module-directions>
+    <wat-pedit-module-directions [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-directions>
 
-    <wat-pedit-module-hide [value]="this.service.editor.line" (valueUpdate)="updateLine($event)"></wat-pedit-module-hide>
+    <wat-pedit-module-hide [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-hide>
 
-    <wat-pedit-module-play [value]="this.service.editor.line" (valueUpdate)="updateLine($event)"></wat-pedit-module-play>
+    <wat-pedit-module-play [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-play>
 
-    <wat-pedit-module-qna [value]="this.service.editor.line" (valueUpdate)="updateLine($event)"></wat-pedit-module-qna>
+    <wat-pedit-module-qna [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-qna>
 
-    <wat-pedit-module-record [value]="this.service.editor.line" (valueUpdate)="updateLine($event)"></wat-pedit-module-record>
+    <wat-pedit-module-record [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-record>
 
-    <wat-pedit-module-text [value]="this.service.editor.line" (valueUpdate)="updateLine($event)"></wat-pedit-module-text>
+    <wat-pedit-module-text [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-text>
 
-    <wat-pedit-module-wait [value]="this.service.editor.line" (valueUpdate)="updateLine($event)"></wat-pedit-module-wait>
+    <wat-pedit-module-wait [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-wait>
 
-    <button class="ui button" (click)="this.save()">Save</button>
+    <button class="ui button" (click)="this.save()" [ngClass]="this.service.pages[this.service.editor.page.id] && this.service.pages[this.service.editor.page.id].isSynced() ? 'disabled': null">Save</button>
   </div>
 
 </div>

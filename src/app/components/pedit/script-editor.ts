@@ -10,11 +10,6 @@ export class ScriptEditor {
   constructor(private service: AppService, private e: ElementRef) {
   }
 
-  defaults = {
-  }
-
-  _value = this.defaults;
-
   flask = new CodeFlask;
 
   ngAfterViewInit() {

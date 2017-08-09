@@ -16,7 +16,7 @@
 
   <div class="field" [hidden]="this._value['mode'] !== 'video'">
     <div class="ui checkbox">
-      <input type="checkbox" [attr.checked]="this._value['video']['isWaveform'] ? '' : null" (change)="updateVideoWaveform($event.target)">
+      <input type="checkbox" [attr.checked]="this._value['video'] && this._value['video']['isWaveform'] ? '' : null" (change)="updateVideoWaveform($event.target)">
       <label>Show waveform</label>
     </div>
   </div>

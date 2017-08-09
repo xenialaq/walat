@@ -7,15 +7,6 @@ import { AppService } from '../../../services/services';
   templateUrl: 'index.html'
 })
 export class TextModule implements AfterViewInit {
-  defaults = {
-    'mode': '',
-    'text': [],
-    'image': { name: '', path: '' },
-    'video': { name: '', path: '', isWaveform: false }
-  }
-
-  _value = this.defaults;
-
   constructor(private service: AppService, private e: ElementRef) {
     $(this.e.nativeElement).find('.ui.checkbox').checkbox();
   }
@@ -23,10 +14,7 @@ export class TextModule implements AfterViewInit {
   ngAfterViewInit() {
   }
 
-  @Input()
-  set value(line) {
-    this._value = line.cmd !== 'show text' || _.isUndefined(line.data) ? this.defaults : line.data;
-  }
+  @Input('value') _value: object;
 
   @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();
 
@@ -77,7 +65,7 @@ export class TextModule implements AfterViewInit {
 
   isAvailable = () => {
     let v = this.service.editor.line;
-    return !_.isUndefined(v.tag) && v.cmd === 'show text';
+    return !_.isNull(v.tag) && v.cmd === 'show text';
   }
 }
 

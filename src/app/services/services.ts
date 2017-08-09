@@ -2,6 +2,8 @@ import {Component, Injectable, ElementRef} from '@angular/core';
 
 import { Page, Exercise, Lesson, Asset } from '../models/models';
 
+import * as PEdit from '../components/pedit';
+
 @Injectable()
 export class AppService {
   public qna: any;
@@ -43,8 +45,8 @@ export class AppService {
     line: {
       i: 0,
       cmd: '',
-      tag: undefined,
-      data: undefined /* field: value */
+      tag: null,
+      data: {} /* field: value */
     }
   };
 
@@ -876,40 +878,82 @@ export class AppService {
   loadOptions = (line) => {
     $('wat-pedit-events-picker').hide();
 
-    let target, cmd, tag;
+    let target, cmd, tag, def;
 
     if (/^show text/.test(line)) {
       target = $('wat-pedit-module-text');
       cmd = 'show text';
+      def = this.peditDefaults.text;
     } else if (/^show directions/.test(line)) {
       target = $('wat-pedit-module-directions');
       cmd = 'show directions';
+      def = this.peditDefaults.directions;
     } else if (/^hide/.test(line)) {
       target = $('wat-pedit-module-hide');
       cmd = 'hide';
+      def = this.peditDefaults.hide;
     } else if (/^pause/.test(line)) {
-      target = $('wat-pedit-module-pause');
-      cmd = 'pause';
+      // target = $('wat-pedit-module-pause');
+      // cmd = 'pause';
+      // def = PEdit.PauseModule.defaults;
     } else if (/^wait/.test(line)) {
       target = $('wat-pedit-module-wait');
       cmd = 'wait';
+      def = this.peditDefaults.wait;
     } else if (/^play/.test(line)) {
       target = $('wat-pedit-module-play');
       cmd = 'play';
+      def = this.peditDefaults.play;
     } else if (/^record/.test(line)) {
       target = $('wat-pedit-module-record');
       cmd = 'record';
+      def = this.peditDefaults.record;
     } else if (/^expect Q&A submission/.test(line)) {
       target = $('wat-pedit-module-qna');
       cmd = 'expect Q&A submission';
+      def = this.peditDefaults.qna;
     }
 
     this.editor.line.cmd = cmd;
     const matches = line.match(/@\w+\s*$/g);
-    tag = _.isNull(matches) ? undefined : matches[0].replace(/^@/g, '').trim();
+    tag = _.isNull(matches) ? null : matches[0].replace(/^@/g, '').trim();
     this.editor.line.tag = tag;
     this.editor.line.data = _.has(this.editor.page.data, tag)
       ? this.editor.page.data[tag]
-      : undefined
+      : _.clone(def)
   }
+
+  peditDefaults = {
+    directions: {
+      'directions': ''
+    }, hide: {
+      'element': ''
+    }, play: {
+      'name': '',
+      'path': ''
+    },
+    qna: {
+      'type': 0,
+      'question': '',
+      'answer': '',
+      'choices': [{
+        'isCorrect': true,
+        'value': ''
+      }]
+    },
+    record: {
+      'isFixed': true,
+      'length': 0,
+      'length-var': 0,
+      'length-multiplier': 1
+    },
+    text: {
+      'mode': '',
+      'text': [],
+      'image': { name: '', path: '' },
+      'video': { name: '', path: '', isWaveform: false }
+    },
+    wait: {}
+  };
+
 }

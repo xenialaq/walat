@@ -7,17 +7,7 @@ import { AppService } from '../../../services/services';
   templateUrl: 'index.html'
 })
 export class QnaModule implements AfterViewInit {
-  defaults = {
-    type: 0,
-    question: '',
-    answer: '',
-    choices: [{
-      isCorrect: true,
-      value: ''
-    }]
-  }
-
-  _value = this.defaults;
+  @Input('value') _value: object;
 
   constructor(private service: AppService, private e: ElementRef) {
   }
@@ -88,11 +78,6 @@ export class QnaModule implements AfterViewInit {
         clearInterval(setter);
       }
     }, 50);
-  }
-
-  @Input()
-  set value(line) {
-    this._value = line.cmd !== 'expect Q&A submission' || _.isUndefined(line.data) ? this.defaults : line.data;
   }
 
   @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();

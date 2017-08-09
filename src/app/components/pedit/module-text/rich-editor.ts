@@ -11,14 +11,12 @@ export class RichEditor implements AfterViewInit {
   constructor(private service: AppService, private e: ElementRef) {
   }
 
-  defaults = [];
-
-  _value = this.defaults;
+  _value = [];
   quill;
 
   @Input()
-  set value(line) {
-    this._value = line.cmd !== '' || _.isUndefined(line.data) ? this.defaults : line.data;
+  set value(data) {
+    this._value = data;
   }
 
   @Output() valueUpdate = new EventEmitter();
