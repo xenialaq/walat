@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ElementRef } from '@angular/core';
 
 import { AppService } from '../../services/services';
 
@@ -7,7 +7,7 @@ import { AppService } from '../../services/services';
   templateUrl: 'events-picker.html'
 })
 export class EventsPicker implements AfterViewInit {
-  constructor(private service: AppService) {
+  constructor(private service: AppService, private e: ElementRef) {
   }
 
   ngAfterViewInit() {

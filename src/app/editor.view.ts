@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ElementRef } from '@angular/core';
 
 import { Page, Exercise, Lesson, Asset } from './models/models';
 import { AppService } from './services/services';
@@ -8,7 +8,7 @@ import { AppService } from './services/services';
   templateUrl: './editor.view.html'
 })
 export class EditorView implements AfterViewInit {
-  constructor(private service: AppService) {
+  constructor(private service: AppService, private e: ElementRef) {
     // this.service.editor = this;
   }
 

@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { AppService } from '../../services/services';
 
@@ -87,13 +87,13 @@ export class AssetUploader implements AfterViewInit {
     this._path = data;
   }
 
-  @Output() change = new EventEmitter();
+  @Output() valueUpdate = new EventEmitter();
 
   update = (name, path) => {
     this._value['name'] = name;
     this._value['path'] = path;
     this.updateSearch(name);
-    this.change.emit(this._value);
+    this.valueUpdate.emit(this._value);
   }
 
   updateSearch = (query) => {

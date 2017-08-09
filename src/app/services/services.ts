@@ -1,10 +1,9 @@
-import {Component, Injectable, ViewChild} from '@angular/core';
+import {Component, Injectable, ElementRef} from '@angular/core';
 
 import { Page, Exercise, Lesson, Asset } from '../models/models';
 
 @Injectable()
 export class AppService {
-  public quill: any;
   public qna: any;
   public flask: any;
 

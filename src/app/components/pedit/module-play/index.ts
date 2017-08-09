@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { AppService } from '../../../services/services';
 
@@ -7,8 +7,6 @@ import { AppService } from '../../../services/services';
   templateUrl: 'index.html'
 })
 export class PlayModule implements AfterViewInit {
-  @ViewChild('selector') e;
-
   defaults = {
     name: '',
     path: ''
@@ -16,23 +14,26 @@ export class PlayModule implements AfterViewInit {
 
   _value = this.defaults;
 
-  constructor(private service: AppService) {
+  constructor(private service: AppService, private e: ElementRef) {
   }
 
   ngAfterViewInit() {
   }
 
   @Input()
-  set value(data) {
-    this._value = _.isUndefined(data) ? this.defaults : data;
+  set value(line) {
+    this._value = line.cmd !== 'play' || _.isUndefined(line.data) ? this.defaults : line.data;
   }
 
-  @Output() change = new EventEmitter();
+  @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();
 
   update = (v) => {
+    if (!this.isAvailable()) {
+      return;
+    }
     this._value['name'] = v.name;
     this._value['path'] = v.path;
-    this.change.emit(this._value);
+    this.valueUpdate.emit(this._value);
   }
 
   debug = () => {

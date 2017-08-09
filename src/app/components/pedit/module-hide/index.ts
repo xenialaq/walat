@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { AppService } from '../../../services/services';
 
@@ -7,15 +7,13 @@ import { AppService } from '../../../services/services';
   templateUrl: 'index.html'
 })
 export class HideModule implements AfterViewInit {
-  @ViewChild('selector') e;
-
   defaults = {
     'element': '',
   }
 
   _value = this.defaults;
 
-  constructor(private service: AppService) {
+  constructor(private service: AppService, private e: ElementRef) {
   }
 
   ngAfterViewInit() {
@@ -23,17 +21,20 @@ export class HideModule implements AfterViewInit {
   }
 
   @Input()
-  set value(data) {
-    this._value = _.isUndefined(data) ? this.defaults : data;
+  set value(line) {
+    this._value = line.cmd !== 'hide' || _.isUndefined(line.data) ? this.defaults : line.data;
   }
 
-  @Output() change = new EventEmitter();
+  @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();
 
   update = (cbox) => {
+    if (!this.isAvailable()) {
+      return;
+    }
     let key = $(cbox).next().text().toLowerCase();
     this._value['element'] = key;
 
-    this.change.emit(this._value);
+    this.valueUpdate.emit(this._value);
   }
 
   debug = () => {

@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { AppService } from '../../services/services';
 
@@ -7,8 +7,13 @@ import { AppService } from '../../services/services';
   templateUrl: 'script-editor.html'
 })
 export class ScriptEditor {
-  constructor(private service: AppService) {
+  constructor(private service: AppService, private e: ElementRef) {
   }
+
+  defaults = {
+  }
+
+  _value = this.defaults;
 
   flask = new CodeFlask;
 

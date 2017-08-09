@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { AppService } from '../../../services/services';
 
@@ -7,28 +7,29 @@ import { AppService } from '../../../services/services';
   templateUrl: 'index.html'
 })
 export class WaitModule implements AfterViewInit {
-  @ViewChild('selector') e;
+  constructor(private service: AppService, private e: ElementRef) {
+  }
 
   defaults = {
   }
 
   _value = this.defaults;
 
-  constructor(private service: AppService) {
-  }
-
   ngAfterViewInit() {
   }
 
   @Input()
-  set value(data) {
-    this._value = _.isUndefined(data) ? this.defaults : data;
+  set value(line) {
+    this._value = line.cmd !== 'wait' || _.isUndefined(line.data) ? this.defaults : line.data;
   }
 
-  @Output() change = new EventEmitter();
+  @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();
 
   update = (v) => {
-    this.change.emit(this._value);
+    if (!this.isAvailable()) {
+      return;
+    }
+    this.valueUpdate.emit(this._value);
   }
 
   debug = () => {

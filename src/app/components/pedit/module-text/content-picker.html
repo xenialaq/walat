@@ -1,4 +1,4 @@
-<div class="ui three stackable cards" *ngIf="this._value['mode'] === ''">
+<div class="ui three stackable cards" *ngIf="this._value === ''">
   <a class="ui card" href="javascript:void(0)" (click)="update('text')">
     <div class="content">
       <img class="right floated mini ui image" src="/assets/templates/text.png">
@@ -17,4 +17,8 @@
       <div class="header">Video</div>
     </div>
   </a>
+</div>
+
+<div class="field">
+  <a class="ui yellow circular label" (click)="this.debug()">!</a>
 </div>

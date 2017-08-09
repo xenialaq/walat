@@ -1,13 +1,17 @@
-<wat-pedit-content-picker [hidden]="!this.isAvailable()" [value]="this._value['mode']" (change)="toggleMode($event)">
+<wat-pedit-content-picker [hidden]="!this.isAvailable()" [value]="this._value['mode']" (valueUpdate)="toggleMode($event)">
 </wat-pedit-content-picker>
 
 <div class="ui form" id="content-options" [hidden]="!this.isAvailable()">
   <div class="field" [hidden]="this._value['mode'] !== 'text'">
-    <wat-pedit-rich-editor [value]="this._value['text']" (change)="updateText($event)"></wat-pedit-rich-editor>
+    <wat-pedit-rich-editor [value]="this._value['text']" (valueUpdate)="updateText($event)"></wat-pedit-rich-editor>
   </div>
 
   <div class="field" [hidden]="this._value['mode'] !== 'image'">
-    <wat-asset-uploader [value]="this._value['image']" (change)="updateImage($event)" [path]="this.service.getEditorPath()"></wat-asset-uploader>
+    <wat-asset-uploader [value]="this._value['image']" (valueUpdate)="updateImage($event)" [path]="this.service.getEditorPath()"></wat-asset-uploader>
+  </div>
+
+  <div class="field" [hidden]="this._value['mode'] !== 'video'">
+    <wat-asset-uploader [value]="this._value['video']" (valueUpdate)="updateVideo($event)" [path]="this.service.getEditorPath()"></wat-asset-uploader>
   </div>
 
   <div class="field" [hidden]="this._value['mode'] !== 'video'">
@@ -15,7 +19,6 @@
       <input type="checkbox" [attr.checked]="this._value['video']['isWaveform'] ? '' : null" (change)="updateVideoWaveform($event.target)">
       <label>Show waveform</label>
     </div>
-    <wat-asset-uploader [value]="this._value['video']" (change)="updateVideo($event)" [path]="this.service.getEditorPath()"></wat-asset-uploader>
   </div>
 </div>
 

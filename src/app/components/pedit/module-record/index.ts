@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { AppService } from '../../../services/services';
 
@@ -7,8 +7,6 @@ import { AppService } from '../../../services/services';
   templateUrl: 'index.html'
 })
 export class RecordModule implements AfterViewInit {
-  @ViewChild('selector') e;
-
   defaults = {
     'isFixed': true,
     'length': 0,
@@ -18,7 +16,7 @@ export class RecordModule implements AfterViewInit {
 
   _value = this.defaults;
 
-  constructor(private service: AppService) {
+  constructor(private service: AppService, private e: ElementRef) {
   }
 
   ngAfterViewInit() {
@@ -26,29 +24,42 @@ export class RecordModule implements AfterViewInit {
   }
 
   @Input()
-  set value(data) {
-    this._value = _.isUndefined(data) ? this.defaults : data;
+  set value(line) {
+    this._value = line.cmd !== 'record' || _.isUndefined(line.data) ? this.defaults : line.data;
   }
 
-  @Output() change = new EventEmitter();
+  @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();
 
   updateLength = (v) => {
+    if (!this.isAvailable()) {
+      return;
+    }
     this._value['length'] = parseFloat(v);
-    this.change.emit(this._value);
+    this.valueUpdate.emit(this._value);
   }
 
   updateLengthVar = (v) => {
+    if (!this.isAvailable()) {
+      return;
+    }
     this._value['length-var'] = parseInt(v, 10);
-    this.change.emit(this._value);
+    this.valueUpdate.emit(this._value);
   }
 
   updateLengthMultiplier = (v) => {
+    if (!this.isAvailable()) {
+      return;
+    }
     this._value['length-multiplier'] = parseFloat(v);
-    this.change.emit(this._value);
+    this.valueUpdate.emit(this._value);
   }
 
   toggleMode = (isFixed) => {
+    if (!this.isAvailable()) {
+      return;
+    }
     this._value['isFixed'] = isFixed;
+    this.valueUpdate.emit(this._value);
   }
 
   debug = () => {

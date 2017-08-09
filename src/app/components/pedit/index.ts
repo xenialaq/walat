@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, NgModule } from '@angular/core';
+import { Component, AfterViewInit, NgModule, ElementRef } from '@angular/core';
 
 import { AppService } from '../../services/services';
 
@@ -26,7 +26,7 @@ import {WaitModule} from './module-wait';
   ]
 })
 export class PEdit implements AfterViewInit {
-  constructor(private service: AppService) {
+  constructor(private service: AppService, private e: ElementRef) {
   }
 
   ngAfterViewInit() {
@@ -54,53 +54,26 @@ export class PEdit implements AfterViewInit {
 
       // this.service.page.content_t = undefined;
     });
+  }
 
-    $('.q-save-button').click((event) => {
-      // let q = this.service.page;
+  updateLine = (v) => {
+    this.service.editor.line.data = v;
 
-      // let template_fields = {};
-      // if (_.has(this.service.eventsFieldsMapping, q.events_t)) {
-      //   this.service.eventsFieldsMapping[q.events_t].forEach((f) => {
-      //     template_fields[f] = q.template_fields.get(f);
-      //   });
-      // }
-      //
-      // let content_fields = {};
-      // q.content_t.forEach((content_t) => {
-      //   if (_.has(this.service.contentFieldsMapping, content_t)) {
-      //     this.service.contentFieldsMapping[content_t].forEach((f) => {
-      //       content_fields[f] = q.content_fields[this.service.content_index].get(f);
-      //     });
-      //   }
-      // })
+    let changedData = {};
+    changedData[this.service.editor.line.tag] = this.service.editor.line.data;
+    this.service.editor.page.data = _.merge(
+      this.service.editor.page.data,
+      changedData
+    );
+  }
 
+  save = () => {
+    let q = this.service.pages[this.service.editor.page.id];
 
-      // $(event.currentTarget).api({
-      //   action: q.id > 0 ? 'put a page' : 'post a page',
-      //   on: 'now',
-      //   method: q.id > 0 ? 'put' : 'post',
-      //   data: JSON.stringify({
-      //     "id": q.id,
-      //     "name": q.name,
-      //     "path": q.path,
-      //     "events_t": q.events_t,
-      //     "template_fields": JSON.stringify(template_fields),
-      //     "template": q.content_t,
-      //     "content_fields": JSON.stringify(content_fields),
-      //     "directions": q.directions,
-      //     "notes": q.notes,
-      //     "script": q.script,
-      //     "exercise": this.service.exercise.id
-      //   }),
-      //   contentType: 'application/json',
-      //   onResponse: (response) => {
-      //     // make some adjustments to response
-      //     // this.service.addPageToEditorView(this.service.exercise.id, q.id);
-      //     // $('#success-message>span').text(`${q.name} has been ${q.id > 0 ? 'updated' : 'posted'}.`);
-      //     $('#success-message').transition('fade');
-      //   }
-      // });
-    });
+    q.setFields(this.service.editor.page.data);
+
+    $('#success-message>span').text(`${q.name} has been ${q.id > 0 ? 'updated' : 'posted'}.`);
+    $('#success-message').transition('fade');
   }
 }
 

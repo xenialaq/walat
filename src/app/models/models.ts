@@ -6,6 +6,7 @@ class Page {
   fields: object; // (field name, value)
   script: string; // walscript template
   exercise: Exercise;
+  synced = false;
 
   constructor(id: number, name: string, path: string, description = '', fields = {}, script = '', exercise: Exercise) {
     this.id = id;
@@ -15,6 +16,44 @@ class Page {
     this.fields = fields;
     this.script = script;
     this.exercise = exercise;
+  }
+
+  isSynced = () => {
+    return this.synced;
+  }
+
+  setName = (v) => {
+    this.name = v;
+    this.synced = false;
+  }
+
+  setPath = (v) => {
+    this.path = v;
+    this.synced = false;
+  }
+
+  setDescription = (v) => {
+    this.description = v;
+    this.synced = false;
+  }
+
+  setFields = (v) => {
+    this.fields = v;
+    this.synced = false;
+  }
+
+  setScript = (v) => {
+    this.script = v;
+    this.synced = false;
+  }
+
+  setExercise = (v) => {
+    this.exercise = v;
+    this.synced = false;
+  }
+
+  sync = () => {
+    this.synced = true;
   }
 }
 

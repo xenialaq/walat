@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { AppService } from '../../../services/services';
 
@@ -7,30 +7,28 @@ import { AppService } from '../../../services/services';
   templateUrl: 'index.html'
 })
 export class DirectionsModule implements AfterViewInit {
-  @ViewChild('selector') e;
-
   defaults = {
     'directions': ''
   }
 
   _value = this.defaults;
 
-  constructor(private service: AppService) {
+  constructor(private service: AppService, private e: ElementRef) {
   }
 
   ngAfterViewInit() {
   }
 
   @Input()
-  set value(data) {
-    this._value = _.isUndefined(data) ? this.defaults : data;
+  set value(line) {
+    this._value = line.cmd !== 'show directions' || _.isUndefined(line.data) ? this.defaults : line.data;
   }
 
-  @Output() change = new EventEmitter();
+  @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();
 
   update = (v) => {
     this._value['directions'] = v;
-    this.change.emit(this._value);
+    this.valueUpdate.emit(this._value);
   }
 
   debug = () => {

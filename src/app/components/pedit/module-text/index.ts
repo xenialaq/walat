@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { AppService } from '../../../services/services';
 
@@ -7,54 +7,68 @@ import { AppService } from '../../../services/services';
   templateUrl: 'index.html'
 })
 export class TextModule implements AfterViewInit {
-  @ViewChild('selector') e;
-
   defaults = {
     'mode': '',
-    'text': {},
-    'image': {},
-    'video': {}
+    'text': [],
+    'image': { name: '', path: '' },
+    'video': { name: '', path: '', isWaveform: false }
   }
 
   _value = this.defaults;
 
-  constructor(private service: AppService) {
+  constructor(private service: AppService, private e: ElementRef) {
+    $(this.e.nativeElement).find('.ui.checkbox').checkbox();
   }
 
   ngAfterViewInit() {
   }
 
   @Input()
-  set value(data) {
-    this._value = _.isUndefined(data) ? this.defaults : data;
+  set value(line) {
+    this._value = line.cmd !== 'show text' || _.isUndefined(line.data) ? this.defaults : line.data;
   }
 
-  @Output() change = new EventEmitter();
+  @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();
 
   toggleMode = (mode) => {
+    if (!this.isAvailable()) {
+      return;
+    }
     this._value['mode'] = mode;
-    this.change.emit(this._value);
+    this.valueUpdate.emit(this._value);
   }
 
   updateText = (v) => {
+    if (!this.isAvailable()) {
+      return;
+    }
     this._value['text'] = v;
-    this.change.emit(this._value);
+    this.valueUpdate.emit(this._value);
   }
 
   updateImage = (v) => {
+    if (!this.isAvailable()) {
+      return;
+    }
     this._value['image'] = v;
-    this.change.emit(this._value);
+    this.valueUpdate.emit(this._value);
   }
 
-  updateVideo = (v, isWaveform) => {
+  updateVideo = (v) => {
+    if (!this.isAvailable()) {
+      return;
+    }
     this._value['video']['name'] = v['name'];
     this._value['video']['path'] = v['path'];
-    this.change.emit(this._value);
+    this.valueUpdate.emit(this._value);
   }
 
   updateVideoWaveform = (cbox) => {
+    if (!this.isAvailable()) {
+      return;
+    }
     this._value['video']['isWaveform'] = cbox.checked;
-    this.change.emit(this._value);
+    this.valueUpdate.emit(this._value);
   }
 
   debug = () => {
