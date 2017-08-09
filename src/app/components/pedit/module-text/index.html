@@ -2,15 +2,15 @@
 </wat-pedit-content-picker>
 
 <div class="ui form" id="content-options" [hidden]="!this.isAvailable()">
-  <div class="field" [hidden]="this.mode !== 'text'">
+  <div class="field" [hidden]="this._value['mode'] !== 'text'">
     <wat-pedit-rich-editor [value]="this._value['text']" (change)="updateText($event)"></wat-pedit-rich-editor>
   </div>
 
-  <div class="field" [hidden]="this.mode !== 'image'">
+  <div class="field" [hidden]="this._value['mode'] !== 'image'">
     <wat-asset-uploader [value]="this._value['image']" (change)="updateImage($event)" [path]="this.service.getEditorPath()"></wat-asset-uploader>
   </div>
 
-  <div class="field" [hidden]="this.mode !== 'video'">
+  <div class="field" [hidden]="this._value['mode'] !== 'video'">
     <div class="ui checkbox">
       <input type="checkbox" [attr.checked]="this._value['video']['isWaveform'] ? '' : null" (change)="updateVideoWaveform($event.target)">
       <label>Show waveform</label>
