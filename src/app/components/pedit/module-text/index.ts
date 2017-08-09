@@ -10,6 +10,10 @@ export class TextModule implements AfterViewInit {
   @ViewChild('selector') e;
 
   defaults = {
+    'mode': '',
+    'text': {},
+    'image': {},
+    'video': {}
   }
 
   _value = this.defaults;
@@ -27,8 +31,23 @@ export class TextModule implements AfterViewInit {
 
   @Output() valueChange = new EventEmitter();
 
-  update = (v) => {
-    this._value['directions'] = v;
+  toggleMode = (mode) => {
+    this._value['mode'] = mode;
+    this.valueChange.emit(this._value);
+  }
+
+  updateText = (v) => {
+    this._value['text'] = v;
+    this.valueChange.emit(this._value);
+  }
+
+  updateImage = (v) => {
+    this._value['image'] = v;
+    this.valueChange.emit(this._value);
+  }
+
+  updateVideo = (v, isWaveform) => {
+    this._value['video'] = v;
     this.valueChange.emit(this._value);
   }
 

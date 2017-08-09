@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { AppService } from '../../../services/services';
 
@@ -10,6 +10,19 @@ import { AppService } from '../../../services/services';
 export class RichEditor implements AfterViewInit {
   constructor(private service: AppService) {
   }
+
+  defaults = {
+    'delta': {}
+  }
+
+  _value = this.defaults;
+
+  @Input()
+  set value(data) {
+    this._value = _.isUndefined(data) ? this.defaults : data;
+  }
+
+  @Output() valueChange = new EventEmitter();
 
   ngAfterViewInit() {
     const toolbarOptions = [
@@ -40,10 +53,12 @@ export class RichEditor implements AfterViewInit {
       readOnly: false,
       theme: 'snow'
     };
-    // this.service.quill = new Quill('#quill-editor', options); // First matching element will be used
 
-    // // this.service.quill.on('text-change', (delta, oldDelta, source) => {
-    //   // this.service.page.content_fields[// this.service.page.content_index].set('text', delta);
-    // });
+    this.service.quill = new Quill('#quill-editor', options); // First matching element will be used
+
+    this.service.quill.on('text-change', (delta, oldDelta, source) => {
+      this._value['delta'] = delta;
+      this.valueChange.emit(this._value);
+    });
   }
 }

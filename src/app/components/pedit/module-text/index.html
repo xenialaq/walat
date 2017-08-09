@@ -1,27 +1,23 @@
-<wat-pedit-content-picker [hidden]="!this.isAvailable()">
+<wat-pedit-content-picker [hidden]="!this.isAvailable()" [value]="this._value['mode']" (change)="toggleMode($event)">
 </wat-pedit-content-picker>
 
-<div class="ui form" id="content-options" style="display: none;" [hidden]="!this.isAvailable()">
-  <div class="field" style="display: none;">
-    <wat-pedit-rich-editor></wat-pedit-rich-editor>
+<div class="ui form" id="content-options" [value]="this._value['text']" (change)="updateText($event)" [hidden]="!this.isAvailable()">
+  <div class="field">
+    <wat-pedit-rich-editor [value]="this._value['text']" (change)="updateText($event)" [hidden]="this.mode !== 'text'"></wat-pedit-rich-editor>
   </div>
 
-  <div class="field" style="display: none;">
-    <wat-asset-uploader></wat-asset-uploader>
+  <div class="field">
+    <wat-asset-uploader [value]="this._value['image']" (change)="updateImage($event)" [path]="this.service.getEditorPath()" [hidden]="this.mode !== 'image'"></wat-asset-uploader>
   </div>
 
-  <div class="field" style="display: none;">
-    <wat-asset-uploader></wat-asset-uploader>
-  </div>
-
-  <div class="field" style="display: none;">
-    <wat-pedit-module-qna></wat-pedit-module-qna>
+  <div class="field">
+    <wat-asset-uploader [value]="this._value['video']" (change)="updateVideo($event)" [path]="this.service.getEditorPath()" [hidden]="this.mode !== 'video'"></wat-asset-uploader>
   </div>
 
   <button class="ui primary button q-save-button disabled">
     Save
   </button>
-  <button class="ui button" id="step-2-reset">
+  <button class="ui button" id="text-module-reset">
     Start over
   </button>
 </div>

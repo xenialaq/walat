@@ -27,15 +27,6 @@ export class ContentPicker implements AfterViewInit {
         } else if (index === 2) {
           // Video
           $('#content-options>div:nth-child(3)').show();
-        } else if (index === 3) {
-          // Page
-          $('#content-options>div:nth-child(4)').show();
-        } else if (index === 4) {
-          // Video and page
-          $('#content-options>div:nth-child(3)').show();
-          $('#content-options>div:nth-child(4)').show();
-        } else if (index === 5) {
-          // Video and waveform
         }
 
         // this.service.page.content_t = $(e).attr('data-mode');
