@@ -29,26 +29,32 @@ export class TextModule implements AfterViewInit {
     this._value = _.isUndefined(data) ? this.defaults : data;
   }
 
-  @Output() valueChange = new EventEmitter();
+  @Output() change = new EventEmitter();
 
   toggleMode = (mode) => {
     this._value['mode'] = mode;
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   updateText = (v) => {
     this._value['text'] = v;
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   updateImage = (v) => {
     this._value['image'] = v;
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   updateVideo = (v, isWaveform) => {
-    this._value['video'] = v;
-    this.valueChange.emit(this._value);
+    this._value['video']['name'] = v['name'];
+    this._value['video']['path'] = v['path'];
+    this.change.emit(this._value);
+  }
+
+  updateVideoWaveform = (cbox) => {
+    this._value['video']['isWaveform'] = cbox.checked;
+    this.change.emit(this._value);
   }
 
   debug = () => {

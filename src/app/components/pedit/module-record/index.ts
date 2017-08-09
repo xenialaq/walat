@@ -30,21 +30,21 @@ export class RecordModule implements AfterViewInit {
     this._value = _.isUndefined(data) ? this.defaults : data;
   }
 
-  @Output() valueChange = new EventEmitter();
+  @Output() change = new EventEmitter();
 
   updateLength = (v) => {
     this._value['length'] = parseFloat(v);
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   updateLengthVar = (v) => {
     this._value['length-var'] = parseInt(v, 10);
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   updateLengthMultiplier = (v) => {
     this._value['length-multiplier'] = parseFloat(v);
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   toggleMode = (isFixed) => {

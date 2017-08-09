@@ -27,12 +27,12 @@ export class PlayModule implements AfterViewInit {
     this._value = _.isUndefined(data) ? this.defaults : data;
   }
 
-  @Output() valueChange = new EventEmitter();
+  @Output() change = new EventEmitter();
 
   update = (v) => {
     this._value['name'] = v.name;
     this._value['path'] = v.path;
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   debug = () => {

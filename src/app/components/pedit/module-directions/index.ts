@@ -26,11 +26,11 @@ export class DirectionsModule implements AfterViewInit {
     this._value = _.isUndefined(data) ? this.defaults : data;
   }
 
-  @Output() valueChange = new EventEmitter();
+  @Output() change = new EventEmitter();
 
   update = (v) => {
     this._value['directions'] = v;
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   debug = () => {

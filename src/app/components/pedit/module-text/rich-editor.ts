@@ -22,7 +22,7 @@ export class RichEditor implements AfterViewInit {
     this._value = _.isUndefined(data) ? this.defaults : data;
   }
 
-  @Output() valueChange = new EventEmitter();
+  @Output() change = new EventEmitter();
 
   ngAfterViewInit() {
     const toolbarOptions = [
@@ -58,7 +58,7 @@ export class RichEditor implements AfterViewInit {
 
     this.service.quill.on('text-change', (delta, oldDelta, source) => {
       this._value['delta'] = delta;
-      this.valueChange.emit(this._value);
+      this.change.emit(this._value);
     });
   }
 }

@@ -27,13 +27,13 @@ export class HideModule implements AfterViewInit {
     this._value = _.isUndefined(data) ? this.defaults : data;
   }
 
-  @Output() valueChange = new EventEmitter();
+  @Output() change = new EventEmitter();
 
   update = (cbox) => {
     let key = $(cbox).next().text().toLowerCase();
     this._value['element'] = key;
 
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   debug = () => {

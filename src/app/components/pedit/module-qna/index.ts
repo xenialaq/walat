@@ -84,7 +84,7 @@ export class QnaModule implements AfterViewInit {
       this._value['choices'][i]['value'] = v;
     }
 
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   activeChoice = 0;
@@ -98,11 +98,11 @@ export class QnaModule implements AfterViewInit {
 
       this.activeChoice++;
 
-      this.valueChange.emit(this._value);
+      this.change.emit(this._value);
     } else if (action === 'remove') {
       this._value['choices'].splice(this.activeChoice, 1);
 
-      this.valueChange.emit(this._value);
+      this.change.emit(this._value);
     } else if (action === 'move down') {
       let a = this._value['choices'][this.activeChoice];
       let b = this._value['choices'][this.activeChoice + 1];
@@ -111,7 +111,7 @@ export class QnaModule implements AfterViewInit {
       this._value['choices'][this.activeChoice + 1] = a;
       this.activeChoice++;
 
-      this.valueChange.emit(this._value);
+      this.change.emit(this._value);
     } else {
       return;
     }
@@ -145,21 +145,21 @@ export class QnaModule implements AfterViewInit {
     this._value = _.isUndefined(data) ? this.defaults : data;
   }
 
-  @Output() valueChange = new EventEmitter();
+  @Output() change = new EventEmitter();
 
   updateQ = (q) => {
     this._value['question'] = q;
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   updateA = (a) => {
     this._value['answer'] = a;
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   toggleMode = (qtype) => {
     this._value['type'] = parseInt(qtype, 10);
-    this.valueChange.emit(this._value);
+    this.change.emit(this._value);
   }
 
   debug = () => {
