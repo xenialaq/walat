@@ -120,7 +120,9 @@ export class CollectionManager implements AfterViewInit {
   showPage = (id) => {
     this.isPage = true;
 
-    this.service.editor.page = { id: id, data: {} };
+    this.service.editor.page = { id: id, data: this.service.pages[id].fields };
+
+    this.service.flask.update(this.service.pages[this.service.editor.page.id].script);
   }
 
   getExercises = () => {

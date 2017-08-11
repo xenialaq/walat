@@ -53,7 +53,24 @@ class Page {
   }
 
   sync = () => {
-    this.synced = true;
+    $.api({
+      action: `${this.id > 0 ? 'put' : 'post'} a page`,
+      on: 'now',
+      method: this.id > 0 ? 'put' : 'post',
+      data: JSON.stringify({
+        id: this.id,
+        name: this.name,
+        path: this.path,
+        description: this.description,
+        fields: JSON.stringify(this.fields),
+        script: this.script,
+        exercise: this.exercise.id
+      }),
+      contentType: 'application/json',
+      onResponse: (response) => {
+        this.synced = true;
+      }
+    });
   }
 }
 

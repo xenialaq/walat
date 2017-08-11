@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, NgModule, ElementRef } from '@angular/core';
 
 import { AppService } from '../../services/services';
+import { Page, Exercise, Lesson, Asset } from '../../models/models';
 
 import {DirectionsModule} from './module-directions';
 import {HideModule} from './module-hide';
@@ -50,6 +51,14 @@ export class PEdit implements AfterViewInit {
     let q = this.service.pages[this.service.editor.page.id];
     q.sync();
     $('#success-message>span').text(`${q.name} has been ${q.id > 0 ? 'updated' : 'posted'}.`);
+    $('#success-message').transition('fade');
+  }
+
+  duplicate = () => {
+    let q = this.service.pages[this.service.editor.page.id];
+    let dup = new Page(0, q.name + ' (copy)', q.path, q.description, q.fields, q.script, q.exercise);
+    dup.sync();
+    $('#success-message>span').text(`A copy named ${dup.name} has been ${dup.id > 0 ? 'updated' : 'posted'}.`);
     $('#success-message').transition('fade');
   }
 }

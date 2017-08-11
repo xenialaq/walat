@@ -23,8 +23,8 @@ export class ScriptEditor {
       'url': /@\w+\s*$/m
     };
     this.flask.run('#flask-editor', { language: 'walscript', lineNumbers: true });
-    this.flask.onUpdate(function(code) {
-      // console.log("User's input code: " + code);
+    this.flask.onUpdate((code) => {
+      this.service.pages[this.service.editor.page.id].setScript(code);
     });
 
     $(this.flask.textarea).click((event) => {

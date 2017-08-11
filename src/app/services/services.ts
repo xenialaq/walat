@@ -127,6 +127,7 @@ export class AppService {
           this.pages[d.id] = (
             new Page(d.id, d.name, d.path, d.description, d.fields, d.script, this.exercises[d.exercise])
           );
+          this.pages[d.id].synced = true;
         });
       }
     });
@@ -306,6 +307,7 @@ export class AppService {
         this.pages[d.id] = (
           new Page(d.id, d.name, d.path, d.description, d.fields, d.script, this.exercises[d.exercise])
         );
+        this.pages[d.id].synced = true;
       }
     });
   }
@@ -912,6 +914,8 @@ export class AppService {
       target = $('wat-pedit-module-qna');
       cmd = 'expect Q&A submission';
       def = this.peditDefaults.qna;
+    } else {
+      def = {};
     }
 
     this.editor.line.cmd = cmd;

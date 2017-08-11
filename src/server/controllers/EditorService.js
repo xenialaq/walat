@@ -305,7 +305,7 @@ exports.pagesGET = function(args, res, next) {
       "name": null2Undefined(d.get('name')),
       "path": null2Undefined(d.get('path')),
       "description": null2Undefined(d.get('description')),
-      "fields": null2Undefined(d.get('fields')),
+      "fields": JSON.parse(d.get('fields')),
       "script": null2Undefined(d.get('script')),
       "exercise": null2Undefined(d.get('exerciseId'))
     }));
@@ -359,7 +359,7 @@ exports.pagesIdGET = function(args, res, next) {
       "name": null2Undefined(d.get('name')),
       "path": null2Undefined(d.get('path')),
       "description": null2Undefined(d.get('description')),
-      "fields": null2Undefined(d.get('fields')),
+      "fields": JSON.parse(d.get('fields')),
       "script": null2Undefined(d.get('script')),
       "exercise": null2Undefined(d.get('exerciseId'))
     };
@@ -384,7 +384,7 @@ exports.pagesPOST = function(args, res, next) {
     path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value
       .path,
     description: args.body.value.description,
-    fields: args.body.value.fields,
+    fields: args.body.value.fields || '{}',
     script: args.body.value.script,
     exerciseId: args.body.value.exercise
   }).then((d) => {
@@ -393,7 +393,7 @@ exports.pagesPOST = function(args, res, next) {
       "name": null2Undefined(d.get('name')),
       "path": null2Undefined(d.get('path')),
       "description": null2Undefined(d.get('description')),
-      "fields": null2Undefined(d.get('fields')),
+      "fields": JSON.parse(d.get('fields')),
       "script": null2Undefined(d.get('script')),
       "exercise": null2Undefined(d.get('exerciseId'))
     };
