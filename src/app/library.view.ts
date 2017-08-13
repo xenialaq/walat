@@ -14,9 +14,6 @@ export class LibraryView implements AfterViewInit {
   ngAfterViewInit() {
     // this.service.setBreadCrumb([], 'Media library', '');
 
-    // Only allows edits in editor
-    $('wat-collection-manager>div>.icon.secondary.menu>div').hide();
-
     $('.message .close').on('click', (event) => {
       $(event.currentTarget).closest('.message').transition('fade');
     });

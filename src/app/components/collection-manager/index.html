@@ -1,5 +1,5 @@
 <div class="ui attached basic segment" style="background-color: #F8F8F8; padding-bottom: 0; border-top: none; border-left: none; border-right: none; margin-left: 0;">
-  <div class="ui search">
+  <div class="ui search" *ngIf="false">
     <div class="ui fluid icon input">
       <input type="text" placeholder="Search..." style="border-radius: 500rem;">
       <i class="search icon"></i>
@@ -11,12 +11,12 @@
     <a class="active item">
       Collection
     </a>
-    <a class="item">
+    <a class="item" *ngIf="false">
       History
     </a>
   </div>
 
-  <div class="ui icon secondary menu">
+  <div class="ui icon secondary menu" *ngIf="this.viewName === 'editor'">
     <div class="right menu">
       <a class="item" id="exercise-create" (click)="this.createExerciseClick()">
         <i class="folder outline icon"></i>

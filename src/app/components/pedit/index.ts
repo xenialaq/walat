@@ -27,6 +27,8 @@ import {WaitModule} from './module-wait';
   ]
 })
 export class PEdit implements AfterViewInit {
+  _ = _;
+
   constructor(private service: AppService, private e: ElementRef) {
   }
 

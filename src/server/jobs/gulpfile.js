@@ -14,22 +14,27 @@ if (!fs.existsSync(tempDir)) {
 tempDir = fs.mkdtempSync(path.join(tempDir, 'walat-'));
 
 gulp.task('default', function() {
+  pageData.script.split('\n').forEach((line, i) => {
+
+  });
   var delta = pageData.fields.content.text;
 
   render(delta, (err, output) => {
     file('text.html', output, { src: true })
       .pipe(gulp.dest(tempDir));
-
-    gulp.src('../../assets/templates/page.html')
-      .pipe(template({
-        pageName: 'P1',
-        pageType: 'video and question',
-        notesSrc: 'aaabbb.html',
-        textSrc: 'text.html',
-        videoSrc: pageData.fields.content.video.path
-      }))
-      .pipe(gulp.dest(tempDir));
   });
+
+  gulp.src('../../assets/templates/page.html').pipe(
+    template({
+      pageName: 'P1',
+      pageType: 'video and question',
+      notesSrc: 'aaabbb.html',
+      textSrc: 'text.html',
+      videoSrc: pageData.fields.content.video.path
+    })).pipe(gulp.dest(tempDir));
+
+  file('E1.bak', pageData[script], { src: true })
+    .pipe(gulp.dest(tempDir));
 });
 
 var pageData = {

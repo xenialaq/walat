@@ -17,6 +17,9 @@ app.use(bodyParser.json());
 var uploader = require('./controllers/Uploader.js');
 uploader(app);
 
+var generator = require('./controllers/Generator.js');
+generator(app);
+
 // swaggerRouter configuration
 var options = {
   swaggerUi: '/swagger.json',

@@ -12,6 +12,8 @@ import * as _ from 'lodash';
 })
 export class LessonManager implements AfterViewInit {
   _ = _;
+  Cookies = Cookies;
+
   constructor(private service: AppService, private e: ElementRef) {
   }
 

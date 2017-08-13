@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+
+  <script language="JavaScript" src="js/video_external.js"></script>
+  <link href="css/wavesurfer_goldilocks_type.css" rel="stylesheet" type="text/css">
+
+  <script language="JavaScript" src="js/wal_api.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.1.10/wavesurfer.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.1.10/plugin/wavesurfer.regions.min.js"></script>
+
+  <script type="text/javascript">
+    // load the source URLs for this page, i.e. variables AudioURL, ImageURL, and TextURL form a js file with the same name as this htm file
+    // e.g. if this file is tree_01.htm, the URLs are expected to be in tree_01.js;
+    // these variables need to be set before they are used in function Init()
+    var DataJsURL = window.location.pathname.replace(".htm", ".js");
+    var ScriptObj = document.createElement('script');
+    var Root = document.getElementsByTagName('head')[0];
+    ScriptObj.setAttribute('type', 'text/javascript');
+    ScriptObj.setAttribute('src', DataJsURL);
+    Root.appendChild(ScriptObj); // appends the element script to the root
+
+    top.ConfirmOnBeforeUnload = false; // when reset to true, this will pop up a confirmation dialog when user does something that calls function StartOrResumeExercise() in exercise_flow_functions.js
+
+    var DefaultWarmUpPauseSec = 2; // seconds; user can override this in UserOptions
+    var DefaultPlaybackVolumeWhileDubbing = 0; // 0 to 1; user can override this in User Options
+
+    var RecordingType = "EasyPreciseDub";
+    // the recording type that is set above defines a page that works like the Goldilocks Page 3, where the student watches and listens, and then records all clips at once;
+  </script>
+
+  <script src="js/wavesurfer_goldilocks_type.js"></script>
+  <!-- the order of loading these ij files is important -->
+
+  <!-- end of the waveform support block -->
+
+  <script type="text/javascript">
+    /* WARNING: If you try to use window.onload() instead of this Init() scheme, be sure to test in all browsers
+                                                            			because window.onload is not triggered in some browsers when an htm file is loaded in iframe by a JS call, as it is here */
+    function InitVideo() {
+      top.document.getElementById("notes_i_frame").src = TextURL;
+      top.document.getElementById("Notes").style.display = "block";
+
+      // define video object
+      if (document.getElementById("CurrVideoEl")) {
+        CurrVideoObj = document.getElementById("CurrVideoEl");
+        CurrVideoObj.addEventListener("timeupdate", VideoPlaying, false);
+      } else {
+        alert("Program error in video file: video element not found. You will have no custom controls.");
+        if (document.getElementById("VideoControls")) {
+          document.getElementById("VideoControls").style.display = "none";
+        }
+      }
+
+      parent.HideWaitBanner()
+    }
+  </script>
+</head>
+
+<body onload="Init(); InitVideo(); ">
+  <div id="NoWrapBox">
+    <div id="video_box">
+      <video id="CurrVideoEl" preload="auto" width="434" height="244" poster="">
+				<source src="<%= videoName %>" type="video/mp4">
+					<div>
+						Your browser cannot play HTML5 video.
+				  </div>
+			</video>
+    </div>
+
+    <div id="VideoControlsAndDirections">
+      <div id="mic_icon" title="Speak while this icon stays red.">
+
+      </div>
+
+      <div id="clip_directions">
+      </div>
+
+      <div id="clip_controls">
+        <div style="float: left; width: 100%; ">
+          <button class="white small" onclick="DeleteAllRegions(); DeleteAllLabels(); MakeSchedule(); " id="DeleteAllRegions" title="All clips definitions (the green overlays, if any) and their labels will be cleared. This cannot be undone.">Clear all clips</button>
+
+          <button class="white small" onclick="StoreRegions()" id="SaveForStudent" title="All clip definitions will be saved to your account and restored when you revisit this page.">Save clips in your account</button>
+          <button class="white small" onclick="StoreMultiClipData()" id="SaveForCourse" title="All clip definitions will be saved for this page and will be used on every student's screen. Student-saved clip definitions, if any, will be archived; to restore them, purge yours.">Save clips for all students</button>
+        </div>
+
+        <div style="width: 100%; ">
+          <div id="PlayAllClipsDiv">
+            <label title="When checked, the defined clips will play in sequence, and the sound between them will be skipped. ">
+							<input type="checkbox" id="clipsOnly">
+							play all clips
+							</label>
+          </div>
+
+          <div id="PlayFromStartDiv">
+            <label title="When checked, the entire video is played while you record or review.">
+							play from start to end
+							<input type="checkbox" id="playFromStart">
+							</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="clear: both; ">
+    </div>
+
+    <fieldset id="LabelFieldSet" class="clip-labels-box">
+    </fieldset>
+
+    <div id="waveform" onclick="waveformClicked(event); ">
+    </div>
+
+    <div id="waveform_cursor" style="position: absolute; z-index: 50; top: 278px; left: 0px; height: 69px; width: 2px; background-color: rgb(0,102,255); display: none; ">
+    </div>
+  </div>
+</body>
+
+</html>

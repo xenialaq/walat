@@ -8,7 +8,7 @@ class Page {
   exercise: Exercise;
   synced = false;
 
-  constructor(id: number, name: string, path: string, description = '', fields = {}, script = '', exercise: Exercise) {
+  constructor(id: number, name: string, path: string, description = '', fields = {}, script = null, exercise: Exercise) {
     this.id = id;
     this.name = name;
     this.path = path;

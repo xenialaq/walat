@@ -948,7 +948,7 @@ export class AppService {
     record: {
       'isFixed': true,
       'length': 0,
-      'length-var': 0,
+      'length-var': '',
       'length-multiplier': 1
     },
     text: {

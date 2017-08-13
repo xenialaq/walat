@@ -1,8 +1,8 @@
 <div class="ui basic segment" id="step-content-wrapper" [hidden]="this.service.editor.page.id <= 0">
-  <wat-pedit-events-picker [hidden]="this.service.pages[this.service.editor.page.id] && this.service.pages[this.service.editor.page.id].script.length > 0">
+  <wat-pedit-events-picker [hidden]="this.service.pages[this.service.editor.page.id] && !_.isNull(this.service.pages[this.service.editor.page.id].script)">
   </wat-pedit-events-picker>
 
-  <wat-script-editor></wat-script-editor>
+  <wat-script-editor [hidden]="this.service.pages[this.service.editor.page.id] && _.isNull(this.service.pages[this.service.editor.page.id].script)"></wat-script-editor>
 
   <div class="ui form" id="events-options">
 

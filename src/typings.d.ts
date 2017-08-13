@@ -9,4 +9,5 @@ declare var URI: any;
 declare var _: any;
 declare var filesize: any;
 declare var CodeFlask: any;
-declare var Prism: any;
+declare var Prism: any
+declare var Cookies: any;

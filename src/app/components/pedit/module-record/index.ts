@@ -30,7 +30,7 @@ export class RecordModule implements AfterViewInit {
     if (!this.isAvailable()) {
       return;
     }
-    this._value['length-var'] = parseInt(v, 10);
+    this._value['length-var'] = v;
     this.valueUpdate.emit(this._value);
   }
 

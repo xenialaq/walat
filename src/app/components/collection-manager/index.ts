@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, Input } from '@angular/core';
 
 import { AppService } from '../../services/services';
 
@@ -12,6 +12,8 @@ export class CollectionManager implements AfterViewInit {
   }
 
   isPage = false;
+
+  @Input('view') viewName: string;
 
   ngAfterViewInit() {
     $('#collection-create-modal button[name="create"]').click((event) => {
@@ -122,7 +124,11 @@ export class CollectionManager implements AfterViewInit {
 
     this.service.editor.page = { id: id, data: this.service.pages[id].fields };
 
-    this.service.flask.update(this.service.pages[this.service.editor.page.id].script);
+    let script = this.service.pages[this.service.editor.page.id].script;
+
+    if (!_.isNull(script)) {
+      this.service.flask.update();
+    }
   }
 
   getExercises = () => {
