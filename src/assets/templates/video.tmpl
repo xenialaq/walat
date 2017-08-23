@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+
+  <style type="text/css">
+    .VControls {
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      background-color: rgb(255, 255, 255);
+      /*height: 31px;*/
+      width: 560px;
+    }
+  </style>
+
+  <script language="JavaScript" src="js/video_external.js"></script>
+
+  <script type="text/javascript">
+    function Init() {
+      top.document.getElementById("notes_i_frame").src = "";
+      top.document.getElementById("Notes").style.display = "block";
+
+      // define video object
+      if (document.getElementById("CurrVideoEl")) {
+        CurrVideoObj = document.getElementById("CurrVideoEl");
+        CurrVideoObj.addEventListener("timeupdate", VideoPlaying, false);
+      } else {
+        alert("Program error in video file: video element not found. You will have no custom controls.");
+        if (document.getElementById("VideoControls")) {
+          document.getElementById("VideoControls").style.display = "none";
+        }
+      }
+
+      parent.HideWaitBanner()
+    }
+  </script>
+</head>
+
+<body style="padding: 0px; margin-top: -15px; margin-left: 0px; margin-bottom: 0px;" onload="Init(); ">
+  <div id="video_box" style="text-align: center; width: 100%; ">
+    <video id="CurrVideoEl" preload="auto" width="420" height="316" poster="sweden-poster.jpg" controls="">
+      <source src="<%= videoName %>" type="video/mp4">
+      <div>
+        Your browser cannot play HTML5 video.
+      </div>
+    </video>
+  </div>
+
+  <div id="VideoControls" class="VControls" style="width: 420px; margin: 0px auto; ">
+    <table cellspacing="0" cellpadding="0" border="0" width="100%">
+      <tbody>
+        <tr valign="middle">
+          <td align="left" style="white-space: nowrap; ">
+            <input id="rewind_button" type="image" src="../../../../graphics/button_blue_play_backward.png" class="video_control_btn" title="Rewind to beginning." onclick="CueVideo(0); VideoPause(); " onmouseover="this.src='../../../../graphics/hot/button_blue_play_backward.png'"
+              onmousedown="this.src='../../../../graphics/disabled/button_blue_play_backward.png'" onmouseup="this.src='../../../../graphics/button_blue_play_backward.png'" onmouseout="this.src='../../../../graphics/button_blue_play_backward.png'">
+
+            <input id="repeat_button" type="image" src="../../../../graphics/button_blue_repeat.png" class="video_control_btn" title="Repeat." onclick="VideoRepeat()" onmouseover="this.src='../../../../graphics/hot/button_blue_repeat.png'" onmousedown="this.src='../../../../graphics/disabled/button_blue_repeat.png'"
+              onmouseup="this.src='../../../../graphics/button_blue_repeat.png'" onmouseout="this.src='../../../../graphics/button_blue_repeat.png'">
+
+            <input id="play_button" type="image" src="../../../../graphics/button_blue_play.png" class="video_control_btn" title="Play." onclick="VideoPlay()" onmouseover="this.src='../../../../graphics/hot/button_blue_play.png'" onmousedown="this.src='../../../../graphics/disabled/button_blue_play.png'"
+              onmouseup="this.src='../../../../graphics/button_blue_play.png'" onmouseout="this.src='../../../../graphics/button_blue_play.png'">
+
+            <input id="pause_button" type="image" src="../../../../graphics/button_blue_pause.png" class="video_control_btn" title="Pause." onclick="VideoPause()" onmouseover="this.src='../../../../graphics/hot/button_blue_pause.png'" onmousedown="this.src='../../../../graphics/disabled/button_blue_pause.png'"
+              onmouseup="this.src='../../../../graphics/button_blue_pause.png'" onmouseout="this.src='../../../../graphics/button_blue_pause.png'">
+          </td>
+          <td align="right" style="white-space: nowrap; ">
+            <span id="cue_point"></span>
+            <span id="total_duration" style="padding-right: 5px; "></span>
+          </td>
+        </tr>
+
+        <tr valign="middle">
+          <td colspan="2" align="left" width="100%">
+            <div id="video_progress_bar" style="height: 4px; width: 0px; background-color: rgb(0,102,255); ">
+              &nbsp;
+            </div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+<wat-navigation></wat-navigation>
+
+<!-- <div class="ui large top fixed hidden menu">
+    <div class="ui container">
+      <a class="active item">Home</a>
+      <a class="item">Work</a>
+      <a class="item">Company</a>
+      <a class="item">Careers</a>
+      <div class="right menu">
+        <div class="item">
+          <a class="ui button">Log in</a>
+        </div>
+        <div class="item">
+          <a class="ui primary button">Sign Up</a>
+        </div>
+      </div>
+    </div>
+  </div> -->
+<div class="ui grid" style="margin: 0; height: calc(100% - 30px);">
+  <div class="ui row" style="padding-bottom: 0;">
+    <div class="sixteen wide column ui segment" style="background-color: #EDF2F6;">
+      <wat-lesson-manager></wat-lesson-manager>
+    </div>
+  </div>
+</div>
+
+<wat-modals [value]="this.service.activeItem" [open]="this.service.activeItem.openModal"></wat-modals>

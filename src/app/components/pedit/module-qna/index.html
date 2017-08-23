@@ -1,0 +1,77 @@
+<div class="field" [hidden]="!this.isAvailable()">
+  <label>Q&amp;A type</label>
+  <div class="ui selection dropdown" id="qna-type-dropdown">
+    <input type="hidden" name="q-type" [value]="this._value.type" (change)="this.toggleMode($event.target.value)">
+    <i class="dropdown icon"></i>
+    <div class="default text">Choose an option</div>
+    <div class="menu">
+      <div class="item" data-value="0">Short answer</div>
+      <div class="item" data-value="1">Filling blanks</div>
+      <div class="item" data-value="2">Multiple choice</div>
+    </div>
+  </div>
+</div>
+
+<div class='q-option' [hidden]="!this.isAvailable() || this._value['type'] !== 0">
+  <div class="field">
+    <label>Question</label>
+    <textarea rows="2" [value]="this._value['question']" (change)="this.updateQ($event.target.value)"></textarea>
+  </div>
+  <div class="field">
+    <label>Answer key</label>
+    <textarea rows="2" [value]="this._value['answer']" (change)="this.updateA($event.target.value)"></textarea>
+  </div>
+</div>
+
+<div class='q-option' [hidden]="!this.isAvailable() || this._value['type'] !== 1">
+  <div class="field">
+    <label>Question</label>
+    <textarea rows="2" [value]="this._value['question']" (change)="this.updateQ($event.target.value)"></textarea>
+  </div>
+  <div class="field">
+    <label>Full text</label>
+    <textarea rows="2" [value]="this._value['answer']" (change)="this.updateA($event.target.value)" placeholder="Enter the full text, then for any blank to fill, wrap around with '[' and ']' on each side."></textarea>
+  </div>
+</div>
+
+<div class='q-option' [hidden]="!this.isAvailable() || this._value['type'] !== 2">
+  <div class="field">
+    <label>Question</label>
+    <textarea rows="2" [value]="this._value['question']" (change)="this.updateQ($event.target.value)"></textarea>
+  </div>
+
+  <div class="field" style="margin-bottom: 0;">
+    <label>Choices</label>
+  </div>
+
+  <div id="mc-choices">
+    <div *ngFor="let choice of this._value['choices']; let i = index" class="field">
+      <div class="ui labeled input" [ngClass]="i === this.activeChoice ? 'right action' : ''">
+        <div class="ui dropdown label correctness">
+          <input type="hidden" name="correctness" (change)="updateChoice(i, $event.target.value.includes('green checkmark'))" [value]="choice.isCorrect ? '<i class=&quot;green checkmark icon&quot;></i>' : '<i class=&quot;red remove icon&quot;></i>'">
+          <div class="text"><i [ngClass]="(choice.isCorrect ? 'green checkmark' : 'red remove') + ' icon'"></i></div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item"><i class="green checkmark icon"></i></div>
+            <div class="item"><i class="red remove icon"></i></div>
+          </div>
+        </div>
+        <input type="text" [value]="choice.value" (click)="this.updateActiveChoice(i)" (change)="updateChoice(i, undefined, $event.target.value, undefined)">
+        <div class="ui basic floating dropdown button mc-choices-handle" *ngIf="i === this.activeChoice">
+          <input type="hidden" name="action" (change)="this.handleChoices($event.target.value)">
+          <div class="text">Action</div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item">Insert above</div>
+            <div class="item" *ngIf="this._value['choices'].length > 1">Remove</div>
+            <div class="item" *ngIf="this._value['choices'].length > this.activeChoice + 1">Move down</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="field" [hidden]="!this.isAvailable()">
+  <a class="ui orange circular label" (click)="this.debug()">!</a>
+</div>

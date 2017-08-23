@@ -1,0 +1,60 @@
+<div class="ui attached basic segment" style="background-color: #F8F8F8; padding-bottom: 0; border-top: none; border-left: none; border-right: none; margin-left: 0;">
+  <div class="ui search" *ngIf="false">
+    <div class="ui fluid icon input">
+      <input type="text" placeholder="Search..." style="border-radius: 500rem;">
+      <i class="search icon"></i>
+    </div>
+    <div class="results"></div>
+  </div>
+
+  <div class="ui secondary pointing fluid two item menu">
+    <a class="active item">
+      Collection
+    </a>
+    <a class="item" *ngIf="false">
+      History
+    </a>
+  </div>
+
+  <div class="ui icon secondary menu" *ngIf="this.service.activeView.name === 'editor'">
+    <div class="right menu">
+      <a class="item" (click)="this.createExerciseClick()" data-tooltip="New exercise">
+        <i class="folder outline icon"></i>
+      </a>
+      <a class="item" (click)="this.createPageClick()" *ngIf="this.service.activeView.exercise.id !== 0" data-tooltip="New page">
+        <i class="circle thin icon"></i>
+      </a>
+      <a class="item" (click)="this.editCollectionClick()" *ngIf="this.service.activeView.exercise.id !== 0 || this.service.activeView.page.id !== 0" [attr.data-tooltip]="'Edit ' + (this.isPage ? 'page' : 'exercise')">
+        <i class="edit icon"></i>
+      </a>
+      <a class="item" (click)="this.deleteCollectionClick()" *ngIf="this.service.activeView.exercise.id !== 0 || this.service.activeView.page.id !== 0" [attr.data-tooltip]="'Delete ' + (this.isPage ? 'page' : 'exercise')">
+        <i class="trash outline red icon"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="ui attached basic segment" style="height: calc(50% - 80px); border-left: none; border-right: none;">
+  <div class="ui fluid vertical basic buttons" id="exercise-list">
+    <a *ngFor="let exercise of this.getExercises()" class="ui basic button" [ngClass]="this.service.activeView.exercise.id === exercise.id ? 'primary' : ''" (click)="this.showExercise(exercise.id)">
+      <i class="folder outline icon"></i>
+      <span>{{exercise.name}}</span>
+    </a>
+    <div *ngIf="this.getExercises().length < 1" class="ui basic button disabled">
+      <span>Create an exercise using <i class="folder outline icon"></i></span>
+    </div>
+  </div>
+</div>
+
+<div class="ui attached basic segment" style="height: calc(50% - 81px); border: none;" [hidden]="this.service.activeView.exercise.id === 0">
+  <div class="ui fluid vertical basic buttons" id="page-list">
+    <a *ngFor="let page of this.getPages()" class="ui basic button" [ngClass]="this.service.activeView.page.id === page.id ? 'primary' : ''" (click)="this.showPage(page.id)">
+      <i class="circle thin icon"></i>
+      <em *ngIf="!page.isSynced()">*{{page.name}}</em>
+      <span *ngIf="page.isSynced()">{{page.name}}</span>
+    </a>
+    <div *ngIf="this.getPages().length < 1" class="ui basic button disabled">
+      <span>Create a page using <i class="circle thin icon"></i></span>
+    </div>
+  </div>
+</div>

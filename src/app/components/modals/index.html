@@ -1,0 +1,38 @@
+<div class="ui modal" id="collection-modal">
+  <div class="header">{{_.capitalize(this._value.action)}} {{this._value.type}}</div>
+  <div class="content">
+    <form class="ui form" action="javascript:void(0)">
+      <div class="field">
+        <label *ngIf="this._value.action !== 'delete'">Name</label>
+        <p *ngIf="this._value.action === 'delete'">
+          Deleting {{this._value.type}} is irreversible. Enter below its name
+          <span class="ui label">{{this._value['value'].name}}</span> to confirm you want to permanently delete it:
+        </p>
+        <input type="text" name="name" placeholder="Name">
+      </div>
+      <div class="field" *ngIf="this._value.action !== 'delete'">
+        <div class="ui accordion">
+          <div class="title">
+            <i class="dropdown icon"></i> Advanced
+          </div>
+          <div class="content">
+            <div class="field">
+              <label>Canonical name</label>
+              <input type="text" name="cname" placeholder="(Optional)">
+            </div>
+            <div class="field">
+              <label>Description</label>
+              <textarea name="description"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="ui primary button" (click)="this.submit()">
+        {{_.capitalize(this._value.action)}}
+      </button>
+      <button class="ui button" (click)="this.cancel()">
+        Cancel
+      </button>
+    </form>
+  </div>
+</div>

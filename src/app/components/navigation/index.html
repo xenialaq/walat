@@ -1,0 +1,37 @@
+<div class="ui segment">
+  <div class="ui borderless inverted blue main menu top fixed">
+    <a class="item" href="/">
+      <span style="font-weight: 400; font-family: 'Allerta Stencil', sans-serif;">
+        WALAT
+      </span>
+    </a>
+    <div class="ui dropdown item" [ngClass]="this.service.activeView.lesson.id === 0 ? 'disabled': null">
+      Edit
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <div class="item" (click)="editLessonClick()">General</div>
+        <div class="item" (click)="composeLessonClick()">Content</div>
+        <div class="item" (click)="editLibraryClick()">Library</div>
+      </div>
+    </div>
+    <div class="ui dropdown item" [ngClass]="this.service.activeView.lesson.id === 0 ? 'disabled': null">
+      Download
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <div class="item" (click)="generateLessonClick('bak')">BAK</div>
+        <div class="item" (click)="generateLessonClick('zip')">ZIP</div>
+        <div class="item disabled">FTP...</div>
+      </div>
+    </div>
+    <div class="right menu">
+      <div class="ui right dropdown item">
+        Help
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <a class="item" target="_blank" href="https://github.com/moodspace/walat/wiki/Frequently-asked-questions">FAQs</a>
+          <a class="item" target="_blank" href="https://github.com/moodspace/walat/issues">Report bugs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

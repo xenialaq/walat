@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>
+    <%= pageName %>
+      <%= pageType %>
+  </title>
+
+  <style type="text/css">
+    .VControls {
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      background-color: rgb(255, 255, 255);
+      /*height: 31px;*/
+      width: 100%;
+    }
+
+    #text_pane {
+      float: right;
+      min-width: 54%;
+      height: 340px;
+      margin: 20px 0 8px;
+      padding: 0;
+      border: none;
+
+      overflow-x: hidden;
+      overflow-y: hidden;
+      /*overflow-y: auto;*/
+      /*overflow-y: scroll; /* this is good for iOS and bad for desktop */
+      /*-webkit-overflow-scrolling: touch; /* this is good for iOS and bad for desktop */
+      border-bottom: 1px solid rgb(120, 120, 120);
+    }
+
+    #text_frame {
+      width: 100%;
+      height: 98%;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+      border: none;
+    }
+
+    #video_pane {
+      float: left;
+      width: 38%;
+      height: 210px;
+      margin: 0 0 8px;
+      padding: 0;
+      border: none;
+      text-align: center;
+    }
+  </style>
+
+  <script language="JavaScript" src="../../../../js/video_external.js"></script>
+
+  <script type="text/javascript">
+    /* WARNING: If you try to use window.onload() instead of this Init() scheme, be sure to test in all browsers
+                			because window.onload is not triggered in some browsers when an htm file is loaded in iframe by a JS call, as it is here */
+    function Init() {
+      top.document.getElementById("notes_i_frame").src = "<%= notesSrc %>";
+      top.document.getElementById("Notes").style.display = "block";
+
+      // define video object
+      if (document.getElementById("CurrVideoEl")) {
+        CurrVideoObj = document.getElementById("CurrVideoEl");
+        CurrVideoObj.addEventListener("timeupdate", VideoPlaying, false);
+        CurrVideoObj.addEventListener("canplay", RestoreCurrentTime, false);
+        CurrVideoObj.addEventListener("loadeddata", RestoreCurrentTime, false);
+        CurrVideoObj.addEventListener("pause", SaveCurrentTime, false);
+        CurrVideoObj.addEventListener("seeked", SaveCurrentTime, false);
+        RestoreCurrentTime();
+      } else {
+        alert("Program error in video file: video element not found. You will have no custom controls.");
+        if (document.getElementById("VideoControls")) {
+          document.getElementById("VideoControls").style.display = "none";
+        }
+      }
+
+      parent.HideWaitBanner()
+    }
+  </script>
+</head>
+
+<body style="padding: 0px; margin-top: -15px; margin-left: 0px; margin-bottom: 0px; " onload="Init(); ">
+  <div id="text_pane">
+    <!-- this wrapper is needed for iOS, where iframe dimensions and scrolling works differently right now -->
+    <iframe id="text_frame" src="<%= textSrc %>"></iframe>
+  </div>
+
+  <div id="video_pane">
+    <div id="video_box" style="text-align: center; width: 100%; ">
+      <!-- Note that the video is actually 640x360, but in order to leave enough room for the custom video controls below the video, we're reducing it to 576x324 -->
+      <video id="CurrVideoEl" preload="auto" width="100%" height="auto" poster="sweden-poster.jpg" controls>
+          <source src="<%= videoSrc %>" type="video/mp4"/>
+          <div>
+            <!-- this will be shown by browsers that don't know html5 video -->
+            Your browser cannot play HTML5 video.
+          </div>
+        </video>
+    </div>
+
+    <div id="VideoControls" class="VControls" style="width: 100%; margin: 0px auto; ">
+      <table cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tbody>
+          <tr valign="middle">
+            <td align="left" style="white-space: nowrap; ">
+              <input id="rewind_button" type="image" src="../../../../graphics/button_blue_play_backward.png" class="video_control_btn" title="Rewind to beginning." onclick="CueVideo(0); VideoPause(); " onmouseover="this.src='../../../../graphics/hot/button_blue_play_backward.png'"
+                onmousedown="this.src='../../../../graphics/disabled/button_blue_play_backward.png'" onmouseup="this.src='../../../../graphics/button_blue_play_backward.png'" onmouseout="this.src='../../../../graphics/button_blue_play_backward.png'">
+
+              <input id="repeat_button" type="image" src="../../../../graphics/button_blue_repeat.png" class="video_control_btn" title="Repeat." onclick="VideoRepeat()" onmouseover="this.src='../../../../graphics/hot/button_blue_repeat.png'" onmousedown="this.src='../../../../graphics/disabled/button_blue_repeat.png'"
+                onmouseup="this.src='../../../../graphics/button_blue_repeat.png'" onmouseout="this.src='../../../../graphics/button_blue_repeat.png'">
+
+              <input id="play_button" type="image" src="../../../../graphics/button_blue_play.png" class="video_control_btn" title="Play." onclick="VideoPlay()" onmouseover="this.src='../../../../graphics/hot/button_blue_play.png'" onmousedown="this.src='../../../../graphics/disabled/button_blue_play.png'"
+                onmouseup="this.src='../../../../graphics/button_blue_play.png'" onmouseout="this.src='../../../../graphics/button_blue_play.png'">
+
+              <input id="pause_button" type="image" src="../../../../graphics/button_blue_pause.png" class="video_control_btn" title="Pause." onclick="VideoPause()" onmouseover="this.src='../../../../graphics/hot/button_blue_pause.png'" onmousedown="this.src='../../../../graphics/disabled/button_blue_pause.png'"
+                onmouseup="this.src='../../../../graphics/button_blue_pause.png'" onmouseout="this.src='../../../../graphics/button_blue_pause.png'">
+            </td>
+            <td align="right" style="white-space: nowrap; ">
+              <span id="cue_point"></span>
+              <!-- innerHTML will be set by JS -->
+              <span id="total_duration" style="padding-right: 5px; "></span>
+              <!-- innerHTML will be set by JS -->
+            </td>
+          </tr>
+
+          <tr valign="middle">
+            <td colspan="2" align="left" width="100%">
+              <div id="video_progress_bar" style="height: 4px; width: 0px; background-color: rgb(0,102,255); ">
+                &nbsp;
+              </div>
+            </td>
+          </tr>
+
+          <!-- omit this row to skip this feature -->
+          <tr valign="middle">
+            <td colspan="2" align="left" width="100%">
+              <label title="When checked, if you move to another page with this video, video will restart where you paused it." style="cursor: help; ">
+                  <input type="checkbox" id="save_current_time" value="0" checked>
+                  save cue point
+                </label>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+    <!--  id="VideoControls" class="VControls" -->
+  </div>
+  <!-- id="video_frame" -->
+</body>
+
+</html>

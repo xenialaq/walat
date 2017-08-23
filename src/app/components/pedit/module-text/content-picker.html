@@ -1,0 +1,24 @@
+<div class="ui three stackable cards" *ngIf="this._value === ''">
+  <a class="ui card" href="javascript:void(0)" (click)="update('text')">
+    <div class="content">
+      <img class="right floated mini ui image" src="/assets/templates/text.png">
+      <div class="header">Text</div>
+    </div>
+  </a>
+  <a class="ui card" href="javascript:void(0)" (click)="update('image')">
+    <div class="content">
+      <img class="right floated mini ui image" src="/assets/templates/slide.png">
+      <div class="header">Image</div>
+    </div>
+  </a>
+  <a class="ui card" href="javascript:void(0)" (click)="update('video')">
+    <div class="content">
+      <img class="right floated mini ui image" src="/assets/templates/video.png">
+      <div class="header">Video</div>
+    </div>
+  </a>
+</div>
+
+<div class="field">
+  <a class="ui orange circular label" (click)="this.debug()">!</a>
+</div>

@@ -1,0 +1,27 @@
+<div class="field" [hidden]="!this.isAvailable()">
+  <div class="grouped fields">
+    <label for="hide-element">Select which element to hide:</label>
+    <div class="field">
+      <div class="ui radio checkbox">
+        <input type="radio" name="hide-element" [attr.checked]="this._value['element'] === 'directions' ? '' : null" tabindex="0" class="hidden" (change)="this.update($event.target)">
+        <label>Directions</label>
+      </div>
+    </div>
+    <div class="field">
+      <div class="ui radio checkbox">
+        <input type="radio" name="hide-element" [attr.checked]="this._value['element'] === 'text' ? '' : null" tabindex="0" class="hidden" (change)="this.update($event.target)">
+        <label>Text</label>
+      </div>
+    </div>
+    <div class="field">
+      <div class="ui radio checkbox">
+        <input type="radio" name="hide-element" [attr.checked]="this._value['element'] === 'comparison buttons' ? '' : null" tabindex="0" class="hidden" (change)="this.update($event.target)">
+        <label>Comparison buttons</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="field" [hidden]="!this.isAvailable()">
+  <a class="ui orange circular label" (click)="this.debug()">!</a>
+</div>

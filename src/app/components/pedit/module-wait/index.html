@@ -1,0 +1,7 @@
+<div class="field" [hidden]="!this.isAvailable()">
+  <label>This command has no specific options.</label>
+</div>
+
+<div class="field" [hidden]="!this.isAvailable()">
+  <a class="ui orange circular label" (click)="this.debug()">!</a>
+</div>

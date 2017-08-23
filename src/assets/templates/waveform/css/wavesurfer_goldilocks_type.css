@@ -1,0 +1,274 @@
+/* this file should be included in all htm files that are modeled on Fobert Frost > Tree 1 */
+
+			body {
+				padding: 0px;
+				margin: 0px;	
+			}
+
+			#NoWrapBox {
+				width: 830px;
+			}
+			
+			#HTML_viewer {
+				 width:360px;
+				 height:200px;
+				 margin: 0px auto;
+				 background: rgb(200, 200, 200);
+				 position: fixed;
+				 z-index: 100;
+				 left: 40px; /* 50vh also works */
+				 bottom: 138px;	 /* 50vw also works */
+				 border: 1px solid rgb(120, 120, 120);
+				 display: none;
+			}	
+		
+			#HTML_viewer_closer {
+				float: right;
+				width: 16px;
+				height: 16px;
+				margin: -10px;
+			}
+			
+			#HTMLViewer_content_box {
+				overflow-y: scroll;
+				overflow-x: auto;
+				width: 348px;
+				height: 184px;
+				margin: 2px 0px;
+				padding: 6px;
+				background-color: rgb(255, 255, 255);
+			}
+			
+			#help_btn {
+				position: absolute;
+				bottom: 134px; /* NOTE: if you change the height of the directions box in General properties from 48 to smt else, adjust this value */
+				left: 0px;
+				margin: 0px;
+				padding: 0px;
+				cursor: pointer;
+			}
+
+			#video_box {
+				width: 434px;
+				float: left;
+				margin: 0px; 	
+			}
+			
+			#VideoControlsAndDirections {
+				width: auto;
+				float: none;
+				margin: 0px 20px 0px 446px;
+			}
+
+			/* Regions aka Clips */
+			.wavesurfer-region {
+				border: 1px solid #ddd !important;
+				border-top: none !important;
+				box-sizing: border-box;
+			}
+
+			/* Region handles */
+			.wavesurfer-handle {
+				width: 4px !important;
+				max-width: 4px !important;
+				border: 1px solid #ddd;
+				background: rgba(0, 0, 0, 0.1);
+				box-sizing: border-box;
+			}
+
+			.wavesurfer-handle-end {
+				margin-left: -4px;
+			}
+			
+			.wavesurfer-handle:before,
+			.wavesurfer-handle:after {
+				content: '';
+				display: block;
+				position: absolute;
+				z-index: 1;
+				border-top: 1px solid #fff;
+				border-bottom: 1px solid #fff;
+				height: 4px;
+				left: 5px;
+				right: 5px;
+				top: 50%;
+				transform: translateY(-50%);
+			}
+			
+			.wavesurfer-handle:before {
+			margin-top: -3px;
+			}
+
+			/* Editable Labels */
+			.clip-labels-box {
+				position: relative;
+				top: 30px;
+			}
+			
+			.wavesurfer-label {
+				display: none;
+				position: absolute;
+				transform: translateY(-100%);
+				z-index: 10;
+				border: 1px solid #ddd;
+				padding: 0px 4px;
+				background: rgba(206, 255, 255, 0.6);
+				box-sizing: border-box;
+			}
+			
+			.wavesurfer-delbtn {
+				position: absolute;
+				display: inline;
+				width: 16px;
+				height: 16px;	
+				transform: translateY(-150%);
+				z-index: 16;
+			}
+
+			body {
+				padding: 0px 6px 0px 0px;
+				margin: 0px;
+			}
+
+			#text_frame {
+				float: right;
+				width: 54%;
+				height: 210px;
+				margin: 0px 0px 8px 0px;
+				padding: 0px;
+				border: none; 
+
+				overflow-x: auto;
+				overflow-y: scroll;
+				-webkit-overflow-scrolling: touch;
+				border-bottom: 1px solid rgb(120, 120, 120);
+			}
+			
+			#image_box {
+				float: left;
+				width: 38%;
+				height: 210px;
+				margin: 0px 0px 8px 0px;
+				padding: 0;
+				border: none;
+				text-align: center; 
+			}
+
+			#LabelFieldSet {
+				border: none;	
+				margin: 0px;
+				padding: 0px;
+			}
+			
+			h4 {
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			#footnote {
+				color: rgb(80, 80, 80);
+				font-family: Tahoma, Geneva, Verdana, sans-serif;
+				font-size: 12px;
+				position: relative;
+				top: 20px;
+				white-space: nowrap;
+				/*position: absolute; */
+				/*bottom: 0px; */
+				left: 0px;				
+			}
+			
+			#waveform {
+				position: relative;
+				top: 30px;
+				/*bottom: -16px;*/
+				left: 0px;
+				cursor: pointer;
+			}
+			
+			#add-similar_btn {
+				position: absolute;
+				/*top: 209px;*/
+				bottom: 134px; /* NOTE: if you change the height of the main text box in General properties from 48 to smt else, adjust this value */
+				right: 30px;
+				/*left: 90%;*/ /* changed from left: 630px in July 2016 */
+				margin: 0px;
+				padding: 0px;
+				cursor: pointer;
+			}
+
+			#clip_controls {
+				margin: 0px 0px 0px 20px;
+				width: 365px;
+				top: 0px; 
+			}
+			
+			#clip_directions {
+				width: 341px; 
+				height: 180px;
+				float: none;
+				margin: 0px 0px 0px 20px; 
+				padding: 12px;
+				overflow-y: scroll;
+				background-color: rgb(224,224,224);
+			}
+			
+			.clip_directions_list {
+				margin: 0px;
+				padding: 10px 20px;
+				list-style-type: 	circle;
+			}
+			
+			.clip_control_link {
+				text-decoration: underline;
+				color: rgb(0, 0, 0);
+			}
+			
+			#DeleteAllRegions {
+				float: left;
+				margin-top: 4px;	
+			}
+			
+			#SaveForStudent, #SaveForCourse {
+				display: none;
+				float: right;
+				margin-top: 4px;	
+			}
+						
+			#PlayFromStartDiv {
+				font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px;
+				font-variant: small-caps;
+				color: rgb(90, 90, 90);
+				float: right;				
+			}
+
+			#PlayAllClipsDiv {
+				font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px;
+				font-variant: small-caps;
+				color: rgb(90, 90, 90); 
+				float: left;
+			}
+			
+			#clipsOnly, #playFromStart {
+				margin: 4px 0px 0px 0px;
+				vertical-align: text-bottom;
+			}
+
+			#remove-added_btn {
+				position: absolute;
+				/* top: 212px; */
+				bottom: 138px; /* NOTE: if you change the height of the main text box in General properties from 48 to smt else, adjust this value */
+				right: 60px;
+				/*left: 86%; */ /* changed from left: 610px in July 2016 */
+				margin: 0px;
+				padding: 0px;
+				cursor: pointer;
+			}
+
+			#mic_icon {
+				position: absolute;
+				top: 214px;
+				left: 432px;
+				width: 32px;
+				height: 32px;
+				background-image: url(../../../../graphics/disabled/record2_red.png); 
+			}

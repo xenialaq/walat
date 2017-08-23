@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+
+  <style type="text/css">
+    h4 {
+      font-family: Verdana, Geneva, sans-serif;
+      font-size: 0.9em;
+      color: rgb(102, 0, 0);
+      margin: 20px 10px 10px 10px;
+    }
+
+    .footnote_class {
+      color: rgb(153, 153, 153);
+      font-family: Verdana, Geneva, sans-serif;
+      font-size: smaller;
+      font-style: italic;
+    }
+
+    fieldset {
+      border: none;
+    }
+
+    .neutral_answer {
+      font-weight: normal;
+      color: rgb(0, 0, 0);
+      cursor: auto;
+    }
+
+    .correct_answer {
+      font-weight: bold;
+      /*color: rgb(0,102,51); too dark? */
+      color: rgb(0, 153, 0);
+      cursor: auto;
+    }
+
+    .incorrect_answer {
+      font-weight: bold;
+      color: rgb(204, 0, 0);
+      cursor: auto;
+    }
+  </style>
+
+  <script language="JavaScript" src="js/wal_api.js"></script>
+  <!-- include the WAL API -->
+  <script type="text/JavaScript" src="js/wal_api_q-and-a.js"></script>
+  <!-- include the WAL API for processing questions and answers -->
+
+  <script type="text/javascript">
+    <!-- define the default textual data for this page -->
+    //the values of these variables are set in files RadioButtonSet.js, CheckBoxSet.js, and TypedSetQuestion.js that are in the same folder as this file
+    var RadioButtonSet = new Object;
+    RadioButtonSet.Question = ""; // HTML string
+    RadioButtonSet.Answers = new Array(0); // array of plain text strings
+    RadioButtonSet.Comments = new Array(0); // array of plain text strings
+    RadioButtonSet.CorrectIncorrect = new Array(0); // array of keywords "Correct" and "Incorrect" that matches RadioButtonSet.Answers
+
+    var CheckBoxSet = new Object;
+    CheckBoxSet.Question = ""; // HTML string
+    CheckBoxSet.Answers = new Array(0); // array of plain text strings
+    CheckBoxSet.Comments = new Array(0); // array of plain text strings
+    CheckBoxSet.CorrectIncorrect = new Array(0); // array of keywords "Correct" and "Incorrect" that matches RadioButtonSet.Answers
+
+    var FillInSet = new Object;
+    FillInSet.Question = ""; // HTML string
+    FillInSet.Answers = new Array(0); // array of plain text strings
+
+    var TypedSet = new Object;
+    TypedSet.Question = ""; // HTML string
+    TypedSet.Comments = "" // HTML string
+
+    var TextBoxWidth = "98%"; // change to fit your screen layout
+    var TextBoxHeight = "100px"; // change to fit your screen layout
+
+    /* WARNING: If you try to use window.onload() instead of this Init() scheme, be sure to test in all browsers
+    	because window.onload is not triggered in some browsers when an HTML page is loaded in iframe by a JS call, as this page is */
+    function Init() {
+      /* does all initialization for the page; called by the onload trigger in the body tag */
+      top.ShowWaitBanner();
+
+      top.document.getElementById("notes_i_frame").src = "";
+      top.document.getElementById("Notes").style.display = "block";
+
+      if (ValidateData()) {
+        if (SetUpRadioFieldset() && SetUpCheckBoxFieldset() && SetUpTypedFieldset() && SetUpFillInFieldset()) {
+          if (ValidateQuestions() && ValidateAnswers() && ValidateCorectIncorrect()) {
+            StartResponseListDownload(); // when this call is done fetching data, function ParseRetrievedQuestionResponseList() is called with the retrieved text as its argument
+          }
+        }
+      }
+
+      UpdateFooter();
+      UpdateSubmitButton();
+
+      top.HideWaitBanner();
+    } // function Init()
+  </script>
+
+  <script language="JavaScript">
+    TypedSet.Question = '<%= qnaQuestion %>';
+    TypedSet.Comments = '<%= qnaAnswer %>';
+
+    FillInSet.Question = '<%= qnaQuestion %>';
+    FillInSet.Text = '<%= qnaAnswer %>';
+
+    RadioButtonSet.Question = '<%= qnaQuestion %>';
+    RadioButtonSet.Answers = <%= qnaChoices %>;
+    RadioButtonSet.CorrectIncorrect = <%= qnaCorrectness %>;
+
+    CheckBoxSet.Question = '<%= qnaQuestion %>';
+    CheckBoxSet.Answers = <%= qnaChoices %>;
+    CheckBoxSet.CorrectIncorrect = <%= qnaCorrectness %>;
+  </script>
+</head>
+
+<body style="padding: 0px; margin-top: -15px; margin-left: 0px; margin-bottom: 0px; " onload="Init(); ">
+  <!-- All data for this page is in files RadioButtonSet.js, CheckBoxSet.js, and TypedSet.js in the same folder as this file.
+				If any of the three types of questions is omitted from the page, its file should be empty, but the file must still be present.
+				Only one set of questions of each type may be used on a page. If you need to offer more, use another page. -->
+
+  <h4>Questions</h4>
+
+  <form id="QandAForm" style="margin: 10px; ">
+    <!-- this form is not submitted; clicking Submit calls a JS function in wal_api.js 		-->
+    <fieldset id="CheckBoxFieldset" style="margin-top: 4px; ">
+      <!-- innerHTML will be set by the Init function in this page -->
+    </fieldset>
+
+    <fieldset id="TypedFieldset" style="margin-top: 4px; padding-bottom: 0px; margin-bottom: 10px; ">
+      <!-- innerHTML will be set by the Init function in this page -->
+    </fieldset>
+
+    <fieldset id="FillInFieldset" style="margin-top: 4px; padding-bottom: 0px; margin-bottom: 10px; ">
+      <!-- innerHTML will be set by the Init function in this page -->
+    </fieldset>
+
+    <fieldset id="RadioFieldset" style="margin-top: 0px; ">
+      <!-- innerHTML will be set by the Init function in this page -->
+    </fieldset>
+
+    <div id="questions_footer" class="footnote_class" style="margin: 0px 10px 0px 0px; width: 70%; float: right; ">
+      <!-- innerHTML will be set by the Init function in this page -->
+    </div>
+    <!--  id="questions_footer" -->
+
+    <div id="questions_submit" style="float: left; width: 60px">
+      <button id="SubmitOrCheckButton" type="button" style="margin: 0px 10px 0px 14px; cursor: pointer; " onclick="SubmitButtonClicked()">Submit</button>
+    </div>
+    <div style="clear: both; "></div>
+    <div id="clear_link" style="width: 100%; text-align: right; cursor: pointer; ">
+      <a href="javascript: ClearAllAnswers(); ">clear all answers</a>
+    </div>
+  </form>
+  <!-- id="questions_form" -->
+</body>
+
+</html>

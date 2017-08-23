@@ -1,0 +1,35 @@
+<div class="ui basic segment" [hidden]="this.service.editor.page.id === 0">
+  <wat-pedit-events-picker [hidden]="this.service.pages[this.service.editor.page.id] && !_.isUndefined(this.service.pages[this.service.editor.page.id].script)">
+  </wat-pedit-events-picker>
+
+  <wat-script-editor [hidden]="this.service.pages[this.service.editor.page.id] && _.isUndefined(this.service.pages[this.service.editor.page.id].script)"></wat-script-editor>
+
+  <div class="ui segment" [hidden]="_.isNull(this.service.editor.line.tag)">
+    <h5 class="ui header">
+      <i class="options icon"></i>
+      <div class="content">
+        Line options
+      </div>
+    </h5>
+    <div class="ui form">
+      <wat-pedit-module-directions [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-directions>
+
+      <wat-pedit-module-hide [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-hide>
+
+      <wat-pedit-module-play [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-play>
+
+      <wat-pedit-module-qna [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-qna>
+
+      <wat-pedit-module-record [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-record>
+
+      <wat-pedit-module-text [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-text>
+
+      <wat-pedit-module-wait [value]="this.service.editor.line.data" (valueUpdate)="updateLine($event)"></wat-pedit-module-wait>
+    </div>
+  </div>
+
+  <div class="ui basic segment">
+    <button class="ui large primary button" (click)="this.save()" [ngClass]="this.isSynced() ? 'disabled': null">{{this.isSynced() ? 'Saved': 'Save'}}</button>
+    <button class="ui large secondary button" (click)="this.duplicate()">Duplicate</button>
+  </div>
+</div>

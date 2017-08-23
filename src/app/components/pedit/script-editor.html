@@ -1,0 +1,21 @@
+<div class="ui segment" id="flask-container">
+  <h5 class="ui header">
+    <i class="code icon"></i>
+    <div class="content">
+      Script editor
+    </div>
+  </h5>
+  <div class="ui labels">
+    <a class="ui orange tag label" (click)="this.insert('wait')">wait</a>
+    <a class="ui blue tag label" (click)="this.insert('play @____')">play</a>
+    <a class="ui grey tag label" (click)="this.insert('hide @____')">hide</a>
+    <a class="ui black tag label" (click)="this.insert('show text @____')">show text</a>
+    <a class="ui black tag label" (click)="this.insert('show directions @____')">show directions</a>
+    <a class="ui orange tag label" (click)="this.insert('pause')">pause</a>
+    <a class="ui violet tag label" (click)="this.insert('imagemap')">imagemap</a>
+    <a class="ui red tag label" (click)="this.insert('record @____')">record</a>
+    <a class="ui teal tag label" (click)="this.insert('expect Q&A submission @____')">expect Q&amp;A submission</a>
+  </div>
+  <div id="flask-editor" style="min-height: 200px; width: 100%; background-color: #F8F8F8;">
+  </div>
+</div>
