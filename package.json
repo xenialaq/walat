@@ -9,10 +9,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ng build --env=prod",
+    "postinstall": "gulp clean && ng build --env=prod",
     "package": "electron-forge package",
-    "make": "electron-forge make",
-    "preinstall": "gulp clean"
+    "make": "electron-forge make"
   },
   "private": true,
   "dependencies": {
@@ -43,7 +42,6 @@
     "gulp-rename": "^1.2.2",
     "gulp-template": "^4.0.0",
     "gulp-zip": "^4.0.0",
-    "jszip": "^3.1.3",
     "lodash": "^4.17.4",
     "merge-stream": "^1.0.1",
     "multer": "^1.3.0",
@@ -112,7 +110,13 @@
       },
       "electronPackagerConfig": {
         "ignore": [
-          "semantic/src"
+          "/e2e($|/)",
+          "/src/environments($|/)",
+          "/src/app($|/)",
+          "/src/assets($|/)",
+          "/semantic/src($|/)",
+          "/semantic/tasks($|/)",
+          "/node_modules/@angular($|/)"
         ]
       },
       "electronWinstallerConfig": {
