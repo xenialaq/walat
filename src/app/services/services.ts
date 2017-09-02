@@ -238,6 +238,11 @@ export class AppService {
   bindUploaders = (uploaders) => {
     uploaders.forEach((s) => {
       s.trigger.click(() => {
+        if (s.multiple) {
+          s.input.attr('multiple', '');
+        } else {
+          s.input.removeAttr('multiple');
+        }
         // Unbind
         s.input.off('change');
 

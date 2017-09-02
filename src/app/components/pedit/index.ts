@@ -36,6 +36,7 @@ export class PEdit implements AfterViewInit {
   }
 
   updateLine = (v) => {
+    console.log('UPDATE LINE', v);
     this.service.editor.line.data = v;
     let merged = {};
     merged[this.service.editor.line.tag] = v;
@@ -45,6 +46,8 @@ export class PEdit implements AfterViewInit {
     );
 
     let q = this.service.pages[this.service.editor.page.id];
+
+    console.log(this.service.editor.page.data, q);
 
     q.setFields(this.service.editor.page.data);
   }

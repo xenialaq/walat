@@ -17,6 +17,7 @@ export class AssetManager implements AfterViewInit {
     $(this.e.nativeElement).find('.dropdown').dropdown();
     const uploaders = [
       {
+        multiple: true,
         input: $('input[name="file-upload"]'),
         trigger: $(this.e.nativeElement).find('.sound-add'),
         label: undefined,
@@ -29,12 +30,13 @@ export class AssetManager implements AfterViewInit {
         path: $('input[name="file-path"]'),
         pvalue: this.service.getPath,
         callback: (a) => {
-          this.service.showMessage('success', `${a.name} has been uploaded.`);
+          this.service.showMessage('success', `${_.map(a, 'name').join(', ')} successfully uploaded.`);
           this.service.hideDimmer();
-          this.service.initAsset(a.id);
+          _.map(a, 'id').forEach(aid => this.service.initAsset(aid));
         }
       },
       {
+        multiple: true,
         input: $('input[name="file-upload"]'),
         trigger: $(this.e.nativeElement).find('.image-add'),
         label: undefined,
@@ -47,12 +49,13 @@ export class AssetManager implements AfterViewInit {
         path: $('input[name="file-path"]'),
         pvalue: this.service.getPath,
         callback: (a) => {
-          this.service.showMessage('success', `${a.name} has been uploaded.`);
+          this.service.showMessage('success', `${_.map(a, 'name').join(', ')} successfully uploaded.`);
           this.service.hideDimmer();
-          this.service.initAsset(a.id);
+          _.map(a, 'id').forEach(aid => this.service.initAsset(aid));
         }
       },
       {
+        multiple: true,
         input: $('input[name="file-upload"]'),
         trigger: $(this.e.nativeElement).find('.video-add'),
         label: undefined,
@@ -65,9 +68,9 @@ export class AssetManager implements AfterViewInit {
         path: $('input[name="file-path"]'),
         pvalue: this.service.getPath,
         callback: (a) => {
-          this.service.showMessage('success', `${a.name} has been uploaded.`);
+          this.service.showMessage('success', `${_.map(a, 'name').join(', ')} successfully uploaded.`);
           this.service.hideDimmer();
-          this.service.initAsset(a.id);
+          _.map(a, 'id').forEach(aid => this.service.initAsset(aid));
         }
       }
     ];

@@ -10,6 +10,48 @@ export class ScriptEditor {
   constructor(private service: AppService, private e: ElementRef) {
   }
 
+  varList = [
+        "artichoke",
+        "aubergine",
+        "basil",
+        "bean",
+        "celery",
+        "corn",
+        "daikon",
+        "dill",
+        "eggplant",
+        "endive",
+        "fennel",
+        "frisee",
+        "garlic",
+        "ginger",
+        "habanero",
+        "jalapeno",
+        "jicama",
+        "kale",
+        "kohlrabi",
+        "lavender",
+        "lettuce",
+        "mamey",
+        "mushroom",
+        "nopale",
+        "okra",
+        "onion",
+        "pea",
+        "potato",
+        "radish",
+        "rhubarb",
+        "sage",
+        "squash",
+        "taro",
+        "thyme",
+        "wasabi",
+        "yam",
+        "zucchini"
+  ];
+
+  varUsed = [];
+
   flask = new CodeFlask;
 
   ngAfterViewInit() {
@@ -22,8 +64,19 @@ export class ScriptEditor {
       'selector': /^\\[\w\s-]+\n/m, /* \Some page */
       'url': /@\w+\s*$/m
     };
+    this.init();
+    this.service.flask.init = this.init;
+  }
+
+  init = () => {
+    this.varList = this.varUsed.concat(this.varList);
+    this.varUsed = [];
+
+    $('#flask-editor').html('');
     this.flask.run('#flask-editor', { language: 'walscript', lineNumbers: true });
     this.flask.onUpdate((code) => {
+      let varRecycled = _.remove(this.varUsed, (a) => !code.includes('@' + a));
+      this.varList = this.varList.concat(varRecycled);
       this.service.pages[this.service.editor.page.id].setScript(code);
     });
 
@@ -67,10 +120,19 @@ export class ScriptEditor {
   }
 
   insert = (cmd) => {
+    if (cmd.endsWith('@')) {
+      const vname = _.sample(this.varList);
+      if (!vname) {
+        return;
+      }
+      _.pull(this.varList, vname);
+      this.varUsed.push(vname);
+      cmd = cmd + vname;
+    }
     const lines = this.getLines();
     const lineno = this.getLineno();
     const line = this.getLine();
-    lines.splice(lineno.i, 0, cmd);
+    lines.splice(lineno.col > 0 ? lineno.i : lineno.i - 1, 0, cmd);
     this.flask.update(lines.join('\n'));
 
     $(this.flask.textarea).prop("selectionStart", lineno.end + cmd.length);

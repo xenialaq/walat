@@ -66,7 +66,7 @@ module.exports = function(app) {
       var bak = fs.createWriteStream(bakPath);
 
       // write lesson line
-      bak.write(`Lesson ${l.name}\n`);
+      bak.write(`Lesson ${l.name}\n\n`);
 
       let cbLesson = () => {
         // complete lesson generation
@@ -111,7 +111,7 @@ module.exports = function(app) {
 
           // write exercise line
           bak.write(
-            `(start of exercise ${e.name.replace(' ', '_')})\n`
+            `(start of exercise ${e.name.replace(' ', '_')})\n\n`
           );
 
           Page.findAll({
@@ -173,7 +173,7 @@ const transScript = (collection, outputDir, isExtraFiles, bakFile, cbPage) => {
   const cbLine = (lIdx) => {
     if (lIdx >= s.length) {
       // complete page generation
-      bakFile.write(resultLines.join('\n'));
+      bakFile.write(resultLines.join('\n') + '\n\n');
       cbPage();
       return;
     }
@@ -233,6 +233,8 @@ const transLine = (collection, line, data, tag, outputDir, qnaTag, isExtraFiles,
   } else if (/^expect Q&A submission/.test(line)) {
     cmd = 'expect Q&A submission';
   }
+
+  console.log('processing', tag, ':', data[tag], '...');
 
   const pageTextDir = path.join(
     outputDir,
@@ -402,42 +404,65 @@ const generateQna = (collection, data, tag, outputDir, cb) => {
   const taskName = rstr.generate();
   let qnaQuestion = '';
   let qnaAnswer = '';
-  let qnaChoices = [];
-  let qnaCorrectness = [];
+  let qnaChoices = '[]';
+  let qnaCorrectness = '[]';
+  let qnaType = -1;
 
   gulp.task(taskName, () => {
+    let tmplData = {
+      qnaQuestion0: '',
+      qnaQuestion1: '',
+      qnaQuestion2: '',
+      qnaQuestion3: '',
+      qnaAnswer0: '',
+      qnaAnswer1: '',
+      qnaChoices2: '[]',
+      qnaChoices3: '[]',
+      qnaCorrectness2: '[]',
+      qnaCorrectness3: '[]',
+    };
+    tmplData[`qnaQuestion${qnaType}`] = qnaQuestion;
+    tmplData[`qnaAnswer${qnaType}`] = qnaAnswer;
+    tmplData[`qnaChoices${qnaType}`] = qnaChoices;
+    tmplData[`qnaCorrectness${qnaType}`] = qnaCorrectness;
+
     const html = gulp.src('dist/assets/templates/qna.tmpl')
-      .pipe(
-        template({
-          qnaQuestion,
-          qnaAnswer,
-          qnaChoices,
-          qnaCorrectness
-        }))
+      .pipe(template(tmplData))
       .pipe(rename(`${collection.page.name}.${tag}.html`))
       .pipe(gulp.dest(outputDir));
-    const commons = undefined;
+    const commons = gulp.src('dist/assets/templates/qna/**/*')
+      .pipe(gulp.dest(outputDir));
     const assets = undefined;
     return merge(html);
   });
 
-  if (data[tag].type === 0) {
+  qnaType = data[tag].type;
+
+  // Checkbox type
+  if (qnaType === 2) {
+    if (_.countBy(data[tag].choices, 'isCorrect')['Correct'] > 1) {
+      qnaType = 3;
+    }
+  }
+
+  if (qnaType === 0) {
     // Short answer
     qnaQuestion = data[tag].question;
     qnaAnswer = data[tag].answer;
     rseq(taskName, () => {
       cb('expect Q&A submission');
     });
-  } else if (data[tag].type === 1) {
+  } else if (qnaType === 1) {
     // Filling blanks
     qnaQuestion = data[tag].question;
     qnaAnswer = data[tag].answer;
     rseq(taskName, () => {
       cb('expect Q&A submission');
     });
-  } else if (data[tag].type === 2) {
+  } else if (qnaType === 2) {
     // Multiple choice
     qnaQuestion = data[tag].question;
+    qnaAnswer = "";
     qnaChoices = JSON.stringify(data[tag].choices.map((c) => c.value));
     qnaCorrectness = JSON.stringify(data[tag].choices.map((c) => c.isCorrect ?
       'Correct' : 'Incorrect'));

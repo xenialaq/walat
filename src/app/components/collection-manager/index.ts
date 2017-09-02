@@ -40,7 +40,7 @@ export class CollectionManager implements AfterViewInit {
     this.isPage = true;
 
     if (this.service.activeView.name == 'editor') {
-      this.service.activeView.page = { id: id, data: this.service.pages[id].fields };
+      this.service.activeView.page = { id: id, data: _.clone(this.service.pages[id].fields) };
 
       this.service.activeView.line = {
         i: 0,
@@ -51,6 +51,7 @@ export class CollectionManager implements AfterViewInit {
 
       let script = this.service.pages[id].script;
 
+      this.service.flask.init(); /* reset code editor */
       if (!_.isUndefined(script)) {
         this.service.flask.update(script);
       }

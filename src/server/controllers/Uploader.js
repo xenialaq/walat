@@ -53,11 +53,11 @@ const fileFilter = (req, file, cb) => {
 const limits = {
   fieldNameSize: 100,
   fieldSize: 1000000,
-  fields: 10,
+  fields: 50,
   fileSize: 500000000,
   files: 50,
-  parts: 60,
-  headerPairs: 50
+  parts: 100,
+  headerPairs: 20
 };
 
 var upload = multer({
@@ -97,32 +97,49 @@ const mimetypes = {
 };
 
 module.exports = function(app) {
-  app.post('/uploader', upload.single('file-upload'), function(req, res, next) {
-    if (!req.file) {
+  app.post('/uploader', upload.array('file-upload', 50), function(req, res,
+    next) {
+    let ret = { 'application/json': [] };
+    if (req.files.length === 0) {
       Errors.emitHttpError(res, { code: 400, message: 'Uploaded file has forbidden MIME type.' });
       return;
     }
 
-    // req.file is the `avatar` file
-    // req.body will hold the text fields, if there were any
-    fs.renameSync(req.file.path, path.join(assetDir, req.file.filename));
-    let filePath = req.body['file-path'] || '';
-    let fullPath =
-      `${filePath === '' ? '' : filePath + '/'}${req.file.filename}`;
-    astsvc.assetsPOST({
-      body: {
-        value: {
-          name: req.file.originalname,
-          path: fullPath,
-          type: mimetypes[req.file.mimetype],
-          attribute: {
-            size: req.file.size,
-            thumb: 'http://via.placeholder.com/350x150',
-            mimetype: req.file.mimetype
-          }
+    let counter = 0;
+
+    req.files.forEach((file) => {
+      // file is the `avatar` file
+      // req.body will hold the text fields, if there were any
+      fs.renameSync(file.path, path.join(assetDir, file.filename));
+      let filePath = req.body['file-path'] || '';
+      let fullPath =
+        `${filePath === '' ? '' : filePath + '/'}${file.filename}`;
+      astsvc.createAsset({
+        name: file.originalname,
+        path: fullPath,
+        type: mimetypes[file.mimetype],
+        attribute: JSON.stringify({
+          size: file.size,
+          thumb: 'http://via.placeholder.com/350x150',
+          mimetype: file.mimetype
+        })
+      }).then((d) => {
+        ret['application/json'].push({
+          "id": null2Undefined(d.get('id')),
+          "name": null2Undefined(d.get('name')),
+          "path": null2Undefined(d.get('path')),
+          "type": null2Undefined(d.get('type')),
+          "attribute": JSON.parse(d.get('attribute'))
+        });
+
+        counter++;
+        if (counter === req.files.length) {
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {},
+            null, 2));
         }
-      }
-    }, res, next);
+      });
+    });
   });
 
   app.post('/zipuploader', zipupload.single('file-upload'), function(req, res,
@@ -157,10 +174,12 @@ module.exports = function(app) {
             "id": null2Undefined(d.get('id')),
             "name": null2Undefined(d.get('name')),
             "path": null2Undefined(d.get('path')),
-            "description": null2Undefined(d.get('description'))
+            "description": null2Undefined(d.get(
+              'description'))
           };
           res.setHeader('Content-Type', 'application/json');
-          res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
+          res.end(JSON.stringify(ret[Object.keys(ret)[0]] ||
+            {}, null, 2));
 
           let lid = d.id;
 
@@ -191,15 +210,6 @@ module.exports = function(app) {
 
   });
 
-  // // max 10 files
-  // app.post('/bulk-uploader', upload.array('file-upload', 10), function(req,
-  //   res,
-  //   next) {
-  //   // req.files is array of `photos` files
-  //   // req.body will contain the text fields, if there were any
-  //   console.log(req.files[0].originalname);
-  // });
-  //
   const extract = (filename, dest, cb) => {
     var xtask = rstr.generate();
 
@@ -235,7 +245,11 @@ module.exports = function(app) {
             if (pfile.type === 'file') {
               const pageName = pfile.name;
               const pagePath = rstr.generate();
-              exercise.pages.push({ name: pageName.replace(/.[^.]*$/, ''), path: pagePath });
+              exercise.pages.push({
+                name: pageName.replace(
+                  /.[^.]*$/, ''),
+                path: pagePath
+              });
 
               const mediaPath = rstr.generate();
 

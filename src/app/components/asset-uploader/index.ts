@@ -36,7 +36,9 @@ export class AssetUploader implements AfterViewInit {
         tvalue: () => 'sound',
         path: $('input[name="file-path"]'), /* form hidden path input */
         pvalue: () => this._path,
-        callback: (d) => {
+        callback: (data) => {
+          // only support single upload
+          const d = data[0];
           this.update(d.name, d.path);
           this.searchQuery = d.name;
           $(this.e.nativeElement).find('.use-asset').click();
