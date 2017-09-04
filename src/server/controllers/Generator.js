@@ -121,6 +121,10 @@ module.exports = function(app) {
           }).then((pages) => {
             let cbPage = (pIdx) => {
               if (pIdx >= pages.length) {
+                // write exercise line
+                bak.write(
+                  `(end of exercise ${e.name.replace(' ', '_')})\n\n`
+                );
                 cbExercise(eIdx + 1);
                 return;
               }
@@ -256,7 +260,7 @@ const transLine = (collection, line, data, tag, outputDir, qnaTag, isExtraFiles,
         generateText(collection, data, tag, pageTextDir, qnaTag, cbLine);
       } else {
         cbLine(
-          `show text ${collection.page.name}/${collection.page.name}.${tag}.html`
+          `show text ${collection.page.name}/${collection.page.name}.${tag}.htm`
         );
       }
       break;
@@ -274,7 +278,7 @@ const transLine = (collection, line, data, tag, outputDir, qnaTag, isExtraFiles,
         generateMedia(collection, data, tag, pageMediaDir, cbLine);
       } else {
         cbLine(
-          `show text ${collection.page.name}/${collection.page.name}.${tag}.html`
+          `show text ${collection.page.name}/${collection.page.name}.${tag}.htm`
         );
       }
       break;
@@ -298,74 +302,74 @@ const generateText = (collection, data, tag, outputDir, qnaTag, cb) => {
   const taskNames = [rstr.generate(), rstr.generate(), rstr.generate(), rstr.generate()];
   let textHtml = '';
   gulp.task(taskNames[0], (cb) => {
-    const html = gulp.src(
+    const htm = gulp.src(
         `dist/assets/templates/text${qnaTag ? '.q': ''}.tmpl`)
       .pipe(
         template({
-          qnaName: collection.page.name + '.' + qnaTag + '.html',
+          qnaName: collection.page.name + '.' + qnaTag + '.htm',
           content: textHtml
         }))
-      .pipe(rename(`${collection.page.name}.${tag}.html`))
+      .pipe(rename(`${collection.page.name}.${tag}.htm`))
       .pipe(gulp.dest(outputDir));
     const commons = undefined;
     const assets = undefined;
-    return merge(html);
+    return merge(htm);
   });
 
   gulp.task(taskNames[1], (cb) => {
     const videoName = data[tag].video.path.split('/').pop();
 
-    const html = gulp.src(
+    const htm = gulp.src(
         `dist/assets/templates/waveform${qnaTag ? '.q': ''}.tmpl`)
       .pipe(
         template({
-          qnaName: collection.page.name + '.' + qnaTag + '.html',
+          qnaName: collection.page.name + '.' + qnaTag + '.htm',
           videoName: videoName
         }))
-      .pipe(rename(`${collection.page.name}.${tag}.html`))
+      .pipe(rename(`${collection.page.name}.${tag}.htm`))
       .pipe(gulp.dest(outputDir));
     const commons = gulp.src('dist/assets/templates/waveform/**/*')
       .pipe(gulp.dest(outputDir));
     const assets = gulp.src('dist/assets/uploads/' + videoName)
       .pipe(gulp.dest(outputDir));
-    return merge(html, commons, assets);
+    return merge(htm, commons, assets);
   });
 
   gulp.task(taskNames[2], (cb) => {
     const videoName = data[tag].video.path.split('/').pop();
 
-    const html = gulp.src(
+    const htm = gulp.src(
         `dist/assets/templates/video${qnaTag ? '.q': ''}.tmpl`)
       .pipe(
         template({
-          qnaName: collection.page.name + '.' + qnaTag + '.html',
+          qnaName: collection.page.name + '.' + qnaTag + '.htm',
           videoName: videoName
         }))
-      .pipe(rename(`${collection.page.name}.${tag}.html`))
+      .pipe(rename(`${collection.page.name}.${tag}.htm`))
       .pipe(gulp.dest(outputDir));
     const commons = gulp.src('dist/assets/templates/video/**/*')
       .pipe(gulp.dest(outputDir));
     const assets = gulp.src('dist/assets/uploads/' + videoName)
       .pipe(gulp.dest(outputDir));
-    return merge(html, commons, assets);
+    return merge(htm, commons, assets);
   });
 
   gulp.task(taskNames[3], (cb) => {
     const imageName = data[tag].image.path.split('/').pop();
 
-    const html = gulp.src(
+    const htm = gulp.src(
         `dist/assets/templates/image${qnaTag ? '.q': ''}.tmpl`)
       .pipe(
         template({
-          qnaName: collection.page.name + '.' + qnaTag + '.html',
+          qnaName: collection.page.name + '.' + qnaTag + '.htm',
           imageName: imageName
         }))
-      .pipe(rename(`${collection.page.name}.${tag}.html`))
+      .pipe(rename(`${collection.page.name}.${tag}.htm`))
       .pipe(gulp.dest(outputDir));
     const commons = undefined;
     const assets = gulp.src('dist/assets/uploads/' + imageName)
       .pipe(gulp.dest(outputDir));
-    return merge(html, assets);
+    return merge(htm, assets);
   });
 
   if (data[tag].mode === 'text') {
@@ -373,7 +377,7 @@ const generateText = (collection, data, tag, outputDir, qnaTag, cb) => {
       textHtml = output;
       rseq(taskNames[0], () => {
         cb(
-          `show text ${collection.page.name}/${collection.page.name}.${tag}.html`
+          `show text ${collection.page.name}/${collection.page.name}.${tag}.htm`
         );
       });
     });
@@ -381,20 +385,20 @@ const generateText = (collection, data, tag, outputDir, qnaTag, cb) => {
     if (data[tag].video.isWaveform) {
       rseq(taskNames[1], () => {
         cb(
-          `show text ${collection.page.name}/${collection.page.name}.${tag}.html`
+          `show text ${collection.page.name}/${collection.page.name}.${tag}.htm`
         );
       });
     } else {
       rseq(taskNames[2], () => {
         cb(
-          `show text ${collection.page.name}/${collection.page.name}.${tag}.html`
+          `show text ${collection.page.name}/${collection.page.name}.${tag}.htm`
         );
       });
     }
   } else if (data[tag].mode === 'image') {
     rseq(taskNames[3], () => {
       cb(
-        `show text ${collection.page.name}/${collection.page.name}.${tag}.html`
+        `show text ${collection.page.name}/${collection.page.name}.${tag}.htm`
       );
     });
   }
@@ -426,14 +430,14 @@ const generateQna = (collection, data, tag, outputDir, cb) => {
     tmplData[`qnaChoices${qnaType}`] = qnaChoices;
     tmplData[`qnaCorrectness${qnaType}`] = qnaCorrectness;
 
-    const html = gulp.src('dist/assets/templates/qna.tmpl')
+    const htm = gulp.src('dist/assets/templates/qna.tmpl')
       .pipe(template(tmplData))
-      .pipe(rename(`${collection.page.name}.${tag}.html`))
+      .pipe(rename(`${collection.page.name}.${tag}.htm`))
       .pipe(gulp.dest(outputDir));
     const commons = gulp.src('dist/assets/templates/qna/**/*')
       .pipe(gulp.dest(outputDir));
     const assets = undefined;
-    return merge(html);
+    return merge(htm);
   });
 
   qnaType = data[tag].type;

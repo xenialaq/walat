@@ -116,7 +116,8 @@
           "/src/assets($|/)",
           "/semantic/src($|/)",
           "/semantic/tasks($|/)",
-          "/node_modules/@angular($|/)"
+          "/node_modules/@angular($|/)",
+          ".ts$"
         ]
       },
       "electronWinstallerConfig": {
