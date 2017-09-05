@@ -28,7 +28,8 @@ var options = {
 };
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-var spec = fs.readFileSync(path.join(__dirname, "../../dist/assets/swagger.yaml"), 'utf8');
+var spec = fs.readFileSync(path.join(__dirname, '..', '..', 'dist', 'assets',
+  'swagger.yaml'), 'utf8');
 var swaggerDoc = jsyaml.safeLoad(spec);
 swaggerDoc.host = process.env.HOST || ("127.0.0.1:" + 9090);
 
@@ -51,11 +52,11 @@ swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
   app.use(middleware.swaggerUi());
 
   // Create link to Angular build directory
-  var distDir = path.join(__dirname, "../../dist");
+  var distDir = path.join(__dirname, '..', '..', 'dist');
   app.use(express.static(distDir));
 
   app.use(function(req, res, next) {
-    res.sendFile(path.join(__dirname, "../../dist/index.html"));
+    res.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
   });
 
   // Start the server

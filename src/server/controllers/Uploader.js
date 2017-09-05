@@ -18,7 +18,7 @@ const _ = require('lodash');
 const rstr = require("randomstring");
 const dirt = require('directory-tree');
 
-let tempDir = path.join(__dirname, '../../../tmp');
+let tempDir = path.join(__dirname, '..', '..', '..', 'tmp');
 
 if (!fs.existsSync(tempDir)) {
   fs.mkdirSync(tempDir);
@@ -26,7 +26,8 @@ if (!fs.existsSync(tempDir)) {
 
 tempDir = fs.mkdtempSync(path.join(tempDir, 'walat-'));
 
-let assetDir = path.join(__dirname, '../../../dist/assets/uploads');
+let assetDir = path.join(__dirname, '..', '..', '..', 'dist', 'assets',
+  'uploads');
 
 if (!fs.existsSync(assetDir)) {
   fs.mkdirSync(assetDir);

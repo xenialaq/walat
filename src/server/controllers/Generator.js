@@ -25,7 +25,7 @@ const rstr = require("randomstring");
 
 DataSource.sync();
 
-let tempDir = path.join(__dirname, '../../../tmp');
+let tempDir = path.join(__dirname, '..', '..', '..', 'tmp');
 
 if (!fs.existsSync(tempDir)) {
   fs.mkdirSync(tempDir);
@@ -33,7 +33,8 @@ if (!fs.existsSync(tempDir)) {
 
 tempDir = fs.mkdtempSync(path.join(tempDir, 'walat-'));
 
-let assetDir = path.join(__dirname, '../../../dist/assets/templates');
+let assetDir = path.join(__dirname, '..', '..', '..', 'dist', 'assets',
+  'templates');
 
 if (!fs.existsSync(assetDir)) {
   fs.mkdirSync(assetDir);

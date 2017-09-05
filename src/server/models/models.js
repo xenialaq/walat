@@ -2,7 +2,8 @@
 
 const path = require('path');
 
-const dbPath = path.join(__dirname, '../../../dist/assets/db.sqlite');
+const dbPath = path.join(__dirname, '..', '..', '..', 'dist', 'assets',
+  'db.sqlite');
 
 const Sequelize = require('sequelize');
 
