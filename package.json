@@ -110,14 +110,18 @@
       },
       "electronPackagerConfig": {
         "ignore": [
-          "/e2e($|/)",
-          "/src/environments($|/)",
-          "/src/app($|/)",
-          "/src/assets($|/)",
-          "/semantic/src($|/)",
-          "/semantic/tasks($|/)",
-          "/node_modules/@angular($|/)",
-          ".ts$"
+          "e2e($|/)",
+          "src/environments($|/)",
+          "src/app($|/)",
+          "src/assets($|/)",
+          "semantic/src($|/)",
+          "semantic/tasks($|/)",
+          "node_modules/@angular($|/)",
+          "src/[^\/]+\\.(ico|html|json|ts|scss)$",
+          "\\.ts$",
+          "gulpfile\\.js$",
+          "ignore$",
+          "\\.conf\\.js$"
         ]
       },
       "electronWinstallerConfig": {
