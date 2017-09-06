@@ -277,6 +277,9 @@ export class AppService {
               if (s.callback) {
                 s.callback(data);
               }
+            },
+            error: (err) => {
+              this.showDimmer(err.responseJSON.message);
             }
           });
         };
@@ -455,9 +458,8 @@ export class AppService {
     wait: {}
   };
 
-  showDimmer = (msg = undefined) => {
-    msg = msg || 'Please wait...';
-    $('#page-wait-dimmer loader').text(msg);
+  showDimmer = (msg = 'Please wait...') => {
+    $('#page-wait-dimmer .loader').text(msg);
     $('#page-wait-dimmer').dimmer('show');
   }
 

@@ -78,6 +78,9 @@ module.exports = function(app) {
             return;
           }
 
+          console.log('dsefwegwgwe', jobDir);
+
+
           // generate zip for download
           let ziptask = rstr.generate();
           gulp.task(ziptask, () =>
@@ -278,9 +281,7 @@ const transLine = (collection, line, data, tag, outputDir, qnaTag, isExtraFiles,
       if (isExtraFiles) {
         generateMedia(collection, data, tag, pageMediaDir, cbLine);
       } else {
-        cbLine(
-          `show text ${collection.page.name}/${collection.page.name}.${tag}.htm`
-        );
+        cbLine('play');
       }
       break;
     case 'record':

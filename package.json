@@ -36,6 +36,7 @@
     "directory-tree": "^2.0.0",
     "electron-compile": "^6.4.1",
     "express": "^4.15.3",
+    "get-port": "^3.2.0",
     "gulp": "^3.9.1",
     "gulp-decompress": "^2.0.1",
     "gulp-file": "^0.3.0",
@@ -117,11 +118,13 @@
           "semantic/src($|/)",
           "semantic/tasks($|/)",
           "node_modules/@angular($|/)",
-          "src/[^\/]+\\.(ico|html|json|ts|scss)$",
+          "src/[^/]+\\.(ico|html|json|ts|scss)$",
           "\\.ts$",
           "gulpfile\\.js$",
           "ignore$",
-          "\\.conf\\.js$"
+          "conf\\.js$",
+          "lint\\.js$",
+          "semantic\\.json"
         ]
       },
       "electronWinstallerConfig": {

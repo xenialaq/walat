@@ -20,51 +20,58 @@ uploader(app);
 var generator = require('./controllers/Generator.js');
 generator(app);
 
-// swaggerRouter configuration
-var options = {
-  swaggerUi: '/swagger.json',
-  controllers: path.join(__dirname, 'controllers'),
-  useStubs: process.env.NODE_ENV === 'development' ? true : false // Conditionally turn on stubs (mock mode)
-};
+const getPort = require('get-port');
 
-// The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-var spec = fs.readFileSync(path.join(__dirname, '..', '..', 'dist', 'assets',
-  'swagger.yaml'), 'utf8');
-var swaggerDoc = jsyaml.safeLoad(spec);
-swaggerDoc.host = process.env.HOST || ("127.0.0.1:" + 9090);
+getPort().then(PORT => {
+  // swaggerRouter configuration
+  var options = {
+    swaggerUi: '/swagger.json',
+    controllers: path.join(__dirname, 'controllers'),
+    useStubs: process.env.NODE_ENV === 'development' ? true : false // Conditionally turn on stubs (mock mode)
+  };
 
-if (process.env.USE_HTTPS) {
-  swaggerDoc.schemes.unshift('https');
-}
+  // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
+  var spec = fs.readFileSync(path.join(__dirname, '..', '..', 'dist',
+    'assets',
+    'swagger.yaml'), 'utf8');
+  var swaggerDoc = jsyaml.safeLoad(spec);
+  swaggerDoc.host = process.env.HOST || ("127.0.0.1:" + PORT);
 
-// Initialize the Swagger middleware
-swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
-  // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
-  app.use(middleware.swaggerMetadata());
+  if (process.env.USE_HTTPS) {
+    swaggerDoc.schemes.unshift('https');
+  }
 
-  // Validate Swagger requests
-  app.use(middleware.swaggerValidator());
+  // Initialize the Swagger middleware
+  swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
+    // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
+    app.use(middleware.swaggerMetadata());
 
-  // Route validated requests to appropriate controller
-  app.use(middleware.swaggerRouter(options));
+    // Validate Swagger requests
+    app.use(middleware.swaggerValidator());
 
-  // Serve the Swagger documents and Swagger UI
-  app.use(middleware.swaggerUi());
+    // Route validated requests to appropriate controller
+    app.use(middleware.swaggerRouter(options));
 
-  // Create link to Angular build directory
-  var distDir = path.join(__dirname, '..', '..', 'dist');
-  app.use(express.static(distDir));
+    // Serve the Swagger documents and Swagger UI
+    app.use(middleware.swaggerUi());
 
-  app.use(function(req, res, next) {
-    res.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
-  });
+    // Create link to Angular build directory
+    var distDir = path.join(__dirname, '..', '..', 'dist');
+    app.use(express.static(distDir));
 
-  // Start the server
-  app.listen(process.env.PORT || 9090, function() {
-    console.log(
-      'Your server is listening on port %d (http://localhost:%d)',
-      9090, 9090);
-    console.log('Swagger-ui is available on http://localhost:%d/docs',
-      9090);
+    app.use(function(req, res, next) {
+      res.sendFile(path.join(__dirname, '..', '..', 'dist',
+        'index.html'));
+    });
+
+    // Start the server
+    app.listen(process.env.PORT || PORT, function() {
+      console.log(
+        'Your server is listening on port %d (http://localhost:%d)',
+        PORT, PORT);
+      console.log(
+        'Swagger-ui is available on http://localhost:%d/docs',
+        PORT);
+    });
   });
 });
