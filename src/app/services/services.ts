@@ -338,6 +338,18 @@ export class AppService {
     delete this.lessons[id];
   }
 
+  showLesson = (id) => {
+    this.activeView.lesson = { id: id, data: {} };
+    this.activeView.exercise = { id: 0, data: {} };
+    this.activeView.page = { id: 0, data: {} };
+    this.activeView.line = {
+      i: 0,
+      cmd: '',
+      tag: null,
+      data: {} /* field: value */
+    };
+  }
+
   removeExercise = (id) => {
     if (this.pages[this.activeView.page.id] && this.pages[this.activeView.page.id].exercise.id === id) {
       this.activeView.page.id = 0;
@@ -354,12 +366,33 @@ export class AppService {
     delete this.exercises[id];
   }
 
+  showExercise = (id) => {
+    this.activeView.exercise = { id: id, data: {} };
+    this.activeView.page = { id: 0, data: {} };
+    this.activeView.line = {
+      i: 0,
+      cmd: '',
+      tag: null,
+      data: {} /* field: value */
+    };
+  }
+
   removePage = (id) => {
     if (this.activeView.page.id === id) {
       this.activeView.page.id = 0;
     }
 
     delete this.pages[id];
+  }
+
+  showPage = (id) => {
+    this.activeView.page = { id: id, data: _.cloneDeep(this.pages[id].fields) };
+    this.activeView.line = {
+      i: 0,
+      cmd: '',
+      tag: null,
+      data: {} /* field: value */
+    };
   }
 
   hideMessages = () => {
@@ -420,9 +453,10 @@ export class AppService {
     const matches = line.match(/@\w+\s*$/g);
     tag = _.isNull(matches) ? null : matches[0].replace(/^@/g, '').trim();
     this.editor.line.tag = tag;
+
     this.editor.line.data = _.has(this.editor.page.data, tag)
       ? this.editor.page.data[tag]
-      : _.clone(def)
+      : _.cloneDeep(def);
   }
 
   peditDefaults = {
@@ -433,29 +467,27 @@ export class AppService {
     }, play: {
       'name': '',
       'path': ''
-    },
-    qna: {
-      'type': 0,
+    }, qna: {
+      'type': -1,
       'question': '',
       'answer': '',
       'choices': [{
         'isCorrect': true,
         'value': ''
       }]
-    },
-    record: {
-      'isFixed': true,
+    }, record: {
+      'isFixed': null,
       'length': 0,
       'length-var': '',
       'length-multiplier': 1
-    },
-    text: {
+    }, text: {
       'mode': '',
       'text': [],
       'image': { name: '', path: '' },
       'video': { name: '', path: '', isWaveform: false }
-    },
-    wait: {}
+    }, wait: {
+
+    }
   };
 
   showDimmer = (msg = 'Please wait...') => {

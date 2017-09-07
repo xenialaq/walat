@@ -36,6 +36,13 @@ export class QnaModule implements AfterViewInit {
         value: ''
       });
 
+      this.valueUpdate.emit(this._value);
+    } else if (action === 'insert below') {
+      this._value['choices'].splice(this.activeChoice + 1, 0, {
+        isCorrect: false,
+        value: ''
+      });
+
       this.activeChoice++;
 
       this.valueUpdate.emit(this._value);
@@ -52,32 +59,23 @@ export class QnaModule implements AfterViewInit {
       this.activeChoice++;
 
       this.valueUpdate.emit(this._value);
-    } else {
-      return;
-    }
+    } else if (action === 'move up') {
+      let a = this._value['choices'][this.activeChoice];
+      let b = this._value['choices'][this.activeChoice - 1];
 
-    this.refreshDropdowns();
+      this._value['choices'][this.activeChoice] = b;
+      this._value['choices'][this.activeChoice - 1] = a;
+      this.activeChoice--;
+
+      this.valueUpdate.emit(this._value);
+    }
   }
 
   updateActiveChoice = (i) => {
     this.activeChoice = i;
-    this.refreshDropdowns();
   }
 
   ngAfterViewInit() {
-    $('#qna-type-dropdown').dropdown();
-    this.refreshDropdowns();
-  }
-
-  refreshDropdowns = () => {
-    // delayed init
-    let setter = setInterval(() => {
-      if ($('.mc-choices-handle').length) {
-        $('.mc-choices-handle').dropdown('restore defaults');
-        $('#mc-choices .dropdown.correctness').dropdown();
-        clearInterval(setter);
-      }
-    }, 50);
   }
 
   @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();

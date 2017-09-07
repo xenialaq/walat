@@ -82,6 +82,9 @@ export class AssetUploader implements AfterViewInit {
   @Input()
   set value(data) {
     this._value = data;
+    if (data) {
+      this.searchQuery = data.name;
+    }
   }
 
   @Input()
@@ -100,10 +103,6 @@ export class AssetUploader implements AfterViewInit {
 
   updateSearch = (query) => {
     this.searchQuery = query;
-  }
-
-  toggleMode = (isAsset) => {
-    this.isAsset = isAsset;
   }
 
   debug = () => {

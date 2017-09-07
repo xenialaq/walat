@@ -39,25 +39,15 @@ export class CollectionManager implements AfterViewInit {
   showPage = (id) => {
     this.isPage = true;
 
+    this.service.showPage(id);
+
     if (this.service.activeView.name == 'editor') {
-      this.service.activeView.page = { id: id, data: _.clone(this.service.pages[id].fields) };
-
-      this.service.activeView.line = {
-        i: 0,
-        cmd: '',
-        tag: null,
-        data: {} /* field: value */
-      };
-
       let script = this.service.pages[id].script;
 
       this.service.flask.init(); /* reset code editor */
       if (!_.isUndefined(script)) {
         this.service.flask.update(script);
       }
-    }
-    else {
-      this.service.activeView.page = { id: id };
     }
   }
 

@@ -8,6 +8,7 @@ var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var fs = require('fs');
 var path = require('path');
+var open = require('open');
 
 var app = express();
 
@@ -72,6 +73,8 @@ getPort().then(PORT => {
       console.log(
         'Swagger-ui is available on http://localhost:%d/docs',
         PORT);
+
+      // open(`http://localhost:${PORT}`, "google-chrome");
     });
   });
 });

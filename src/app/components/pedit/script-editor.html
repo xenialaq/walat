@@ -6,15 +6,42 @@
     </div>
   </h5>
   <div class="ui labels" *ngIf="this.varList.length > 0">
-    <a class="ui orange tag label" (click)="this.insert('wait')">wait</a>
-    <a class="ui blue tag label" (click)="this.insert('play @')">play</a>
-    <a class="ui grey tag label" (click)="this.insert('hide @')">hide</a>
-    <a class="ui black tag label" (click)="this.insert('show text @')">show text</a>
-    <a class="ui black tag label" (click)="this.insert('show directions @')">show directions</a>
-    <a class="ui orange tag label" (click)="this.insert('pause')">pause</a>
-    <a class="ui violet tag label" (click)="this.insert('imagemap')">imagemap</a>
-    <a class="ui red tag label" (click)="this.insert('record @')">record</a>
-    <a class="ui teal tag label" (click)="this.insert('expect Q&A submission @')">expect Q&amp;A submission</a>
+    <a class="ui blue label" (click)="this.insert('show directions @')">
+      <i class="pointing left icon"></i>
+      Directions
+    </a>
+    <a class="ui blue label" (click)="this.insert('hide @')">
+      <i class="low vision icon"></i>
+      Hide
+    </a>
+    <a class="ui blue label" (click)="this.insert('play @')">
+      <i class="music icon"></i>
+      Play
+    </a>
+    <a class="ui blue label" (click)="this.insert('expect Q&A submission @')">
+      <i class="help icon"></i>
+      Q&amp;A
+    </a>
+    <a class="ui blue label" (click)="this.insert('record @')">
+      <i class="unmute icon"></i>
+      Record
+    </a>
+    <a class="ui blue label" (click)="this.insert('show text @')">
+      <i class="newspaper icon"></i>
+      Text
+    </a>
+    <a class="ui label" (click)="this.insert('imagemap')">
+      <i class="anchor icon"></i>
+      Imagemap
+    </a>
+    <a class="ui label" (click)="this.insert('pause')">
+      <i class="hourglass start icon"></i>
+      Pause
+    </a>
+    <a class="ui label" (click)="this.insert('wait')">
+      <i class="pause icon"></i>
+      Wait
+    </a>
   </div>
   <div id="flask-editor" style="min-height: 200px; width: 100%; background-color: #F8F8F8;">
   </div>

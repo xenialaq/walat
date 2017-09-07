@@ -71,7 +71,6 @@ export class LessonManager implements AfterViewInit {
   }
 
   toggleLesson = (id) => {
-    console.log(this.service.activeView.lesson.id === id, this.service.activeView.lesson.id, id)
     if (this.service.activeView.lesson.id === id) {
       this.service.activeView.lesson.id = 0;
     } else {

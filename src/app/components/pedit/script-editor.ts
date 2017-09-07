@@ -11,43 +11,43 @@ export class ScriptEditor {
   }
 
   varList = [
-        "artichoke",
-        "aubergine",
-        "basil",
-        "bean",
-        "celery",
-        "corn",
-        "daikon",
-        "dill",
-        "eggplant",
-        "endive",
-        "fennel",
-        "frisee",
-        "garlic",
-        "ginger",
-        "habanero",
-        "jalapeno",
-        "jicama",
-        "kale",
-        "kohlrabi",
-        "lavender",
-        "lettuce",
-        "mamey",
-        "mushroom",
-        "nopale",
-        "okra",
-        "onion",
-        "pea",
-        "potato",
-        "radish",
-        "rhubarb",
-        "sage",
-        "squash",
-        "taro",
-        "thyme",
-        "wasabi",
-        "yam",
-        "zucchini"
+    "artichoke",
+    "aubergine",
+    "basil",
+    "bean",
+    "celery",
+    "corn",
+    "daikon",
+    "dill",
+    "eggplant",
+    "endive",
+    "fennel",
+    "frisee",
+    "garlic",
+    "ginger",
+    "habanero",
+    "jalapeno",
+    "jicama",
+    "kale",
+    "kohlrabi",
+    "lavender",
+    "lettuce",
+    "mamey",
+    "mushroom",
+    "nopale",
+    "okra",
+    "onion",
+    "pea",
+    "potato",
+    "radish",
+    "rhubarb",
+    "sage",
+    "squash",
+    "taro",
+    "thyme",
+    "wasabi",
+    "yam",
+    "zucchini"
   ];
 
   varUsed = [];
@@ -131,13 +131,16 @@ export class ScriptEditor {
     }
     const lines = this.getLines();
     const lineno = this.getLineno();
+    const currentLine = lines[lineno.i];
     const line = this.getLine();
     lines.splice(lineno.col > 0 ? lineno.i : lineno.i - 1, 0, cmd);
     this.flask.update(lines.join('\n'));
 
-    $(this.flask.textarea).prop("selectionStart", lineno.end + cmd.length);
-    $(this.flask.textarea).prop("selectionEnd", lineno.end + cmd.length);
+    let cursor = lineno.col > 0 ? lineno.end + cmd.length : lineno.start - 1;
+    $(this.flask.textarea).prop("selectionStart", cursor);
+    $(this.flask.textarea).prop("selectionEnd", cursor);
 
+    $(this.flask.textarea).click();
     $(this.flask.textarea).focus();
   }
 

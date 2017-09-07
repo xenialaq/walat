@@ -50,7 +50,7 @@ class Page {
     if (this.fields === v) {
       return;
     }
-    this.fields = _.clone(v);
+    this.fields = _.cloneDeep(v);
     this.synced = false;
   }
 

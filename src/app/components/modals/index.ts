@@ -167,11 +167,17 @@ export class Modals implements AfterViewInit {
           this._value['value'].description = response.description;
           switch (this._value['type']) {
             case 'lesson':
-              this.service.lessons[response.id] = this._value['value']; break;
+              this.service.lessons[response.id] = this._value['value'];
+              this.service.showLesson(this._value['value'].id);
+              break;
             case 'exercise':
-              this.service.exercises[response.id] = this._value['value']; break;
+              this.service.exercises[response.id] = this._value['value'];
+              this.service.showExercise(this._value['value'].id);
+              break;
             case 'page':
-              this.service.pages[response.id] = this._value['value']; break;
+              this.service.pages[response.id] = this._value['value'];
+              this.service.showPage(this._value['value'].id);
+              break;
           }
         }
       }

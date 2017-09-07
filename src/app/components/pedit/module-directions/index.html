@@ -1,6 +1,6 @@
 <div class="field" [hidden]="!this.isAvailable()">
   <label>Directions</label>
-  <textarea [value]="this._value['directions']" rows="2" name="directions" (change)="this.update($event.target.value)"></textarea>
+  <textarea [value]="this._value['directions']" rows="2" name="directions" (input)="this.update($event.target.value)"></textarea>
 </div>
 
 <div class="field" [hidden]="!this.isAvailable()">

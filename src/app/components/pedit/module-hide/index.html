@@ -1,6 +1,6 @@
 <div class="field" [hidden]="!this.isAvailable()">
   <div class="grouped fields">
-    <label for="hide-element">Select which element to hide:</label>
+    <label for="hide-element">Element</label>
     <div class="field">
       <div class="ui radio checkbox">
         <input type="radio" name="hide-element" [attr.checked]="this._value['element'] === 'directions' ? '' : null" tabindex="0" class="hidden" (change)="this.update($event.target)">

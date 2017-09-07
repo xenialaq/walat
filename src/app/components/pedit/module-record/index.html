@@ -13,7 +13,7 @@
       <div class="equal width fields">
         <div class="field">
           <div class="ui right labeled input">
-            <input type="text" name="length" [value]="this._value['length']" (change)="this.updateLength($event.target.value)">
+            <input type="text" name="length" [value]="this._value['length']" (input)="this.updateLength($event.target.value)">
             <div class="ui basic label">
               seconds
             </div>
@@ -25,22 +25,27 @@
     <div class="field" id='record-variable' [ngClass]="this._value['isFixed'] === false ? '' : 'disabled'">
       <div class="equal width fields">
         <div class="field">
-          <div class="ui selection dropdown" id="record-variable-dropdown">
-            <input type="hidden" name="length-var" [value]="this._value['length-var']" (change)="this.updateLengthVar($event.target.value)">
-            <i class="dropdown icon"></i>
-            <div class="default text">Choose a variable</div>
-            <div class="menu">
-              <div class="item" data-value="thisQuestion">Same as this sound</div>
-              <div class="item" data-value="nextQuestion">Same as next sound</div>
+          <div class="inline fields" style="height: 38px; margin: 0;">
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="length-var" [attr.checked]="this._value['length-var'] === 'thisQuestion' ? '' : null" tabindex="0" (change)="this.updateLengthVar('thisQuestion')">
+                <label>This sound</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="length-var" [attr.checked]="this._value['length-var'] === 'nextQuestion' ? '' : null" tabindex="0" (change)="this.updateLengthVar('nextQuestion')">
+                <label>Next sound</label>
+              </div>
             </div>
           </div>
         </div>
         <div class="field">
           <div class="ui labeled input">
             <div class="ui basic label">
-              x
+              x (Multiplier)
             </div>
-            <input type="text" placeholder="Multiplier" name="multiplier" [value]="this._value['length-multiplier']" (change)="this.updateLengthMultiplier($event.target.value)">
+            <input type="text" name="multiplier" [value]="this._value['length-multiplier']" (input)="this.updateLengthMultiplier($event.target.value)">
           </div>
         </div>
       </div>

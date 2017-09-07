@@ -13,7 +13,6 @@ export class RecordModule implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    $('#record-variable-dropdown').dropdown();
   }
 
   @Output() valueUpdate: EventEmitter<object> = new EventEmitter<object>();
@@ -22,7 +21,12 @@ export class RecordModule implements AfterViewInit {
     if (!this.isAvailable()) {
       return;
     }
-    this._value['length'] = parseFloat(v);
+
+    if (_.isNaN(parseFloat(v))) {
+      this._value['length'] = 1;
+    } else {
+      this._value['length'] = parseFloat(v);
+    }
     this.valueUpdate.emit(this._value);
   }
 
