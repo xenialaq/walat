@@ -60,9 +60,9 @@ export class ScriptEditor {
       'important': /^Lesson [\w\s-]+\n/m,
       'comment': /^\((start|end) of exercise [\w\s-]+\)\n/m,
       'function': /^(show text|show directions|hide|hide text|hide directions|pause|wait|play|record|expect)/m,
-      'constant': /(comparison button|thisPage|nextPage|Q&A submission)/,
+      'attr-value': /(comparison button|thisPage|nextPage|Q&A submission)/,
       'selector': /^\\[\w\s-]+\n/m, /* \Some page */
-      'url': /@\w+\s*$/m
+      'variable': /@\w+\s*$/m
     };
     this.init();
     this.service.flask.init = this.init;
@@ -77,6 +77,7 @@ export class ScriptEditor {
     this.flask.onUpdate((code) => {
       let varRecycled = _.remove(this.varUsed, (a) => !code.includes('@' + a));
       this.varList = this.varList.concat(varRecycled);
+
       this.service.pages[this.service.editor.page.id].setScript(code);
     });
 
@@ -144,6 +145,26 @@ export class ScriptEditor {
     $(this.flask.textarea).focus();
   }
 
+  @Input('gutter')
+  set gutter(lines: number[]) {
+    // detect data changes and mark lines set / unset
+    $(this.flask.highlightCode).children('.line-numbers-rows').children().css({
+      'background-color': 'transparent',
+      'text-shadow': '0 1px white',
+      'color': '#000'
+    });
+
+    lines.forEach((i) => {
+      let lineNumberSpan = $(this.flask.highlightCode).children('.line-numbers-rows').children().eq(i);
+      // data is not set
+      lineNumberSpan.css({
+        'background-color': '#FE8181',
+        'text-shadow': 'none',
+        'color': '#000'
+      });
+    });
+  }
+
   @Input('hidden')
   set hidden(hidden: boolean) {
     if (hidden) {
@@ -151,5 +172,12 @@ export class ScriptEditor {
     } else {
       $('#flask-container').show();
     }
+  }
+
+  _value = '';
+
+  @Input()
+  set value(data) {
+    this._value = data;
   }
 }

@@ -101,6 +101,24 @@ class Page {
       }
     });
   }
+
+  getUnsetLineNumbers = () => {
+    let ret = [];
+    if (!this.script || this.script === null) {
+      return ret;
+    }
+
+    this.script.split('\n').forEach((line, i) => {
+      const matches = line.match(/@\w+\s*$/g);
+      let tag = _.isNull(matches) ? null : matches[0].replace(/^@/g, '').trim();
+
+      if (tag !== null && !this.fields.hasOwnProperty(tag)) {
+        ret.push(i);
+      }
+    });
+
+    return ret;
+  }
 }
 
 class Exercise {

@@ -2,7 +2,7 @@
   <wat-pedit-events-picker [hidden]="this.service.pages[this.service.editor.page.id] && !_.isUndefined(this.service.pages[this.service.editor.page.id].script)">
   </wat-pedit-events-picker>
 
-  <wat-script-editor [hidden]="this.service.pages[this.service.editor.page.id] && _.isUndefined(this.service.pages[this.service.editor.page.id].script)"></wat-script-editor>
+  <wat-script-editor [value]="this.service.activeView.page.id === 0 ? '' : this.service.pages[this.service.activeView.page.id].script" [gutter]="this.service.activeView.page.id === 0 ? [] : this.service.pages[this.service.activeView.page.id].getUnsetLineNumbers()" [hidden]="this.service.pages[this.service.editor.page.id] && _.isUndefined(this.service.pages[this.service.editor.page.id].script)"></wat-script-editor>
 
   <div class="ui segment" [hidden]="_.isNull(this.service.editor.line.tag)">
     <h5 class="ui header">
