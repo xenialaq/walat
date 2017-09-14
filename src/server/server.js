@@ -11,6 +11,7 @@ var path = require('path');
 var open = require('open');
 
 var app = express();
+var currentPort = 0;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -67,14 +68,19 @@ getPort().then(PORT => {
 
     // Start the server
     app.listen(process.env.PORT || PORT, function() {
+      currentPort = process.env.PORT || PORT;
       console.log(
         'Your server is listening on port %d (http://localhost:%d)',
-        PORT, PORT);
+        currentPort, currentPort);
       console.log(
         'Swagger-ui is available on http://localhost:%d/docs',
-        PORT);
+        currentPort);
 
-      // open(`http://localhost:${PORT}`, "google-chrome");
+      // open(`http://localhost:${currentPort}`);
     });
   });
 });
+
+exports.getCurrentPort = () => {
+  return currentPort;
+}

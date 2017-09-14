@@ -20,7 +20,7 @@
     <i class="trash icon"></i> Delete
   </div>
 
-  <div class="ui dropdown grey button">
+  <div class="ui dropdown grey button disabled">
     Filter <i class="filter icon"></i>
     <div class="menu">
       <div class="ui search icon input">
@@ -63,19 +63,17 @@
   <table class="ui large selectable padded very basic table">
     <thead>
       <tr>
-        <th class="center aligned">#</th>
+        <th class="center aligned"></th>
         <th class="center aligned">Name</th>
         <th class="two wide center aligned">Author</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let lesson of _.values(this.service.lessons)" (click)="toggleLesson(lesson.id)" [ngClass]="this.service.activeView.lesson.id === lesson.id ? 'positive' : null">
-        <td class="center aligned">
-          {{lesson.id}}
+        <td>
         </td>
         <td class="single line">
           <a href="/editor?lid={{lesson.id}}">{{lesson.name}}</a>
-          <p>{{lesson.path}}</p>
         </td>
         <td class="center aligned">
           {{Cookies.get('author name')}}

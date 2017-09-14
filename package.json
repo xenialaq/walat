@@ -1,6 +1,6 @@
 {
   "name": "walat",
-  "version": "0.0.0",
+  "version": "0.0.1-beta.1",
   "license": "Apache-2.0",
   "scripts": {
     "ng": "ng",
@@ -90,7 +90,10 @@
     "type": "git",
     "url": "git+https://github.com/moodspace/walat.git"
   },
-  "author": "moodspace",
+  "author": "Language Resource Center",
+  "maintainers": [{
+    "Alex": "kq32@cornell.edu"
+  }],
   "bugs": {
     "url": "https://github.com/moodspace/walat/issues"
   },

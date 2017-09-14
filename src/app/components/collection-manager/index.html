@@ -1,4 +1,4 @@
-<div class="ui attached basic segment" style="background-color: #F8F8F8; padding-bottom: 0; border-top: none; border-left: none; border-right: none; margin-left: 0;">
+<div class="ui attached basic segment" style="background-color: #F8F8F8; padding-bottom: 0; margin-left: 0;">
   <div class="ui search" *ngIf="false">
     <div class="ui fluid icon input">
       <input type="text" placeholder="Search..." style="border-radius: 500rem;">
@@ -34,7 +34,10 @@
   </div>
 </div>
 
-<div class="ui attached basic segment" style="height: calc(50% - 80px); border-left: none; border-right: none;">
+<div class="ui attached centered header">
+  Exercises
+</div>
+<div class="ui attached basic segment" style="height: calc(50% - 120px); border-left: none; border-right: none;">
   <div class="ui fluid vertical basic buttons" id="exercise-list" style="max-height: 100%; overflow-y: auto;">
     <a *ngFor="let exercise of this.getExercises()" class="ui basic button" [ngClass]="this.service.activeView.exercise.id === exercise.id ? 'primary' : ''" (click)="this.showExercise(exercise.id)">
       <i class="folder outline icon"></i>
@@ -46,7 +49,10 @@
   </div>
 </div>
 
-<div class="ui attached basic segment" style="height: calc(50% - 81px); border: none;" [hidden]="this.service.activeView.exercise.id === 0">
+<div class="ui attached centered header">
+  Pages
+</div>
+<div class="ui attached basic segment" style="height: calc(50% - 121px); border: none;" [hidden]="this.service.activeView.exercise.id === 0">
   <div class="ui fluid vertical basic buttons" id="page-list" style="max-height: 100%; overflow-y: auto;">
     <a *ngFor="let page of this.getPages()" class="ui basic button" [ngClass]="this.service.activeView.page.id === page.id ? 'primary' : ''" (click)="this.showPage(page.id)">
       <i class="circle thin icon"></i>

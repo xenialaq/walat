@@ -24,7 +24,7 @@ function createWindow() {
   });
 
   // and load the index.html of the app.
-    mainWindow.loadURL('http://localhost:9090');
+    mainWindow.loadURL('http://localhost:' + express.getCurrentPort());
     mainWindow.focus();
 
 
