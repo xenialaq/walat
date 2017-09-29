@@ -42,7 +42,7 @@ export class CollectionManager implements AfterViewInit {
     this.service.showPage(id);
 
     if (this.service.activeView.name == 'editor') {
-      let script = this.service.pages[id].script;
+      let script = this.service.getPage(id).script;
 
       this.service.flask.init(); /* reset code editor */
       if (!_.isUndefined(script)) {
@@ -51,17 +51,9 @@ export class CollectionManager implements AfterViewInit {
     }
   }
 
-  getExercises = () => {
-    return _.filter(_.values(this.service.exercises), (e) => {
-      return e.lesson.id === this.service.activeView.lesson.id;
-    });
-  }
+  getExercises = () => this.service.exercises[this.service.activeView.lesson.id] || []
 
-  getPages = () => {
-    return _.filter(_.values(this.service.pages), (e) => {
-      return e.exercise.id === this.service.activeView.exercise.id;
-    });
-  }
+  getPages = () => this.service.pages[this.service.activeView.exercise.id] || []
 
   createExerciseClick = () => {
     let rid = _.random(-5000, -1);
@@ -85,7 +77,7 @@ export class CollectionManager implements AfterViewInit {
     while (_.has(this.service.pages, rid)) {
       rid = _.random(-5000, -1);
     }
-    let n = new Page(rid, '', '', '', undefined, undefined, this.service.exercises[this.service.activeView.exercise.id]);
+    let n = new Page(rid, '', '', '', undefined, undefined, this.service.getExercise(this.service.activeView.exercise.id));
 
     this.service.activeItem = {
       value: n,
@@ -100,10 +92,10 @@ export class CollectionManager implements AfterViewInit {
 
     if (!this.isPage) {
       // Edit exercise
-      item = this.service.exercises[this.service.activeView.exercise.id];
+      item = this.service.getExercise(this.service.activeView.exercise.id);
     } else {
       // Edit page
-      item = this.service.pages[this.service.activeView.page.id];
+      item = this.service.getPage(this.service.activeView.page.id);
     }
 
     this.service.activeItem = {
@@ -119,10 +111,10 @@ export class CollectionManager implements AfterViewInit {
 
     if (!this.isPage) {
       // Edit exercise
-      item = this.service.exercises[this.service.activeView.exercise.id];
+      item = this.service.getExercise(this.service.activeView.exercise.id);
     } else {
       // Edit page
-      item = this.service.pages[this.service.activeView.page.id];
+      item = this.service.getPage(this.service.activeView.page.id);
     }
 
     this.service.activeItem = {
@@ -130,6 +122,48 @@ export class CollectionManager implements AfterViewInit {
       action: 'delete',
       type: this.isPage ? 'page' : 'exercise',
       openModal: true
+    }
+  }
+
+  exerciseListOpt = {
+    onUpdate: (event) => {
+      // angular binding does mutation automatically
+      const items = this.getExercises();
+
+      $.api({
+        action: 'reorder lesson by ID',
+        on: 'now',
+        method: 'post',
+        urlData: {
+          id: this.service.activeView.lesson.id
+        },
+        data: JSON.stringify(items.map(i => i.id)),
+        contentType: 'application/json',
+        onResponse: (response) => {
+          console.log(response);
+        }
+      });
+    }
+  }
+
+  pageListOpt = {
+    onUpdate: (event) => {
+      // angular binding does mutation automatically
+      const items = this.getPages();
+
+      $.api({
+        action: 'reorder exercise by ID',
+        on: 'now',
+        method: 'post',
+        urlData: {
+          id: this.service.activeView.exercise.id
+        },
+        data: JSON.stringify(items.map(i => i.id)),
+        contentType: 'application/json',
+        onResponse: (response) => {
+          console.log(response);
+        }
+      });
     }
   }
 }

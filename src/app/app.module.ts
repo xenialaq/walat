@@ -21,6 +21,8 @@ import { AssetManager } from './components/asset-manager';
 import { LessonManager } from './components/lesson-manager';
 import * as PEdit from './components/pedit';
 
+import { SortablejsModule } from 'angular-sortablejs';
+
 @NgModule({
   declarations: [
     App,
@@ -67,7 +69,9 @@ import * as PEdit from './components/pedit';
         path: 'library',
         component: LibraryView
       }
-    ])
+    ]),
+    // addons
+    SortablejsModule
   ],
   providers: [AppService],
   bootstrap: [App]

@@ -1,8 +1,4 @@
-'use strict';
-
-var url = require('url');
-
-var Editor = require('./EditorService');
+const Editor = require('./EditorService');
 
 module.exports.exercisesGET = function exercisesGET(req, res, next) {
   Editor.exercisesGET(req.swagger.params, res, next);
@@ -14,6 +10,10 @@ module.exports.exercisesIdDELETE = function exercisesIdDELETE(req, res, next) {
 
 module.exports.exercisesIdGET = function exercisesIdGET(req, res, next) {
   Editor.exercisesIdGET(req.swagger.params, res, next);
+};
+
+module.exports.exercisesIdReorderPOST = function exercisesIdReorderPOST(req, res, next) {
+  Editor.exercisesIdReorderPOST(req.swagger.params, res, next);
 };
 
 module.exports.exercisesPOST = function exercisesPOST(req, res, next) {
@@ -34,6 +34,10 @@ module.exports.lessonsIdDELETE = function lessonsIdDELETE(req, res, next) {
 
 module.exports.lessonsIdGET = function lessonsIdGET(req, res, next) {
   Editor.lessonsIdGET(req.swagger.params, res, next);
+};
+
+module.exports.lessonsIdReorderPOST = function lessonsIdReorderPOST(req, res, next) {
+  Editor.lessonsIdReorderPOST(req.swagger.params, res, next);
 };
 
 module.exports.lessonsPOST = function lessonsPOST(req, res, next) {

@@ -10,12 +10,50 @@ export class AppService {
   public flask: any;
 
   public lessons: { [i: number]: Lesson } = {};
-  // public lesson: Lesson;
-  public exercises: { [i: number]: Exercise } = {};
-  // public exercise: Exercise;
-  public pages: { [i: number]: Page } = {};
+  // order matters
+  public exercises: { [i: number]: Exercise[] } = {};
+  // order matters
+  public pages: { [i: number]: Page[] } = {};
   // public page: Page;
   public assets: { [i: number]: Asset } = {};
+
+  getExercise = (id) => {
+    for (let lid in this.exercises) {
+      for (let e of this.exercises[lid]) {
+        if (e.id === id) {
+          return e;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  setExercise = (e: Exercise) => {
+    if (!this.exercises[e.lesson.id]) {
+      this.exercises[e.lesson.id] = [];
+    }
+    _.remove(this.exercises[e.lesson.id], (item) => item.id === e.id);
+    this.exercises[e.lesson.id].push(e);
+  }
+
+  getPage = (id) => {
+    for (let eid in this.pages) {
+      for (let p of this.pages[eid]) {
+        if (p.id === id) {
+          return p;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  setPage = (p: Page) => {
+    if (!this.pages[p.exercise.id]) {
+      this.pages[p.exercise.id] = [];
+    }
+    _.remove(this.pages[p.exercise.id], (item) => item.id === p.id);
+    this.pages[p.exercise.id].push(p);
+  }
 
   public readonly templates = [
     `show text @text \nshow directions @directions \nplay @sound \nhide text \nshow directions @directions \nwait`,
@@ -23,21 +61,6 @@ export class AppService {
     `show text @content \nshow directions @dir \nplay @sound \nwait \nrecord @duration \nhide @element \nshow directions @directions \nwait`,
     ``
   ];
-
-  public readonly eventsFieldsMapping = {
-    'listen': ['sound-id', 'sound-name'],
-    'record': ['isFixed', 'length', 'length-multiplier'],
-    'listen, record': ['sound-id', 'sound-name', 'isFixed', 'length', 'length-multiplier']
-  };
-
-  public readonly contentFieldsMapping = {
-    'text': ['text'],
-    'slide': ['slide-id', 'slide-name'],
-    'video': ['video-id', 'video-name'],
-    'page': ['qna-type', 'qna-page', 'qna-mc', 'qna-key'],
-    'video, page': ['qna-type', 'qna-page', 'qna-mc', 'qna-key'],
-    'video, waveform': ['video-id', 'video-name']
-  };
 
   public editor = {
     name: 'editor',
@@ -96,6 +119,7 @@ export class AppService {
           this.lessons[d.id] = (
             new Lesson(d.id, d.name, d.path, d.description)
           );
+          this.exercises[d.id] = [];
 
           this.initExercises(d.id);
           this.initAssets(d.id);
@@ -123,9 +147,10 @@ export class AppService {
       on: 'now',
       onResponse: (response) => {
         _.values(response).forEach((d) => {
-          this.exercises[d.id] = (
+          this.exercises[d.lesson].push(
             new Exercise(d.id, d.name, d.path, d.description, this.lessons[d.lesson])
           );
+          this.pages[d.id] = [];
 
           this.initPages(d.id);
         });
@@ -142,10 +167,9 @@ export class AppService {
       on: 'now',
       onResponse: (response) => {
         _.values(response).forEach((d) => {
-          this.pages[d.id] = (
-            new Page(d.id, d.name, d.path, d.description, d.fields, d.script, this.exercises[d.exercise])
-          );
-          this.pages[d.id].synced = true;
+          const np = new Page(d.id, d.name, d.path, d.description, d.fields, d.script, this.getExercise(d.exercise));
+          this.pages[d.exercise].push(np);
+          np.synced = true;
         });
       }
     });
@@ -199,7 +223,7 @@ export class AppService {
       urlData: { id: id },
       on: 'now',
       onResponse: (d) => {
-        this.exercises[d.id] = (
+        this.exercises[d.lesson].push(
           new Exercise(d.id, d.name, d.path, d.description, this.lessons[d.lesson])
         );
 
@@ -214,10 +238,9 @@ export class AppService {
       urlData: { id: id },
       on: 'now',
       onResponse: (d) => {
-        this.pages[d.id] = (
-          new Page(d.id, d.name, d.path, d.description, d.fields, d.script, this.exercises[d.exercise])
-        );
-        this.pages[d.id].synced = true;
+        const np = new Page(d.id, d.name, d.path, d.description, d.fields, d.script, this.getExercise(d.exercise));
+        this.pages[d.exercise].push(np);
+        np.synced = true;
       }
     });
   }
@@ -307,19 +330,19 @@ export class AppService {
     // only upload to definitive paths
     let path = [
       this.activeView.lesson.id > 0 ? this.lessons[this.activeView.lesson.id].path : '',
-      this.activeView.exercise.id > 0 ? this.exercises[this.activeView.exercise.id].path : '',
-      this.activeView.page.id > 0 ? this.pages[this.activeView.page.id].path : ''
+      this.activeView.exercise.id > 0 ? this.getExercise(this.activeView.exercise.id).path : '',
+      this.activeView.page.id > 0 ? this.getPage(this.activeView.page.id).path : ''
     ];
     _.pull(path, '');
     return path.join('/');
   }
 
   removeLesson = (id) => {
-    if (this.pages[this.activeView.page.id] && this.pages[this.activeView.page.id].exercise.lesson.id === id) {
+    if (this.pages[this.activeView.page.id] && this.getPage(this.activeView.page.id).exercise.lesson.id === id) {
       this.activeView.page.id = 0;
     }
 
-    if (this.exercises[this.activeView.exercise.id] && this.exercises[this.activeView.exercise.id].lesson.id === id) {
+    if (this.exercises[this.activeView.exercise.id] && this.getExercise(this.activeView.exercise.id).lesson.id === id) {
       this.activeView.exercise.id = 0;
     }
 
@@ -351,7 +374,7 @@ export class AppService {
   }
 
   removeExercise = (id) => {
-    if (this.pages[this.activeView.page.id] && this.pages[this.activeView.page.id].exercise.id === id) {
+    if (this.pages[this.activeView.page.id] && this.getPage(this.activeView.page.id).exercise.id === id) {
       this.activeView.page.id = 0;
     }
 
@@ -386,7 +409,7 @@ export class AppService {
   }
 
   showPage = (id) => {
-    this.activeView.page = { id: id, data: _.cloneDeep(this.pages[id].fields) };
+    this.activeView.page = { id: id, data: _.cloneDeep(this.getPage(id).fields) };
     this.activeView.line = {
       i: 0,
       cmd: '',

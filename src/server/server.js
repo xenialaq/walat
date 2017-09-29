@@ -1,51 +1,51 @@
-'use strict';
-var cors = require('cors');
-var express = require("express");
-var bodyParser = require("body-parser");
-var Sequelize = require("sequelize");
-var http = require('http');
-var swaggerTools = require('swagger-tools');
-var jsyaml = require('js-yaml');
-var fs = require('fs');
-var path = require('path');
-var open = require('open');
+const cors = require('cors');
+const express = require('express');
+const bodyParser = require('body-parser');
+const swaggerTools = require('swagger-tools');
+const jsyaml = require('js-yaml');
+const fs = require('fs');
+const path = require('path');
+const open = require('open');
 
-var app = express();
-var currentPort = 0;
+const app = express();
+let currentPort = 0;
 
 app.use(cors());
 app.use(bodyParser.json());
 
-var uploader = require('./controllers/Uploader.js');
-uploader(app);
+const uploader = require('./controllers/Uploader.js');
+const generator = require('./controllers/Generator.js');
 
-var generator = require('./controllers/Generator.js');
+uploader(app);
 generator(app);
 
 const getPort = require('get-port');
 
-getPort().then(PORT => {
+getPort().then((PORT) => {
   // swaggerRouter configuration
-  var options = {
+  const options = {
     swaggerUi: '/swagger.json',
     controllers: path.join(__dirname, 'controllers'),
-    useStubs: process.env.NODE_ENV === 'development' ? true : false // Conditionally turn on stubs (mock mode)
+    useStubs: process.env.NODE_ENV === 'development', // Conditionally turn on stubs (mock mode)
   };
 
   // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-  var spec = fs.readFileSync(path.join(__dirname, '..', '..', 'dist',
+  const spec = fs.readFileSync(path.join(...[
+    __dirname, '..', '..', 'dist',
     'assets',
-    'swagger.yaml'), 'utf8');
-  var swaggerDoc = jsyaml.safeLoad(spec);
-  swaggerDoc.host = process.env.HOST || ("127.0.0.1:" + PORT);
+    'swagger.yaml',
+  ]), 'utf8');
+  const swaggerDoc = jsyaml.safeLoad(spec);
+  swaggerDoc.host = process.env.HOST || (`127.0.0.1:${PORT}`);
 
   if (process.env.USE_HTTPS) {
     swaggerDoc.schemes.unshift('https');
   }
 
   // Initialize the Swagger middleware
-  swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
-    // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
+  swaggerTools.initializeMiddleware(swaggerDoc, (middleware) => {
+    // Interpret Swagger resources and attach metadata to request -
+    // must be first in swagger-tools middleware chain
     app.use(middleware.swaggerMetadata());
 
     // Validate Swagger requests
@@ -58,29 +58,32 @@ getPort().then(PORT => {
     app.use(middleware.swaggerUi());
 
     // Create link to Angular build directory
-    var distDir = path.join(__dirname, '..', '..', 'dist');
+    const distDir = path.join(__dirname, '..', '..', 'dist');
     app.use(express.static(distDir));
 
-    app.use(function(req, res, next) {
-      res.sendFile(path.join(__dirname, '..', '..', 'dist',
-        'index.html'));
+    app.use((req, res) => {
+      res.sendFile(path.join(...[
+        __dirname, '..', '..', 'dist',
+        'index.html',
+      ]));
     });
 
     // Start the server
-    app.listen(process.env.PORT || PORT, function() {
+    app.listen(process.env.PORT || PORT, () => {
       currentPort = process.env.PORT || PORT;
-      console.log(
+      console.log(...[
         'Your server is listening on port %d (http://localhost:%d)',
-        currentPort, currentPort);
-      console.log(
+        currentPort,
+        currentPort,
+      ]);
+      console.log(...[
         'Swagger-ui is available on http://localhost:%d/docs',
-        currentPort);
+        currentPort,
+      ]);
 
       // open(`http://localhost:${currentPort}`);
     });
   });
 });
 
-exports.getCurrentPort = () => {
-  return currentPort;
-}
+exports.getCurrentPort = () => currentPort;

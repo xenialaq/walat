@@ -78,7 +78,7 @@ export class ScriptEditor {
       let varRecycled = _.remove(this.varUsed, (a) => !code.includes('@' + a));
       this.varList = this.varList.concat(varRecycled);
 
-      this.service.pages[this.service.editor.page.id].setScript(code);
+      this.service.getPage(this.service.editor.page.id).setScript(code);
     });
 
     $(this.flask.textarea).click((event) => {

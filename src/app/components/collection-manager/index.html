@@ -38,7 +38,7 @@
   Exercises
 </div>
 <div class="ui attached basic segment" style="height: calc(50% - 120px); border-left: none; border-right: none;">
-  <div class="ui fluid vertical basic buttons" id="exercise-list" style="max-height: 100%; overflow-y: auto;">
+  <div class="ui fluid vertical basic buttons" id="exercise-list" style="max-height: 100%; overflow-y: auto;" [sortablejs]="this.getExercises()" [sortablejsOptions]="this.exerciseListOpt">
     <a *ngFor="let exercise of this.getExercises()" class="ui basic button" [ngClass]="this.service.activeView.exercise.id === exercise.id ? 'primary' : ''" (click)="this.showExercise(exercise.id)">
       <i class="folder outline icon"></i>
       <span>{{exercise.name}}</span>
@@ -53,7 +53,7 @@
   Pages
 </div>
 <div class="ui attached basic segment" style="height: calc(50% - 121px); border: none;" [hidden]="this.service.activeView.exercise.id === 0">
-  <div class="ui fluid vertical basic buttons" id="page-list" style="max-height: 100%; overflow-y: auto;">
+  <div class="ui fluid vertical basic buttons" id="page-list" style="max-height: 100%; overflow-y: auto;" [sortablejs]="this.getPages()" [sortablejsOptions]="this.pageListOpt">
     <a *ngFor="let page of this.getPages()" class="ui basic button" [ngClass]="this.service.activeView.page.id === page.id ? 'primary' : ''" (click)="this.showPage(page.id)">
       <i class="icon" [ngClass]="page.getUnsetLineNumbers().length === 0 ? 'circle thin' : 'warning sign'"></i>
       <em *ngIf="!page.isSynced()">*{{page.name}}</em>

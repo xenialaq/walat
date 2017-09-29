@@ -7,11 +7,11 @@
         </div>
         <i class="right angle icon divider" *ngIf="this.service.activeView.exercise.id > 0"></i>
         <div class="section" *ngIf="this.service.activeView.exercise.id > 0">
-          {{this.service.exercises[this.service.activeView.exercise.id].name}}
+          {{this.service.getExercise(this.service.activeView.exercise.id).name}}
         </div>
         <i class="right angle icon divider" *ngIf="this.service.activeView.page.id > 0"></i>
         <div class="section" *ngIf="this.service.activeView.page.id > 0">
-          {{this.service.pages[this.service.activeView.page.id].name}}
+          {{this.service.getPage(this.service.activeView.page.id).name}}
         </div>
       </div>
     </div>

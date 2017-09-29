@@ -70,7 +70,7 @@ class Page {
     this.synced = false;
   }
 
-  sync = (registry, pre = undefined, post = undefined) => {
+  sync = (pre = undefined, post = undefined) => {
     if (pre) {
       pre();
     }
@@ -90,10 +90,8 @@ class Page {
       }),
       contentType: 'application/json',
       onResponse: (response) => {
-        delete registry[this.id];
         this.synced = true;
         this.id = response.id; /* if post */
-        registry[this.id] = this;
 
         if (post) {
           post();
@@ -152,7 +150,7 @@ class Exercise {
     this.synced = false;
   }
 
-  sync = (registry, pre = undefined, post = undefined) => {
+  sync = (pre = undefined, post = undefined) => {
     if (pre) {
       pre();
     }
@@ -170,10 +168,8 @@ class Exercise {
       }),
       contentType: 'application/json',
       onResponse: (response) => {
-        delete registry[this.id];
         this.synced = true;
         this.id = response.id; /* if post */
-        registry[this.id] = this;
 
         if (post) {
           post();

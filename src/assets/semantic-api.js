@@ -13,16 +13,17 @@ $.fn.api.settings.api = {
   'delete page': `${host}/v1/pages/{id}`,
   'get page by ID': `${host}/v1/pages/{id}`,
 
-
   'get exercises': `${host}/v1/exercises?lesson_id={id}`,
   'post exercise': `${host}/v1/exercises`,
   'put exercise': `${host}/v1/exercises`,
   'delete exercise': `${host}/v1/exercises/{id}`,
   'get exercise by ID': `${host}/v1/exercises/{id}`,
+  'reorder exercise by ID': `${host}/v1/exercises/{id}/reorder`,
 
   'get lessons': `${host}/v1/lessons`,
   'post lesson': `${host}/v1/lessons`,
   'put lesson': `${host}/v1/lessons`,
   'delete lesson': `${host}/v1/lessons/{id}`,
-  'get lesson by ID': `${host}/v1/lessons/{id}`
+  'get lesson by ID': `${host}/v1/lessons/{id}`,
+  'reorder lesson by ID': `${host}/v1/lessons/{id}/reorder`
 };

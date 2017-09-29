@@ -44,7 +44,7 @@ export class PEdit implements AfterViewInit {
       merged
     );
 
-    let q = this.service.pages[this.service.editor.page.id];
+    let q = this.service.getPage(this.service.editor.page.id);
 
     q.setFields(this.service.editor.page.data);
   }
@@ -53,9 +53,9 @@ export class PEdit implements AfterViewInit {
     this.service.showDimmer();
 
     setTimeout(() => {
-      let q = this.service.pages[this.service.editor.page.id];
-      q.sync(this.service.pages, this.service.showDimmer, this.service.hideDimmer);
-      this.service.pages[q.id] = q;
+      let q = this.service.getPage(this.service.editor.page.id);
+      q.sync(this.service.showDimmer, this.service.hideDimmer);
+      this.service.setPage(q);
       $('#success-message>span').text(`${q.name} has been ${q.id > 0 ? 'updated' : 'posted'}.`);
       $('#success-message').transition('fade');
       this.service.hideDimmer();
@@ -63,21 +63,21 @@ export class PEdit implements AfterViewInit {
   }
 
   duplicate = () => {
-    let q = this.service.pages[this.service.editor.page.id];
+    let q = this.service.getPage(this.service.editor.page.id);
     let rid = _.random(-5000, -1);
 
     while (_.has(this.service.pages, rid)) {
       rid = _.random(-5000, -1);
     }
     let dup = new Page(rid, q.name + ' (copy)', q.path, q.description, q.fields, q.script, q.exercise);
-    dup.sync(this.service.pages, this.service.showDimmer, this.service.hideDimmer);
-    this.service.pages[dup.id] = dup;
+    dup.sync(this.service.showDimmer, this.service.hideDimmer);
+    this.service.setPage(dup);
     $('#success-message>span').text(`A copy named ${dup.name} has been ${dup.id > 0 ? 'updated' : 'posted'}.`);
     $('#success-message').transition('fade');
   }
 
   isSynced = () => {
-    return this.service.pages[this.service.editor.page.id] && this.service.pages[this.service.editor.page.id].isSynced();
+    return this.service.getPage(this.service.editor.page.id) && this.service.getPage(this.service.editor.page.id).isSynced();
   }
 }
 

@@ -1,161 +1,169 @@
-'use strict';
+const Model = require('../models/models.js');
 
-var Model = require('../models/models.js');
-
-var DataSource = Model.DataSource;
-var Asset = Model.Asset;
+const {
+  DataSource,
+  Asset,
+} = Model;
 
 DataSource.sync();
 
-var Errors = require('./Errors');
+const Errors = require('./Errors');
 
-exports.assetsGET = function(args, res, next) {
-  /**
+const null2Undefined = (v) => {
+  if (v === null) {
+    return undefined;
+  }
+  return v;
+};
+
+exports.assetsGET = (args, res) => {
+  /* *
    * Returns information about assets.
    *
    * returns List
-   **/
-  var ret = {};
+   * */
+  const ret = {};
   Asset.findAll({
     where: {
       name: {
-        $like: `${args.name.value ? args.name.value : ''}%`
+        $like: `${args.name.value ? args.name.value : ''}%`,
       },
       path: {
-        $like: `${args.path.value ? args.path.value : ''}%`
-      }
-    }
-  }).then(function(assets) {
-    ret['application/json'] = assets.map((d) => ({
-      "id": null2Undefined(d.get('id')),
-      "name": null2Undefined(d.get('name')),
-      "path": null2Undefined(d.get('path')),
-      "type": null2Undefined(d.get('type')),
-      "attribute": JSON.parse(d.get('attribute'))
+        $like: `${args.path.value ? args.path.value : ''}%`,
+      },
+    },
+  }).then((assets) => {
+    ret['application/json'] = assets.map(d => ({
+      id: null2Undefined(d.get('id')),
+      name: null2Undefined(d.get('name')),
+      path: null2Undefined(d.get('path')),
+      type: null2Undefined(d.get('type')),
+      attribute: JSON.parse(d.get('attribute')),
     }));
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
-  }, function(reason) {
+  }, (reason) => {
     Errors.emitDbError(res, reason);
   });
-}
+};
 
-exports.assetsIdDELETE = function(args, res, next) {
-  /**
+exports.assetsIdDELETE = (args, res) => {
+  /* *
    * Deletes an asset.
    *
    * id Integer ID of asset
    * returns String
-   **/
-  var ret = {};
+   * */
+  const ret = {};
 
   Asset.destroy({
     where: {
-      id: args.id.value
-    }
+      id: args.id.value,
+    },
   });
 
-  ret['application/json'] = { "code": 200 };
+  ret['application/json'] = {
+    code: 200,
+  };
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
-}
+};
 
-exports.assetsIdGET = function(args, res, next) {
-  /**
+exports.assetsIdGET = (args, res) => {
+  /* *
    * Returns information about the asset of a specified ID.
    *
    * id Integer ID of asset
    * returns inline_response_200_3
-   **/
-  var ret = {};
+   * */
+  const ret = {};
 
   Asset.find({
     where: {
-      id: args.id.value
-    }
-  }).then(function(d) {
+      id: args.id.value,
+    },
+  }).then((d) => {
     if (d === null) {
-      Errors.emitHttpError(res, { code: 404, message: 'Cannot find id.' });
+      Errors.emitHttpError(res, {
+        code: 404,
+        message: 'Cannot find id.',
+      });
       return;
     }
     ret['application/json'] = {
-      "id": null2Undefined(d.get('id')),
-      "name": null2Undefined(d.get('name')),
-      "path": null2Undefined(d.get('path')),
-      "type": null2Undefined(d.get('type')),
-      "attribute": JSON.parse(d.get('attribute'))
+      id: null2Undefined(d.get('id')),
+      name: null2Undefined(d.get('name')),
+      path: null2Undefined(d.get('path')),
+      type: null2Undefined(d.get('type')),
+      attribute: JSON.parse(d.get('attribute')),
     };
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
-  }, function(reason) {
+  }, (reason) => {
     Errors.emitDbError(res, reason);
   });
-}
+};
 
-exports.assetsPOST = function(args, res, next) {
-  /**
+exports.assetsPOST = (args, res) => {
+  /* *
    * Adds a new asset.
    *
    * body Body_7 Asset with default ID to be added
    * returns String
-   **/
-  var ret = {};
+   * */
+  const ret = {};
 
   this.createAsset({
     name: args.body.value.name,
     path: args.body.value.path,
     type: args.body.value.type,
-    attribute: JSON.stringify(args.body.value.attribute)
+    attribute: JSON.stringify(args.body.value.attribute),
   }).then((d) => {
     ret['application/json'] = {
-      "id": null2Undefined(d.get('id')),
-      "name": null2Undefined(d.get('name')),
-      "path": null2Undefined(d.get('path')),
-      "type": null2Undefined(d.get('type')),
-      "attribute": JSON.parse(d.get('attribute'))
+      id: null2Undefined(d.get('id')),
+      name: null2Undefined(d.get('name')),
+      path: null2Undefined(d.get('path')),
+      type: null2Undefined(d.get('type')),
+      attribute: JSON.parse(d.get('attribute')),
     };
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
   });
-}
+};
 
-exports.assetsPUT = function(args, res, next) {
-  /**
+exports.assetsPUT = (args, res, next) => {
+  /* *
    * Edits an asset.
    *
    * body Body_6 Asset with given ID to be updated
    * returns String
-   **/
-  var ret = {};
-
+   * */
   Asset.update({
     name: args.body.value.name,
     path: args.body.value.path,
     type: args.body.value.type,
-    attribute: JSON.stringify(args.body.value.attribute)
+    attribute: JSON.stringify(args.body.value.attribute),
   }, {
     where: {
-      id: args.body.value.id
-    }
+      id: args.body.value.id,
+    },
   }).then((rows) => {
-    let d = rows[0];
+    const d = rows[0];
     if (_.isUndefined(d)) {
-      Errors.emitHttpError(res, { code: 400, message: 'Cannot update asset.' });
+      Errors.emitHttpError(res, {
+        code: 400,
+        message: 'Cannot update asset.',
+      });
       return;
     }
 
-    args.id = {
-      value: args.body.value.id
+    const retArgs = {
+      id: {
+        value: args.body.value.id,
+      },
     };
-    this.assetsIdGET(args, res, next);
+    this.assetsIdGET(retArgs, res, next);
   });
-}
+};
 
-let null2Undefined = function(v) {
-  if (v === null) {
-    return undefined;
-  }
-  return v;
-}
-
-exports.createAsset = (v) => Asset.create(v);
+exports.createAsset = v => Asset.create(v);

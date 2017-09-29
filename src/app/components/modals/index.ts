@@ -311,6 +311,13 @@ export class Modals implements AfterViewInit {
         }
       });
     }
+
+    $('#collection-modal').find('input[name="name"]').focus((event) => {
+      $(event.currentTarget).select();
+      $(event.currentTarget).mouseup(() => {
+        $(event).preventDefault();
+      });
+    }).unbind('focus');
   }
 
   @Input()
@@ -386,11 +393,11 @@ export class Modals implements AfterViewInit {
               this.service.showLesson(this._value['value'].id);
               break;
             case 'exercise':
-              this.service.exercises[response.id] = this._value['value'];
+              this.service.setExercise(this._value['value']);
               this.service.showExercise(this._value['value'].id);
               break;
             case 'page':
-              this.service.pages[response.id] = this._value['value'];
+              this.service.setPage(this._value['value']);
               this.service.showPage(this._value['value'].id);
               break;
           }

@@ -1,8 +1,4 @@
-'use strict';
-
-var url = require('url');
-
-var Assets = require('./AssetsService');
+const Assets = require('./AssetsService');
 
 module.exports.assetsGET = function assetsGET(req, res, next) {
   Assets.assetsGET(req.swagger.params, res, next);
