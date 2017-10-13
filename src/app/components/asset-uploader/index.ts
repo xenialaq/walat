@@ -22,7 +22,12 @@ export class AssetUploader implements AfterViewInit {
   searchQuery = '';
   isAsset = false;
 
+  _type = '';
+
   ngAfterViewInit() {
+    setInterval(() => {
+      console.log(this._type)
+    }, 1000)
     const uploaders = [
       {
         input: $('input[name="file-upload"]'), /* form file input */
@@ -33,7 +38,7 @@ export class AssetUploader implements AfterViewInit {
           this.service.showDimmer();
         },
         type: $('input[name="file-type"]'), /* form hidden type input */
-        tvalue: () => 'sound',
+        tvalue: () => this._type,
         path: $('input[name="file-path"]'), /* form hidden path input */
         pvalue: () => this._path,
         callback: (data) => {
@@ -92,6 +97,12 @@ export class AssetUploader implements AfterViewInit {
     this._path = data;
   }
 
+  @Input()
+  set type(data) {
+    console.log(data)
+    this._type = data;
+  }
+
   @Output() valueUpdate = new EventEmitter();
 
   update = (name, path) => {
@@ -108,6 +119,7 @@ export class AssetUploader implements AfterViewInit {
   debug = () => {
     console.log('asset-uploader value: ', this._value);
     console.log('asset-uploader path: ', this._path);
+    console.log('asset-uploader type: ', this._type);
     console.log('asset-uploader search query: ', this.searchQuery);
   }
 }

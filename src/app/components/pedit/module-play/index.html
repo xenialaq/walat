@@ -1,4 +1,4 @@
-<wat-asset-uploader [hidden]="!this.isAvailable()" [value]="this._value" (valueUpdate)="update($event)" [path]="this.service.getPath()"></wat-asset-uploader>
+<wat-asset-uploader [type]="'sound'" [hidden]="!this.isAvailable()" [value]="this._value" (valueUpdate)="update($event)" [path]="this.service.getPath()"></wat-asset-uploader>
 
 <div class="field" [hidden]="!this.isAvailable()">
   <!-- <a class="ui orange circular label" (click)="this.debug()">!</a> -->
