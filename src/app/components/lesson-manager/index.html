@@ -16,9 +16,7 @@
     </div>
   </div>
 
-  <div class="ui red button" (click)="deleteLessonClick()" *ngIf="this.service.activeView.lesson.id !== 0">
-    <i class="trash icon"></i> Delete
-  </div>
+  <button class="uk-button uk-button-danger" (click)="deleteLessonClick()" *ngIf="this.service.activeView.lesson.id !== 0">Delete</button>
 
   <div class="ui dropdown grey button disabled">
     Filter <i class="filter icon"></i>

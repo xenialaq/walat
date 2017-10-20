@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, NgModule, ElementRef } from '@angular/core';
 
 import { AppService } from '../../services/services';
-import { Page, Exercise, Lesson, Asset } from '../../models/models';
+import { Page, Exercise, Lesson, Asset, Template } from '../../models/models';
 
 import { DirectionsModule } from './module-directions';
 import { HideModule } from './module-hide';
@@ -74,6 +74,23 @@ export class PEdit implements AfterViewInit {
     this.service.setPage(dup);
     $('#success-message>span').text(`A copy named ${dup.name} has been ${dup.id > 0 ? 'updated' : 'posted'}.`);
     $('#success-message').transition('fade');
+  }
+
+  createTemplate = () => {
+    let q = this.service.getPage(this.service.editor.page.id);
+    let rid = _.random(-5000, -1);
+
+    while (_.has(this.service.templates, rid)) {
+      rid = _.random(-5000, -1);
+    }
+    let tmpl = new Template(rid, q.name + ' (template)', q.script, 'Created by user.');
+
+    this.service.activeItem = {
+      value: tmpl,
+      action: 'create',
+      type: 'template',
+      openModal: true
+    }
   }
 
   isSynced = () => {

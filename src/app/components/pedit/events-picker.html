@@ -1,37 +1,10 @@
 <div class="ui four stackable cards">
-  <a class="ui card" href="javascript:void(0)">
+  <a *ngFor="let template of _.values(this.service.templates)" (click)="useTemplate(template.id)" class="ui card">
     <div class="content">
-      <i class="right floated big ui volume up icon"></i>
-      <div class="header">Listen</div>
+      <i class="right floated big ui cube icon"></i>
+      <div class="header">{{template.name}}</div>
       <div class="description">
-        <p>A voice instruction or teacher's recording.</p>
-      </div>
-    </div>
-  </a>
-  <a class="ui card" href="javascript:void(0)">
-    <div class="content">
-      <i class="right floated big ui unmute icon"></i>
-      <div class="header">Record</div>
-      <div class="description">
-        <p>Student's recording.</p>
-      </div>
-    </div>
-  </a>
-  <a class="ui card" href="javascript:void(0)">
-    <div class="content">
-      <i class="right floated big ui unmute icon"></i>
-      <div class="header">Listen then record</div>
-      <div class="description">
-        <p>A voice instruction or teacher's recording, followed by student's recording.</p>
-      </div>
-    </div>
-  </a>
-  <a class="ui card" href="javascript:void(0)">
-    <div class="content">
-      <i class="right floated big ui write icon"></i>
-      <div class="header">Advanced</div>
-      <div class="description">
-        <p>Write your own script.</p>
+        <p>{{template.description}}</p>
       </div>
     </div>
   </a>

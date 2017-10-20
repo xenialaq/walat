@@ -5,6 +5,7 @@ const {
   Page,
   Exercise,
   Lesson,
+  Template,
 } = Model;
 
 const _ = require('lodash');
@@ -446,6 +447,145 @@ exports.lessonsPUT = (args, res, next) => {
   });
 };
 
+exports.templatesGET = (args, res) => {
+  /* *
+   * Returns information about templates.
+   *
+   * returns List
+   * */
+  const ret = {};
+
+  Template.findAll().then((templates) => {
+    ret['application/json'] = templates.map(d => ({
+      id: null2Undefined(d.get('id')),
+      name: null2Undefined(d.get('name')),
+      path: null2Undefined(d.get('path')),
+      description: null2Undefined(d.get('description')),
+    }));
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
+  }, (reason) => {
+    Errors.emitDbError(res, reason);
+  });
+};
+
+exports.templatesIdDELETE = (args, res) => {
+  /* *
+   * Deletes a template.
+   *
+   * id Integer ID of template
+   * returns String
+   * */
+  const ret = {};
+
+  Template.destroy({
+    where: {
+      id: args.id.value,
+    },
+  });
+
+  ret['application/json'] = {
+    code: 200,
+  };
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
+};
+
+exports.templatesIdGET = (args, res) => {
+  /* *
+   * Returns information about the template of a specified ID.
+   *
+   * id Integer ID of template
+   * returns inline_response_200_2
+   * */
+  const ret = {};
+
+  Template.find({
+    where: {
+      id: args.id.value,
+    },
+  }).then((d) => {
+    if (d === null) {
+      Errors.emitHttpError(res, {
+        code: 404,
+        message: 'Cannot find id.',
+      });
+      return;
+    }
+    ret['application/json'] = {
+      id: null2Undefined(d.get('id')),
+      name: null2Undefined(d.get('name')),
+      path: null2Undefined(d.get('path')),
+      description: null2Undefined(d.get('description')),
+    };
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
+  }, (reason) => {
+    Errors.emitDbError(res, reason);
+  });
+};
+
+exports.templatesPOST = (args, res) => {
+  /* *
+   * Adds a new template.
+   *
+   * body Body_5 Template with default ID to be added
+   * returns String
+   * */
+  const ret = {};
+
+  this.createTemplate({
+    name: args.body.value.name,
+    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value
+      .path,
+    description: args.body.value.description,
+  }).then((d) => {
+    ret['application/json'] = {
+      id: null2Undefined(d.get('id')),
+      name: null2Undefined(d.get('name')),
+      path: null2Undefined(d.get('path')),
+      description: null2Undefined(d.get('description')),
+    };
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
+  });
+};
+
+exports.templatesPUT = (args, res, next) => {
+  /* *
+   * Edits a template.
+   *
+   * body Body_4 Template with given ID to be updated
+   * returns String
+   * */
+  Template.update({
+    name: args.body.value.name,
+    path: _.isEmpty(args.body.value.path) ? rstr.generate() : args.body.value
+      .path,
+    description: args.body.value.description,
+  }, {
+    where: {
+      id: args.body.value.id,
+    },
+  }).then((rows) => {
+    const d = rows[0];
+    if (_.isUndefined(d)) {
+      Errors.emitHttpError(res, {
+        code: 400,
+        message: 'Cannot update template.',
+      });
+      return;
+    }
+
+    const retArgs = {
+      id: {
+        value: args.body.value.id,
+      },
+    };
+    this.templatesIdGET(retArgs, res, next);
+  });
+};
+
 exports.pagesGET = (args, res) => {
   /* *
    * Returns information about pages at a given exercise.
@@ -611,3 +751,4 @@ exports.pagesPUT = (args, res, next) => {
 exports.createLesson = v => Lesson.create(v);
 exports.createExercise = v => Exercise.create(v);
 exports.createPage = v => Page.create(v);
+exports.createTemplate = v => Template.create(v);

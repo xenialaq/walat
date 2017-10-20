@@ -7,19 +7,19 @@ import { AppService } from '../../services/services';
   templateUrl: 'events-picker.html'
 })
 export class EventsPicker implements AfterViewInit {
+  _ = _;
+
   constructor(private service: AppService, private e: ElementRef) {
   }
 
   ngAfterViewInit() {
-    $('wat-pedit-events-picker>.cards>a.card').each((index, e) => {
-      $(e).click(() => {
-        $('wat-script-editor').show();
-        const flask = this.service.flask;
-        flask.update(this.service.templates[index]);
-        // this.service.page.events_t = $(e).attr('data-mode');
-        this.hidden = true;
-      });
-    });
+  }
+
+  useTemplate(tid) {
+    $('wat-script-editor').show();
+    const flask = this.service.flask;
+    flask.update(this.service.templates[tid].content);
+    this.hidden = true;
   }
 
   @Input('hidden')

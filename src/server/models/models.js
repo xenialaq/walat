@@ -1,9 +1,12 @@
-'use strict';
+/* eslint-disable */
 
 const path = require('path');
 
-const dbPath = path.join(__dirname, '..', '..', '..', 'dist', 'assets',
-  'db.sqlite');
+const dbPath = path.join(
+  __dirname,
+  '..', '..', '..', 'dist', 'assets',
+  'db.sqlite'
+);
 
 const Sequelize = require('sequelize');
 
@@ -32,20 +35,23 @@ const Exercise = sequelize.define('exercise', {
   description: Sequelize.TEXT('medium')
 });
 
-
 const Lesson = sequelize.define('lesson', {
   name: Sequelize.STRING,
   path: Sequelize.STRING,
   description: Sequelize.TEXT('medium')
 });
 
-
-
 const Asset = sequelize.define('asset', {
   name: Sequelize.STRING,
   path: Sequelize.STRING,
   type: Sequelize.STRING,
   attribute: Sequelize.TEXT('medium')
+});
+
+const Template = sequelize.define('template', {
+  name: Sequelize.STRING,
+  content: Sequelize.TEXT('script'),
+  description: Sequelize.TEXT('medium')
 });
 
 Exercise.hasMany(Page);
@@ -56,3 +62,4 @@ exports.Page = Page;
 exports.Exercise = Exercise;
 exports.Lesson = Lesson;
 exports.Asset = Asset;
+exports.Template = Template;

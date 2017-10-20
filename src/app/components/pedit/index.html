@@ -31,5 +31,6 @@
   <div class="ui basic segment">
     <button class="ui large primary button" (click)="this.save()" [ngClass]="this.isSynced() ? 'disabled': null">{{this.isSynced() ? 'Saved': 'Save'}}</button>
     <button class="ui large secondary button" (click)="this.duplicate()">Duplicate</button>
+    <button class="ui large secondary button" (click)="this.createTemplate()">Create template</button>
   </div>
 </div>

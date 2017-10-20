@@ -48,6 +48,26 @@ module.exports.lessonsPUT = function lessonsPUT(req, res, next) {
   Editor.lessonsPUT(req.swagger.params, res, next);
 };
 
+module.exports.templatesGET = function templatesGET(req, res, next) {
+  Editor.templatesGET(req.swagger.params, res, next);
+};
+
+module.exports.templatesIdDELETE = function templatesIdDELETE(req, res, next) {
+  Editor.templatesIdDELETE(req.swagger.params, res, next);
+};
+
+module.exports.templatesIdGET = function templatesIdGET(req, res, next) {
+  Editor.templatesIdGET(req.swagger.params, res, next);
+};
+
+module.exports.templatesPOST = function templatesPOST(req, res, next) {
+  Editor.templatesPOST(req.swagger.params, res, next);
+};
+
+module.exports.templatesPUT = function templatesPUT(req, res, next) {
+  Editor.templatesPUT(req.swagger.params, res, next);
+};
+
 module.exports.pagesGET = function pagesGET(req, res, next) {
   Editor.pagesGET(req.swagger.params, res, next);
 };

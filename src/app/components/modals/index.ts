@@ -15,6 +15,8 @@ export class Modals implements AfterViewInit {
 
   _open: boolean;
 
+  _modalIndex: number;
+
   rivers = [
     "aldan",
     "allegheny",
@@ -233,6 +235,7 @@ export class Modals implements AfterViewInit {
   @Input()
   set value(data) {
     $('#collection-modal').find('form').form('clear');
+    $('#template-modal').find('form').form('clear');
 
     this._value = data;
 
@@ -252,8 +255,39 @@ export class Modals implements AfterViewInit {
           }
         }
       });
+
+      $('#template-modal').find('form').form({
+        fields: {
+          name: {
+            identifier: 'name',
+            rules: [
+              {
+                type: 'isExactly',
+                value: data['value'].name,
+                prompt: 'Please enter the name.'
+              }
+            ]
+          }
+        }
+      });
     } else if (data.action === 'create') {
+      // use if pre-assigned
+      $('#collection-modal').find('input[name="name"]').val(data['value'].name);
+      $('#collection-modal').find('input[name="cname"]').val(data['value'].path);
+      $('#collection-modal').find('textarea[name="description"]').val(data['value'].description);
+
+      $('#template-modal').find('input[name="name"]').val(data['value'].name);
+      $('#template-modal').find('textarea[name="content"]').val(data['value'].content);
+      $('#template-modal').find('textarea[name="description"]').val(data['value'].description);
+
+      // overwrite with random names
       $('#collection-modal').find('input[name="name"]').val([
+        _.sample(this.rivers),
+        _.sample(this.stones),
+        _.random(9) + '' + _.random(9)
+      ].join('-'));
+
+      $('#template-modal').find('input[name="name"]').val([
         _.sample(this.rivers),
         _.sample(this.stones),
         _.random(9) + '' + _.random(9)
@@ -282,10 +316,28 @@ export class Modals implements AfterViewInit {
           }
         }
       });
+
+      $('#template-modal').find('form').form({
+        fields: {
+          name: {
+            identifier: 'name',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please enter the name.'
+              }
+            ]
+          }
+        }
+      });
     } else if (data.action === 'edit') {
       $('#collection-modal').find('input[name="name"]').val(data['value'].name);
       $('#collection-modal').find('input[name="cname"]').val(data['value'].path);
       $('#collection-modal').find('textarea[name="description"]').val(data['value'].description);
+
+      $('#template-modal').find('input[name="name"]').val(data['value'].name);
+      $('#template-modal').find('textarea[name="content"]').val(data['value'].content);
+      $('#template-modal').find('textarea[name="description"]').val(data['value'].description);
 
       $('#collection-modal').find('form').form({
         fields: {
@@ -310,9 +362,30 @@ export class Modals implements AfterViewInit {
           }
         }
       });
+
+      $('#template-modal').find('form').form({
+        fields: {
+          name: {
+            identifier: 'name',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please enter the name.'
+              }
+            ]
+          }
+        }
+      });
     }
 
     $('#collection-modal').find('input[name="name"]').focus((event) => {
+      $(event.currentTarget).select();
+      $(event.currentTarget).mouseup(() => {
+        $(event).preventDefault();
+      });
+    }).unbind('focus');
+
+    $('#template-modal').find('input[name="name"]').focus((event) => {
       $(event.currentTarget).select();
       $(event.currentTarget).mouseup(() => {
         $(event).preventDefault();
@@ -323,22 +396,30 @@ export class Modals implements AfterViewInit {
   @Input()
   set open(t) {
     this._open = t;
+    let $modal = $('#collection-modal');
+    if (this._value['type'] === 'template') {
+      $modal = $('#template-modal');
+    }
     if (t) {
-      $('#collection-modal').find('.accordion').accordion('close', 0);
-      $('#collection-modal').modal({
+      $modal.find('.accordion').accordion('close', 0);
+      $modal.modal({
         onHide: () => {
           // workaround
           this.service.activeItem.openModal = false;
         }
       }).modal('show');
     } else {
-      $('#collection-modal').modal('hide');
+      $modal.modal('hide');
     }
   }
 
   submit = () => {
-    if (!$('#collection-modal').find('form').form('is valid')) {
-      // form is not valid (both name and cname)
+    let $modal = $('#collection-modal');
+    if (this._value['type'] === 'template') {
+      $modal = $('#template-modal');
+    }
+    if (!$modal.find('form').form('is valid')) {
+      // form is not valid
       return;
     }
 
@@ -358,9 +439,10 @@ export class Modals implements AfterViewInit {
       urlData: apiAction === 'delete' ? { id: this._value['value'].id } : undefined,
       data: JSON.stringify({
         "id": this._value['value'].id,
-        "name": $('#collection-modal').find('input[name="name"]').val(),
-        "path": $('#collection-modal').find('input[name="cname"]').val(),
-        "description": $('#collection-modal').find('textarea[name="description"]').val(),
+        "name": $modal.find('input[name="name"]').val(),
+        "path": $modal.find('input[name="cname"]').val(), // either
+        "content": $modal.find('textarea[name="content"]').val(), // not both
+        "description": $modal.find('textarea[name="description"]').val(),
         "lesson": this._value['value'].lesson ? this._value['value'].lesson.id : undefined, // either
         "exercise": this._value['value'].exercise ? this._value['value'].exercise.id : undefined // not both
       }),
@@ -377,15 +459,19 @@ export class Modals implements AfterViewInit {
               this.service.removeExercise(this._value['value'].id); break;
             case 'page':
               this.service.removePage(this._value['value'].id); break;
+            case 'template':
+              this.service.removeTemplate(this._value['value'].id); break;
           }
         } else if (this._value['action'] === 'edit') {
           this._value['value'].name = response.name;
-          this._value['value'].path = response.path;
+          this._value['value'].path = response.path; // either
+          this._value['value'].content = response.content; // not both
           this._value['value'].description = response.description;
         } else if (this._value['action'] === 'create') {
           this._value['value'].id = response.id;
           this._value['value'].name = response.name;
-          this._value['value'].path = response.path;
+          this._value['value'].path = response.path; // either
+          this._value['value'].content = response.content; // not both
           this._value['value'].description = response.description;
           switch (this._value['type']) {
             case 'lesson':
@@ -399,6 +485,9 @@ export class Modals implements AfterViewInit {
             case 'page':
               this.service.setPage(this._value['value']);
               this.service.showPage(this._value['value'].id);
+              break;
+            case 'template':
+              this.service.setTemplate(this._value['value']);
               break;
           }
         }

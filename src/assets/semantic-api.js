@@ -25,5 +25,11 @@ $.fn.api.settings.api = {
   'put lesson': `${host}/v1/lessons`,
   'delete lesson': `${host}/v1/lessons/{id}`,
   'get lesson by ID': `${host}/v1/lessons/{id}`,
-  'reorder lesson by ID': `${host}/v1/lessons/{id}/reorder`
+  'reorder lesson by ID': `${host}/v1/lessons/{id}/reorder`,
+
+  'get templates': `${host}/v1/templates`,
+  'post template': `${host}/v1/templates`,
+  'put template': `${host}/v1/templates`,
+  'delete template': `${host}/v1/templates/{id}`,
+  'get template by ID': `${host}/v1/templates/{id}`
 };

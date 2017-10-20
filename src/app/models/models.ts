@@ -256,4 +256,63 @@ class Asset {
   public getUrl = () => '/assets/uploads/' + this.path.split('/').pop();
 }
 
-export { Page, Exercise, Lesson, Asset };
+class Template {
+  id: number;
+  name: string;
+  content: string;
+  description: string;
+  synced = false;
+
+  constructor(id: number, name: string, content: string, description = '') {
+    this.id = id;
+    this.name = name;
+    this.content = content;
+    this.description = description;
+  }
+
+  setName = (v) => {
+    this.name = v;
+    this.synced = false;
+  }
+
+  setContent = (v) => {
+    this.content = v;
+    this.synced = false;
+  }
+
+  setDescription = (v) => {
+    this.description = v;
+    this.synced = false;
+  }
+
+  sync = (registry, pre = undefined, post = undefined) => {
+    if (pre) {
+      pre();
+    }
+
+    $.api({
+      action: `${this.id > 0 ? 'put' : 'post'} lesson`,
+      on: 'now',
+      method: this.id > 0 ? 'put' : 'post',
+      data: JSON.stringify({
+        id: this.id,
+        name: this.name,
+        content: this.content,
+        description: this.description
+      }),
+      contentType: 'application/json',
+      onResponse: (response) => {
+        delete registry[this.id];
+        this.synced = true;
+        this.id = response.id; /* if post */
+        registry[this.id] = this;
+
+        if (post) {
+          post();
+        }
+      }
+    });
+  }
+}
+
+export { Page, Exercise, Lesson, Asset, Template };

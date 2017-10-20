@@ -1,6 +1,6 @@
 import { Component, Injectable, ElementRef } from '@angular/core';
 
-import { Page, Exercise, Lesson, Asset } from '../models/models';
+import { Page, Exercise, Lesson, Asset, Template } from '../models/models';
 
 import * as PEdit from '../components/pedit';
 
@@ -14,8 +14,15 @@ export class AppService {
   public exercises: { [i: number]: Exercise[] } = {};
   // order matters
   public pages: { [i: number]: Page[] } = {};
-  // public page: Page;
   public assets: { [i: number]: Asset } = {};
+
+  public templates: { [i: number]: Template } = {};
+  public readonly basicTemplates: { [i: number]: Template } = {
+    '-1': new Template(-1, 'Listen', `show text @text \nshow directions @directions \nplay @sound \nhide text \nshow directions @directions \nwait`, 'A voice instruction or teacher\'s recording.'),
+    '-2': new Template(-2, 'Record', `show text @text \nshow directions @directions \nwait \nrecord @duration \nhide text \nshow directions @directions \nwait`, 'Student\'s recording.'),
+    '-3': new Template(-3, 'Listen then record', `show text @content \nshow directions @dir \nplay @sound \nwait \nrecord @duration \nhide @element \nshow directions @directions \nwait`, 'A voice instruction or teacher\'s recording, followed by student\'s recording.'),
+    '-4': new Template(-4, 'Advanced', ``, 'Write your own script.')
+  };
 
   getExercise = (id) => {
     for (let lid in this.exercises) {
@@ -55,12 +62,9 @@ export class AppService {
     this.pages[p.exercise.id].push(p);
   }
 
-  public readonly templates = [
-    `show text @text \nshow directions @directions \nplay @sound \nhide text \nshow directions @directions \nwait`,
-    `show text @text \nshow directions @directions \nwait \nrecord @duration \nhide text \nshow directions @directions \nwait`,
-    `show text @content \nshow directions @dir \nplay @sound \nwait \nrecord @duration \nhide @element \nshow directions @directions \nwait`,
-    ``
-  ];
+  setTemplate = (t: Template) => {
+    this.templates[t.id] = t;
+  }
 
   public editor = {
     name: 'editor',
@@ -76,7 +80,7 @@ export class AppService {
   };
 
   public activeItem = {
-    value: { name: '', path: '', description: '' },
+    value: {},
     action: '',
     type: '',
     openModal: false
@@ -100,14 +104,31 @@ export class AppService {
 
   constructor() {
     this.initLessons();
+    this.initTemplates();
 
     setInterval(() => {
       console.log('lessons', this.lessons);
       console.log('exercises', this.exercises);
       console.log('pages', this.pages);
+      console.log('templates', this.templates)
       console.log('activeView', this.activeView);
       console.log('activeItem', this.activeItem);
     }, 12000);
+  }
+
+  initTemplates = () => {
+    $.api({
+      action: 'get templates',
+      on: 'now',
+      onResponse: (response) => {
+        _.values(response).forEach((d) => {
+          this.templates[d.id] = (
+            new Template(d.id, d.name, d.content, d.description)
+          );
+        });
+        this.templates = Object.assign(this.templates, this.basicTemplates);
+      }
+    });
   }
 
   initLessons = () => {
@@ -416,6 +437,10 @@ export class AppService {
       tag: null,
       data: {} /* field: value */
     };
+  }
+
+  removeTemplate = (id) => {
+    delete this.templates[id];
   }
 
   hideMessages = () => {
