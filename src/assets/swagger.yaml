@@ -247,6 +247,7 @@ paths:
             type:                  "string"
         405:
           description:             "Invalid input"
+      x-swagger-router-controller: "Editor"  
   /exercises/{id}/reorder:
     post:
       tags:

@@ -25,9 +25,6 @@ export class AssetUploader implements AfterViewInit {
   _type = '';
 
   ngAfterViewInit() {
-    setInterval(() => {
-      console.log(this._type)
-    }, 1000)
     const uploaders = [
       {
         input: $('input[name="file-upload"]'), /* form file input */
