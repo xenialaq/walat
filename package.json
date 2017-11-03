@@ -38,6 +38,7 @@
     "directory-tree": "^2.0.0",
     "electron-compile": "^6.4.1",
     "express": "^4.15.3",
+    "fs-extra": "^4.0.2",
     "get-port": "^3.2.0",
     "gulp": "^3.9.1",
     "gulp-decompress": "^2.0.1",

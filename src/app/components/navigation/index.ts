@@ -36,4 +36,8 @@ export class Navigation {
   generateLessonClick(format) {
     window.open(`/generator?lid=${this.service.activeView.lesson.id}&format=${format}`);
   }
+
+  exportLessonClick() {
+    window.open(`/exportor?lid=${this.service.activeView.lesson.id}`);
+  }
 }
