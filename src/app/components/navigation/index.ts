@@ -12,6 +12,29 @@ export class Navigation {
 
   ngAfterViewInit() {
     $(this.e.nativeElement).find('.dropdown').dropdown();
+
+    const uploaders = [
+      {
+        input: $('input[name="file-upload"]'),
+        trigger: $(this.e.nativeElement).find('.import-from-walat'),
+        label: undefined,
+        submit: undefined, /* submits immediately */
+        onSubmit: () => {
+          this.service.showDimmer();
+        },
+        type: $(),
+        tvalue: () => '*',
+        path: $('input[name="file-path"]'),
+        pvalue: this.service.getPath,
+        callback: (l) => {
+          this.service.hideDimmer();
+          // this.service.initLesson(l.id);
+        },
+        url: '/importer'
+      }
+    ];
+
+    this.service.bindUploaders(uploaders);
   }
 
   editLessonClick() {

@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 
 const uploader = require('./controllers/Uploader.js');
 const generator = require('./controllers/Generator.js');
-const exportor = require('./controllers/Exportor.js');
+const exportor = require('./controllers/Exporter.js');
 
 uploader(app);
 generator(app);
@@ -83,7 +83,7 @@ getPort().then((PORT) => {
         currentPort,
       ]);
 
-      // open(`http://localhost:${currentPort}`);
+      open(`http://localhost:${currentPort}`);
     });
   });
 });

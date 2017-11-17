@@ -9,6 +9,7 @@ const hash = require('object-hash');
 const astsvc = require('./AssetsService');
 const edtsvc = require('./EditorService');
 const Errors = require('./Errors');
+const importer = require('./Importer');
 
 const rstr = require('randomstring');
 const dirt = require('directory-tree');
@@ -95,6 +96,11 @@ const zipupload = multer({
       cb(null, false);
     }
   },
+  limits,
+});
+
+const unsecureUpload = multer({
+  storage,
   limits,
 });
 
@@ -218,6 +224,18 @@ module.exports = (app) => {
         }
       });
     });
+  });
+
+  app.post('/importer', unsecureUpload.single('file-upload'), (req, res) => {
+    if (!req.file) {
+      Errors.emitHttpError(res, {
+        code: 400,
+        message: 'Uploaded file has forbidden MIME type.',
+      });
+      return;
+    }
+
+    importer(req.file.path, path.join(tempDir, req.file.originalname));
   });
 
   app.post('/zipuploader', zipupload.single('file-upload'), (req, res) => {

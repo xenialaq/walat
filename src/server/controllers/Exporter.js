@@ -2,7 +2,7 @@ const gulp = require('gulp');
 const rseq = require('run-sequence');
 const zip = require('gulp-zip');
 
-const fs = require('fs-extra')
+const fs = require('fs-extra');
 const path = require('path');
 const Errors = require('./Errors');
 
@@ -53,11 +53,12 @@ module.exports = (app) => {
         return;
       }
 
-      const walatPath = path.join(jobDir, `${l.name}.wson`);
+      const walatPath = path.join(jobDir, 'db.wson');
       const walat = fs.createWriteStream(walatPath);
 
       // write lesson row
       walat.write(JSON.stringify(l));
+      walat.write('L \n');
 
       let partExercisesComplete = false;
       let partAssetsComplete = false;
@@ -106,6 +107,7 @@ module.exports = (app) => {
 
           // write asset row
           walat.write(JSON.stringify(a));
+          walat.write('A \n');
 
           const assetName = a.path.split('/').pop();
 
@@ -136,6 +138,7 @@ module.exports = (app) => {
 
           // write exercise row
           walat.write(JSON.stringify(e));
+          walat.write('E \n');
 
           Page.findAll({
             where: {
@@ -152,6 +155,7 @@ module.exports = (app) => {
 
               // write page row
               walat.write(JSON.stringify(p));
+              walat.write('P \n');
               cbPage(pIdx + 1);
             };
 
